@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Navbar from '@/components/Navbar'
 import Link from 'next/link'
-import { PlusIcon, FilmIcon, VideoCameraIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, FilmIcon, VideoCameraIcon, QueueListIcon, ChartBarIcon } from '@heroicons/react/24/outline'
+import ViewAnalyticsChart from '@/components/ViewAnalyticsChart'
+import TopVideosTable from '@/components/TopVideosTable'
 
 export default function AdminPage() {
     const [stats, setStats] = useState({
@@ -35,10 +36,9 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
-            <Navbar />
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-4 sm:p-6 lg:p-8">
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="max-w-7xl mx-auto py-8">
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
                     <p className="text-gray-300">Manage your content and platform</p>
@@ -138,6 +138,27 @@ export default function AdminPage() {
                             </div>
                         </div>
                     </Link>
+
+                    <Link
+                        href="/admin/playlists"
+                        className="glass rounded-2xl p-8 hover:bg-white/20 transition group"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="p-4 bg-pink-600 rounded-full group-hover:scale-110 transition">
+                                <QueueListIcon className="w-8 h-8 text-white" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-1">Manage Playlists</h3>
+                                <p className="text-gray-400">Create and organize playlists</p>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+
+                {/* Analytics Section */}
+                <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <ViewAnalyticsChart />
+                    <TopVideosTable />
                 </div>
             </main>
         </div>

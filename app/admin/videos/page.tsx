@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Navbar from '@/components/Navbar'
 import Link from 'next/link'
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
@@ -46,10 +45,8 @@ export default function ManageVideosPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
-            <Navbar />
-
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="p-4 sm:p-6 lg:p-8">
+            <main className="max-w-7xl mx-auto py-8">
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-4xl font-bold text-white mb-2">Manage Videos</h1>
@@ -106,8 +103,8 @@ export default function ManageVideosPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${video.accessType === 'PREMIUM'
-                                                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
-                                                    : 'bg-green-500 text-white'
+                                                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
+                                                : 'bg-green-500 text-white'
                                                 }`}>
                                                 {video.accessType}
                                             </span>
@@ -117,6 +114,12 @@ export default function ManageVideosPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex justify-end gap-2">
+                                                <Link
+                                                    href={`/admin/videos/${video.id}/edit`}
+                                                    className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded transition"
+                                                >
+                                                    <PencilIcon className="w-5 h-5" />
+                                                </Link>
                                                 <button
                                                     onClick={() => handleDelete(video.id)}
                                                     className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition"

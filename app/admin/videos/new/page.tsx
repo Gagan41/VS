@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Navbar from '@/components/Navbar'
 import toast from 'react-hot-toast'
 
 export default function NewVideoPage() {
@@ -10,6 +9,7 @@ export default function NewVideoPage() {
     const [loading, setLoading] = useState(false)
     const [inputType, setInputType] = useState<'URL' | 'FILE'>('URL')
     const [videoFile, setVideoFile] = useState<File | null>(null)
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -29,6 +29,7 @@ export default function NewVideoPage() {
             if (inputType === 'FILE' && videoFile) {
                 const uploadFormData = new FormData()
                 uploadFormData.append('file', videoFile)
+                uploadFormData.append('type', 'videos')
 
                 const uploadResponse = await fetch('/api/upload', {
                     method: 'POST',
@@ -43,12 +44,30 @@ export default function NewVideoPage() {
                 finalVideoUrl = uploadData.url
             }
 
+            let finalThumbnailUrl = formData.thumbnailUrl
+            if (thumbnailFile) {
+                const thumbFormData = new FormData()
+                thumbFormData.append('file', thumbnailFile)
+                thumbFormData.append('type', 'thumbnails')
+
+                const thumbResponse = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: thumbFormData,
+                })
+
+                if (thumbResponse.ok) {
+                    const thumbData = await thumbResponse.json()
+                    finalThumbnailUrl = thumbData.url
+                }
+            }
+
             const response = await fetch('/api/videos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
                     videoUrl: finalVideoUrl,
+                    thumbnailUrl: finalThumbnailUrl,
                     videoType: 'LONG',
                 }),
             })
@@ -68,10 +87,8 @@ export default function NewVideoPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
-            <Navbar />
-
-            <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="p-4 sm:p-6 lg:p-8">
+            <main className="max-w-3xl mx-auto py-8">
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-white mb-2">Upload New Video</h1>
                     <p className="text-gray-300">Add a new long-form video to your platform</p>
@@ -160,15 +177,31 @@ export default function NewVideoPage() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-2">
-                            Thumbnail URL
+                            Thumbnail (URL or Upload File)
                         </label>
-                        <input
-                            type="url"
-                            value={formData.thumbnailUrl}
-                            onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            placeholder="https://example.com/thumbnail.jpg"
-                        />
+                        <div className="space-y-3">
+                            <input
+                                type="url"
+                                value={formData.thumbnailUrl}
+                                onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
+                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                placeholder="https://example.com/thumbnail.jpg"
+                            />
+                            <div className="space-y-2">
+                                <p className="text-sm text-gray-400">Or upload a thumbnail file:</p>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
+                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                                />
+                                {thumbnailFile && (
+                                    <p className="text-xs text-green-400 font-semibold">
+                                        Selected: {thumbnailFile.name}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     <div>

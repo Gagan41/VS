@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Navbar from '@/components/Navbar'
 import toast from 'react-hot-toast'
 
 export default function NewShortPage() {
@@ -45,10 +44,8 @@ export default function NewShortPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
-            <Navbar />
-
-            <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="p-4 sm:p-6 lg:p-8">
+            <main className="max-w-3xl mx-auto py-8">
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-white mb-2">Upload New Short</h1>
                     <p className="text-gray-300">Add a new short/reel to your platform</p>

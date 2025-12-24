@@ -13,6 +13,7 @@ export async function POST(request: Request) {
 
         const formData = await request.formData()
         const file = formData.get('file') as File
+        const type = formData.get('type') as string || 'videos' // 'videos' or 'thumbnails'
 
         if (!file) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
@@ -22,13 +23,13 @@ export async function POST(request: Request) {
         const filename = Date.now() + '_' + file.name.replace(/\s/g, '_')
 
         // Ensure upload directory exists
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'videos')
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', type)
         await mkdir(uploadDir, { recursive: true })
 
         const filepath = path.join(uploadDir, filename)
         await writeFile(filepath, buffer)
 
-        const fileUrl = `/uploads/videos/${filename}`
+        const fileUrl = `/uploads/${type}/${filename}`
 
         return NextResponse.json({ url: fileUrl }, { status: 201 })
     } catch (error) {

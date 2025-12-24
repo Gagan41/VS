@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
-import Navbar from '@/components/Navbar'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 
@@ -37,10 +36,8 @@ export default function PricingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
-            {session && <Navbar />}
-
-            <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="p-4 sm:p-6 lg:p-8">
+            <main className="max-w-6xl mx-auto py-16">
                 <div className="text-center mb-16">
                     <h1 className="text-5xl font-bold text-white mb-4">Choose Your Plan</h1>
                     <p className="text-xl text-gray-300">Unlock premium content and exclusive features</p>

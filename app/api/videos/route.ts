@@ -12,11 +12,15 @@ export async function GET(request: Request) {
 
         const { searchParams } = new URL(request.url)
         const type = searchParams.get('type') // 'LONG' or 'SHORT'
+        const accessType = searchParams.get('accessType') // 'FREE' or 'PREMIUM'
         const user = session.user as any
 
         const where: any = {}
         if (type) {
             where.videoType = type
+        }
+        if (accessType) {
+            where.accessType = accessType
         }
 
         // If user is not premium, they can only see free shorts in shorts feed
