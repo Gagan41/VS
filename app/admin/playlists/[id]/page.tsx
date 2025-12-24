@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { TrashIcon, PlusIcon, ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, PlusIcon, ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 
 interface PlaylistVideo {
@@ -34,6 +34,9 @@ export default function PlaylistEditorPage() {
     const [allVideos, setAllVideos] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [showAddModal, setShowAddModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
+    const [editedPlaylist, setEditedPlaylist] = useState({ title: '', description: '', thumbnailUrl: '' })
+    const [saving, setSaving] = useState(false)
 
     useEffect(() => {
         if (id) {
@@ -47,6 +50,11 @@ export default function PlaylistEditorPage() {
             const response = await fetch(`/api/admin/playlists/${id}`)
             const data = await response.json()
             setPlaylist(data)
+            setEditedPlaylist({
+                title: data.title || '',
+                description: data.description || '',
+                thumbnailUrl: data.thumbnailUrl || ''
+            })
         } catch (error) {
             console.error('Error fetching playlist:', error)
             toast.error('Failed to load playlist')
@@ -107,6 +115,44 @@ export default function PlaylistEditorPage() {
         }
     }
 
+    const handleSavePlaylist = async () => {
+        if (!editedPlaylist.title || !editedPlaylist.description) {
+            toast.error('Title and description are required')
+            return
+        }
+
+        setSaving(true)
+        try {
+            const response = await fetch(`/api/admin/playlists/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editedPlaylist)
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to update playlist')
+            }
+
+            const updated = await response.json()
+            setPlaylist(updated)
+            setIsEditing(false)
+            toast.success('Playlist updated successfully!')
+        } catch (error) {
+            toast.error('Failed to update playlist')
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const handleCancelEdit = () => {
+        setEditedPlaylist({
+            title: playlist?.title || '',
+            description: playlist?.description || '',
+            thumbnailUrl: playlist?.thumbnailUrl || ''
+        })
+        setIsEditing(false)
+    }
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
@@ -145,19 +191,89 @@ export default function PlaylistEditorPage() {
                     Back to Playlists
                 </Link>
 
-                <div className="flex justify-between items-start mb-8">
-                    <div>
-                        <h1 className="text-4xl font-bold text-white mb-2">{playlist.title}</h1>
-                        <p className="text-gray-300">{playlist.description}</p>
-                        <p className="text-gray-400 mt-2">{playlist.videos?.length || 0} videos</p>
+                <div className="glass rounded-2xl p-6 mb-8">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="flex-1">
+                            {isEditing ? (
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-gray-300 mb-2 text-sm font-semibold">Title</label>
+                                        <input
+                                            type="text"
+                                            value={editedPlaylist.title}
+                                            onChange={(e) => setEditedPlaylist({ ...editedPlaylist, title: e.target.value })}
+                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white text-2xl font-bold focus:outline-none focus:border-purple-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-300 mb-2 text-sm font-semibold">Description</label>
+                                        <textarea
+                                            value={editedPlaylist.description}
+                                            onChange={(e) => setEditedPlaylist({ ...editedPlaylist, description: e.target.value })}
+                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500 resize-none"
+                                            rows={2}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-300 mb-2 text-sm font-semibold">Thumbnail URL</label>
+                                        <input
+                                            type="url"
+                                            value={editedPlaylist.thumbnailUrl}
+                                            onChange={(e) => setEditedPlaylist({ ...editedPlaylist, thumbnailUrl: e.target.value })}
+                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                                            placeholder="https://example.com/image.jpg"
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <h1 className="text-4xl font-bold text-white mb-2">{playlist.title}</h1>
+                                    <p className="text-gray-300">{playlist.description}</p>
+                                    {playlist.thumbnailUrl && (
+                                        <p className="text-gray-400 text-sm mt-2 line-clamp-1">Thumbnail: {playlist.thumbnailUrl}</p>
+                                    )}
+                                    <p className="text-gray-400 mt-2">{playlist.videos?.length || 0} videos</p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                            {isEditing ? (
+                                <>
+                                    <button
+                                        onClick={handleSavePlaylist}
+                                        disabled={saving}
+                                        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition disabled:opacity-50 flex items-center gap-2"
+                                    >
+                                        {saving ? 'Saving...' : 'Save'}
+                                    </button>
+                                    <button
+                                        onClick={handleCancelEdit}
+                                        disabled={saving}
+                                        className="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition disabled:opacity-50"
+                                    >
+                                        Cancel
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={() => setIsEditing(true)}
+                                        className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition flex items-center gap-2"
+                                    >
+                                        <PencilIcon className="w-5 h-5" />
+                                        Edit Info
+                                    </button>
+                                    <button
+                                        onClick={() => setShowAddModal(true)}
+                                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition flex items-center gap-2"
+                                    >
+                                        <PlusIcon className="w-5 h-5" />
+                                        Add Video
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </div>
-                    <button
-                        onClick={() => setShowAddModal(true)}
-                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition flex items-center gap-2"
-                    >
-                        <PlusIcon className="w-5 h-5" />
-                        Add Video
-                    </button>
                 </div>
 
                 {

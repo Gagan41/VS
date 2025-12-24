@@ -7,6 +7,10 @@ import toast from 'react-hot-toast'
 export default function NewShortPage() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
+    const [inputType, setInputType] = useState<'URL' | 'FILE' | 'REMOTE'>('URL')
+    const [remoteUrl, setRemoteUrl] = useState('')
+    const [isImporting, setIsImporting] = useState(false)
+    const [videoFile, setVideoFile] = useState<File | null>(null)
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -15,29 +19,77 @@ export default function NewShortPage() {
         accessType: 'FREE',
     })
 
+    const handleRemoteImport = async () => {
+        if (!remoteUrl) {
+            toast.error('Please enter a link')
+            return
+        }
+
+        setIsImporting(true)
+        const loadingToast = toast.loading('Importing short to server...')
+        try {
+            const response = await fetch('/api/upload/remote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: remoteUrl, type: 'videos' })
+            })
+
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error.error || 'Failed to import')
+            }
+
+            const data = await response.json()
+            setFormData({ ...formData, videoUrl: data.url })
+            toast.success('Import successful!', { id: loadingToast })
+            setInputType('URL')
+        } catch (error: any) {
+            console.error('Remote import failed:', error)
+            toast.error(`Import failed: ${error.message}`, { id: loadingToast })
+        } finally {
+            setIsImporting(false)
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
 
         try {
+            let finalVideoUrl = formData.videoUrl
+
+            if (inputType === 'FILE' && videoFile) {
+                const uploadFormData = new FormData()
+                uploadFormData.append('file', videoFile)
+                uploadFormData.append('type', 'videos')
+
+                const uploadResponse = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: uploadFormData,
+                })
+
+                if (!uploadResponse.ok) throw new Error('Upload failed')
+                const uploadData = await uploadResponse.json()
+                finalVideoUrl = uploadData.url
+            }
+
             const response = await fetch('/api/videos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
+                    videoUrl: finalVideoUrl,
                     videoType: 'SHORT',
                 }),
             })
 
-            if (!response.ok) {
-                throw new Error('Failed to create short')
-            }
+            if (!response.ok) throw new Error('Failed to create short')
 
             toast.success('Short uploaded successfully!')
             router.push('/admin/shorts')
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating short:', error)
-            toast.error('Failed to upload short')
+            toast.error(error.message || 'Failed to upload short')
         } finally {
             setLoading(false)
         }
@@ -81,16 +133,75 @@ export default function NewShortPage() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-200 mb-2">
-                            Video URL *
+                            Video Source *
                         </label>
-                        <input
-                            type="url"
-                            required
-                            value={formData.videoUrl}
-                            onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            placeholder="https://youtube.com/shorts/... or direct video URL"
-                        />
+                        <div className="flex flex-wrap gap-4 mb-4">
+                            <button
+                                type="button"
+                                onClick={() => setInputType('URL')}
+                                className={`px-4 py-2 rounded-lg transition ${inputType === 'URL' ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                            >
+                                External Link
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setInputType('REMOTE')}
+                                className={`px-4 py-2 rounded-lg transition ${inputType === 'REMOTE' ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                            >
+                                Import from Link
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setInputType('FILE')}
+                                className={`px-4 py-2 rounded-lg transition ${inputType === 'FILE' ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                            >
+                                Upload File
+                            </button>
+                        </div>
+
+                        {inputType === 'URL' ? (
+                            <input
+                                key="url-input"
+                                type="url"
+                                required={inputType === 'URL'}
+                                value={formData.videoUrl}
+                                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                placeholder="https://youtube.com/shorts/... or direct URL"
+                            />
+                        ) : inputType === 'REMOTE' ? (
+                            <div className="space-y-3">
+                                <div className="flex gap-2">
+                                    <input
+                                        type="url"
+                                        value={remoteUrl}
+                                        onChange={(e) => setRemoteUrl(e.target.value)}
+                                        className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        placeholder="Paste a direct video link (MP4, etc.)"
+                                    />
+                                    <button
+                                        type="button"
+                                        disabled={isImporting}
+                                        onClick={handleRemoteImport}
+                                        className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+                                    >
+                                        Import
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <input
+                                key="file-input"
+                                type="file"
+                                accept="video/*"
+                                required={inputType === 'FILE'}
+                                onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white"
+                            />
+                        )}
+                        {formData.videoUrl.startsWith('/uploads') && (
+                            <p className="mt-2 text-xs text-green-400">Target path: {formData.videoUrl}</p>
+                        )}
                     </div>
 
                     <div>
@@ -123,10 +234,10 @@ export default function NewShortPage() {
                     <div className="flex gap-4">
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={loading || isImporting}
                             className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50"
                         >
-                            {loading ? 'Uploading...' : 'Upload Short'}
+                            {loading ? 'Processing...' : 'Upload Short'}
                         </button>
                         <button
                             type="button"

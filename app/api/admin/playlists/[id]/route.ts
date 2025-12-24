@@ -58,6 +58,43 @@ export async function GET(
     }
 }
 
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const session = await getServerSession(authOptions)
+        const user = session?.user as any
+
+        if (!user || user.role !== 'ADMIN') {
+            return NextResponse.json(
+                { error: 'Unauthorized' },
+                { status: 401 }
+            )
+        }
+
+        const { id: playlistId } = await params
+        const { title, description, thumbnailUrl } = await request.json()
+
+        const playlist = await prisma.playlist.update({
+            where: { id: playlistId },
+            data: {
+                ...(title && { title }),
+                ...(description && { description }),
+                ...(thumbnailUrl !== undefined && { thumbnailUrl })
+            }
+        })
+
+        return NextResponse.json(playlist)
+    } catch (error) {
+        console.error('Error updating playlist:', error)
+        return NextResponse.json(
+            { error: 'Failed to update playlist' },
+            { status: 500 }
+        )
+    }
+}
+
 export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }

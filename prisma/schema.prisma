@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,36 +8,30 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(USER)
-  
-  // Stripe fields
-  stripeCustomerId String?
+  id                 String             @id @default(cuid())
+  name               String?
+  email              String             @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  role               Role               @default(USER)
+  stripeCustomerId   String?
   subscriptionStatus SubscriptionStatus @default(NONE)
-  
-  // Password reset fields
-  resetToken        String?   @unique
-  resetTokenExpiry  DateTime?
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  accounts      Account[]
-  sessions      Session[]
-  videos        Video[]
-  watchHistory  WatchHistory[]
-  subscriptions Subscription[]
-  likes         Like[]
-  comments      Comment[]
-  commentReplies CommentReply[]
-  views         View[]
-  playlists     Playlist[]
-  watchLater    WatchLater[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  resetToken         String?            @unique
+  resetTokenExpiry   DateTime?
+  accounts           Account[]
+  comments           Comment[]
+  commentReplies     CommentReply[]
+  likes              Like[]
+  playlists          Playlist[]
+  sessions           Session[]
+  subscriptions      Subscription[]
+  videos             Video[]
+  views              View[]
+  watchHistory       WatchHistory[]
+  watchLater         WatchLater[]
 }
 
 model Account {
@@ -49,15 +40,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -70,28 +60,26 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-
 model Video {
-  id                    String      @id @default(cuid())
-  title                 String
-  description           String      @db.Text
-  videoType             VideoType
-  accessType            AccessType
-  videoUrl              String
-  trailerDurationSeconds Int?      @default(30)
-  thumbnailUrl          String?
-  createdById           String
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-  
-  createdBy             User        @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  watchHistory          WatchHistory[]
-  likes                 Like[]
-  comments              Comment[]
-  views                 View[]
-  playlistVideos        PlaylistVideo[]
-  watchLaterEntries     WatchLater[]
-  
+  id                     String          @id @default(cuid())
+  title                  String
+  description            String
+  videoType              VideoType
+  accessType             AccessType
+  videoUrl               String
+  trailerDurationSeconds Int?            @default(30)
+  thumbnailUrl           String?
+  createdById            String
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  comments               Comment[]
+  likes                  Like[]
+  playlistVideos         PlaylistVideo[]
+  createdBy              User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  views                  View[]
+  watchHistory           WatchHistory[]
+  watchLaterEntries      WatchLater[]
+
   @@index([videoType])
   @@index([accessType])
 }
@@ -102,10 +90,9 @@ model WatchHistory {
   videoId               String
   lastWatchedAt         DateTime @default(now())
   totalWatchTimeSeconds Int      @default(0)
-  
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   video                 Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, videoId])
   @@index([userId])
 }
@@ -120,10 +107,110 @@ model Subscription {
   currentPeriodEnd     DateTime
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
-  
   user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  videoId   String
+  isLike    Boolean
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId])
+  @@index([videoId])
+}
+
+model Comment {
+  id        String         @id @default(cuid())
+  content   String
+  userId    String
+  videoId   String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video     Video          @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  replies   CommentReply[]
+
+  @@index([videoId])
+  @@index([userId])
+}
+
+model CommentReply {
+  id        String         @id @default(cuid())
+  content   String
+  userId    String
+  commentId String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  parentId  String?
+  comment   Comment        @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  parent    CommentReply?  @relation("NestedReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   CommentReply[] @relation("NestedReplies")
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
+  @@index([userId])
+  @@index([parentId])
+}
+
+model View {
+  id       String   @id @default(cuid())
+  videoId  String
+  userId   String?
+  viewedAt DateTime @default(now())
+  user     User?    @relation(fields: [userId], references: [id])
+  video    Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId], name: "userId_videoId")
+  @@index([videoId])
+  @@index([userId])
+  @@index([viewedAt])
+}
+
+model Playlist {
+  id           String          @id @default(cuid())
+  title        String
+  description  String
+  thumbnailUrl String?
+  createdById  String
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  createdBy    User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  videos       PlaylistVideo[]
+
+  @@index([createdById])
+}
+
+model PlaylistVideo {
+  id         String   @id @default(cuid())
+  playlistId String
+  videoId    String
+  order      Int
+  addedAt    DateTime @default(now())
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  video      Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, videoId])
+  @@index([playlistId])
+  @@index([videoId])
+}
+
+model WatchLater {
+  id      String   @id @default(cuid())
+  userId  String
+  videoId String
+  addedAt DateTime @default(now())
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video   Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId])
+  @@index([userId])
+  @@index([videoId])
 }
 
 enum Role {
@@ -146,112 +233,4 @@ enum SubscriptionStatus {
   ACTIVE
   CANCELED
   PAST_DUE
-}
-
-model Like {
-  id        String   @id @default(cuid())
-  userId    String
-  videoId   String
-  isLike    Boolean  // true = like, false = dislike
-  createdAt DateTime @default(now())
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, videoId])
-  @@index([videoId])
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  content   String   @db.Text
-  userId    String
-  videoId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  video     Video          @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  replies   CommentReply[]
-  
-  @@index([videoId])
-  @@index([userId])
-}
-
-model CommentReply {
-  id        String   @id @default(cuid())
-  content   String   @db.Text
-  userId    String
-  commentId String
-  parentId  String?  // For nested replies
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comment   Comment        @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  parent    CommentReply?  @relation("NestedReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies   CommentReply[] @relation("NestedReplies")
-  
-  @@index([commentId])
-  @@index([userId])
-  @@index([parentId])
-}
-
-model View {
-  id        String   @id @default(cuid())
-  videoId   String
-  userId    String?  // Optional - can track anonymous views
-  viewedAt  DateTime @default(now())
-  
-  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
-  @@unique([userId, videoId], name: "userId_videoId")
-  @@index([videoId])
-  @@index([userId])
-  @@index([viewedAt])
-}
-
-model Playlist {
-  id           String   @id @default(cuid())
-  title        String
-  description  String   @db.Text
-  thumbnailUrl String?
-  createdById  String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  createdBy    User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  videos       PlaylistVideo[]
-  
-  @@index([createdById])
-}
-
-model PlaylistVideo {
-  id         String   @id @default(cuid())
-  playlistId String
-  videoId    String
-  order      Int      // Position in playlist
-  addedAt    DateTime @default(now())
-  
-  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
-  video      Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  
-  @@unique([playlistId, videoId])
-  @@index([playlistId])
-  @@index([videoId])
-}
-
-model WatchLater {
-  id        String   @id @default(cuid())
-  userId    String
-  videoId   String
-  addedAt   DateTime @default(now())
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, videoId])
-  @@index([userId])
-  @@index([videoId])
 }

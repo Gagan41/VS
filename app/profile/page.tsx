@@ -156,7 +156,6 @@ export default function ProfilePage() {
         { id: 'account', label: 'Account', icon: UserIcon },
         { id: 'subscription', label: 'Subscription', icon: CreditCardIcon },
         { id: 'history', label: 'Watch History', icon: HistoryIcon },
-        { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     ]
 
     return (
