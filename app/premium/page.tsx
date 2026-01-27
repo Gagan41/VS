@@ -2,18 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import VideoCard from '@/components/VideoCard'
+import SearchInput from '@/components/SearchInput'
 
 export default function PremiumPage() {
     const [videos, setVideos] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
         fetchVideos()
-    }, [])
+    }, [searchQuery])
 
     const fetchVideos = async () => {
+        setLoading(true)
         try {
-            const response = await fetch('/api/videos?accessType=PREMIUM')
+            const url = `/api/videos?accessType=PREMIUM${searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : ''}`
+            const response = await fetch(url)
             const data = await response.json()
             setVideos(data)
         } catch (error) {
@@ -25,9 +29,18 @@ export default function PremiumPage() {
 
     return (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="mb-8">
-                <h1 className="text-4xl font-bold text-white mb-2">Premium Content</h1>
-                <p className="text-gray-300">Exclusive videos for our premium members</p>
+            <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
+                <div className="space-y-4">
+                    <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">Premium Content</h1>
+                    <p className="text-gray-400 text-lg font-medium">Exclusive high-fidelity content for our active members.</p>
+                </div>
+                <div className="w-full md:w-auto">
+                    <SearchInput
+                        onSearch={setSearchQuery}
+                        placeholder="Search premium library..."
+                        className="w-full md:min-w-[400px]"
+                    />
+                </div>
             </div>
 
             {loading ? (

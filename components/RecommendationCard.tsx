@@ -1,5 +1,4 @@
-'use client'
-
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { PlayIcon } from '@heroicons/react/24/solid'
@@ -93,13 +92,15 @@ export default function RecommendationCard({ video, isUpNext, isLoading, progres
             {/* Thumbnail Container */}
             <div className={`relative flex-shrink-0 rounded-xl overflow-hidden bg-gray-800 ${thumbSizes[thumbVariant]}`}>
                 {video.thumbnailUrl ? (
-                    <img
+                    <Image
                         src={video.thumbnailUrl}
                         alt={video.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 150px, 200px"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/50 to-blue-900/50">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-900/50 to-primary-800/50">
                         <PlayIcon className="w-8 h-8 text-white/20" />
                     </div>
                 )}
@@ -115,7 +116,7 @@ export default function RecommendationCard({ video, isUpNext, isLoading, progres
                 {progress !== undefined && (
                     <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20">
                         <div
-                            className="h-full bg-purple-500 transition-all duration-1000"
+                            className="h-full bg-primary-600 transition-all duration-1000"
                             style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
                         />
                     </div>
@@ -125,11 +126,11 @@ export default function RecommendationCard({ video, isUpNext, isLoading, progres
             {/* Info Container */}
             <div className="flex-1 min-w-0 py-0.5">
                 {isUpNext && (
-                    <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-1 block">
+                    <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1 block">
                         Up Next
                     </span>
                 )}
-                <h3 className="text-white text-sm font-bold line-clamp-2 leading-tight group-hover:text-purple-400 transition-colors">
+                <h3 className="text-white text-sm font-bold line-clamp-2 leading-tight group-hover:text-primary-400 transition-colors text-no-overflow">
                     {video.title}
                 </h3>
                 <div className="mt-1 flex flex-col gap-0.5">

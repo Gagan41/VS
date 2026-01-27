@@ -13,6 +13,7 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url)
         const type = searchParams.get('type') // 'LONG' or 'SHORT'
         const accessType = searchParams.get('accessType') // 'FREE' or 'PREMIUM'
+        const q = searchParams.get('q')
         const user = session.user as any
 
         const where: any = {}
@@ -21,6 +22,12 @@ export async function GET(request: Request) {
         }
         if (accessType) {
             where.accessType = accessType
+        }
+        if (q) {
+            where.OR = [
+                { title: { contains: q, mode: 'insensitive' } },
+                { description: { contains: q, mode: 'insensitive' } }
+            ]
         }
 
         // If user is not premium, they can only see free shorts in shorts feed

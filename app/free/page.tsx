@@ -2,18 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import VideoCard from '@/components/VideoCard'
+import SearchInput from '@/components/SearchInput'
 
 export default function FreePage() {
     const [videos, setVideos] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
         fetchVideos()
-    }, [])
+    }, [searchQuery])
 
     const fetchVideos = async () => {
+        setLoading(true)
         try {
-            const response = await fetch('/api/videos?accessType=FREE')
+            const url = `/api/videos?accessType=FREE${searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : ''}`
+            const response = await fetch(url)
             const data = await response.json()
             setVideos(data)
         } catch (error) {
@@ -25,9 +29,18 @@ export default function FreePage() {
 
     return (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="mb-8">
-                <h1 className="text-4xl font-bold text-white mb-2">Free Videos</h1>
-                <p className="text-gray-300">Enjoy our collection of free content</p>
+            <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
+                <div className="space-y-4">
+                    <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">Free Videos</h1>
+                    <p className="text-gray-400 text-lg font-medium">Enjoy our collection of free content, open for everyone.</p>
+                </div>
+                <div className="w-full md:w-auto">
+                    <SearchInput
+                        onSearch={setSearchQuery}
+                        placeholder="Search free videos..."
+                        className="w-full md:min-w-[400px]"
+                    />
+                </div>
             </div>
 
             {loading ? (

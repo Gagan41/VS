@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 import VideoCard from '@/components/VideoCard'
+import SearchInput from '@/components/SearchInput'
 
 function HomeContent() {
     const { data: session } = useSession()
@@ -14,22 +15,32 @@ function HomeContent() {
     const [videos, setVideos] = useState([])
     const [playlistName, setPlaylistName] = useState('')
     const [loading, setLoading] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
         fetchVideos()
-    }, [playlistId])
+    }, [playlistId, searchQuery])
 
     const fetchVideos = async () => {
         setLoading(true)
         try {
-            let url = '/api/videos?type=LONG'
+            let url = `/api/videos?type=LONG${searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : ''}`
             if (playlistId) {
-                // Fetch playlist details to get the name and its videos
+                // ... same as before but maybe search within playlist if possible, 
+                // but for now we'll stick to general search or just playlist content
                 const playlistRes = await fetch(`/api/admin/playlists/${playlistId}`)
                 const playlistData = await playlistRes.json()
                 if (!playlistData.error) {
                     setPlaylistName(playlistData.title)
-                    setVideos(playlistData.videos.map((pv: any) => pv.video))
+                    let filteredVideos = playlistData.videos.map((pv: any) => pv.video)
+                    if (searchQuery) {
+                        const lowQ = searchQuery.toLowerCase()
+                        filteredVideos = filteredVideos.filter((v: any) =>
+                            v.title.toLowerCase().includes(lowQ) ||
+                            v.description?.toLowerCase().includes(lowQ)
+                        )
+                    }
+                    setVideos(filteredVideos)
                     setLoading(false)
                     return
                 }
@@ -48,13 +59,13 @@ function HomeContent() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-primary-950 to-gray-900 p-4 sm:p-6 lg:p-8">
             <main className="max-w-7xl mx-auto pb-20">
                 <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                            <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-                            <span className="text-xs font-bold uppercase tracking-widest text-purple-400">
+                            <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-primary-400">
                                 {playlistName ? 'Featured Collection' : 'Personalized Stream'}
                             </span>
                         </div>
@@ -66,6 +77,14 @@ function HomeContent() {
                                 ? `Now streaming: "${playlistName}". Handpicked selection for our library.`
                                 : "The absolute best in long-form entertainment and professional insights, curated specifically for you."}
                         </p>
+                    </div>
+
+                    <div className="w-full md:w-auto">
+                        <SearchInput
+                            onSearch={setSearchQuery}
+                            placeholder="Search library..."
+                            className="w-full md:min-w-[400px]"
+                        />
                     </div>
                 </div>
 

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const session = await getServerSession(authOptions)
         const user = session?.user as any
@@ -15,13 +15,29 @@ export async function GET() {
             )
         }
 
+        const { searchParams } = new URL(request.url)
+        const q = searchParams.get('q')
+
+        const where: any = {
+            OR: [
+                { createdBy: { role: 'ADMIN' } },
+                { createdById: user.id }
+            ]
+        }
+
+        if (q) {
+            where.AND = [
+                {
+                    OR: [
+                        { title: { contains: q, mode: 'insensitive' } },
+                        { description: { contains: q, mode: 'insensitive' } }
+                    ]
+                }
+            ]
+        }
+
         const playlists = await prisma.playlist.findMany({
-            where: {
-                OR: [
-                    { createdBy: { role: 'ADMIN' } },
-                    { createdById: user.id }
-                ]
-            },
+            where,
             include: {
                 createdBy: {
                     select: {

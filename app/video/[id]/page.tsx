@@ -9,7 +9,10 @@ import Link from 'next/link'
 import toast from 'react-hot-toast'
 import LikeDislikeButton from '@/components/LikeDislikeButton'
 import ViewsDisplay from '@/components/ViewsDisplay'
-import CommentSection from '@/components/CommentSection'
+const CommentSection = dynamic(() => import('@/components/CommentSection'), {
+    loading: () => <div className="animate-pulse h-40 bg-white/5 rounded-2xl" />,
+    ssr: false
+})
 import VideoProtection from '@/components/VideoProtection'
 import { BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/24/outline'
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid'
@@ -244,6 +247,9 @@ export default function VideoPage() {
                                         {isPlaying && (
                                             <div className={`w-full h-full transition-opacity duration-700 ${isTrailerEnded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                                                 {(() => {
+                                                    const isCloudinary = video.videoUrl.includes('res.cloudinary.com')
+                                                    const isDirectFile = isLocal || isCloudinary
+
                                                     // A. Trailer Mode
                                                     if (!canWatchFull) {
                                                         if (youtubeId) {
@@ -274,36 +280,38 @@ export default function VideoPage() {
                                                             )
                                                         }
 
-                                                        // Local Trailer (Use native for reliability)
-                                                        return (
-                                                            <div className="w-full h-full relative">
-                                                                {!isTrailerEnded && (
-                                                                    <video
-                                                                        key={`trailer-local-${video.id}`}
-                                                                        ref={videoRef}
-                                                                        src={video.videoUrl}
-                                                                        controls
-                                                                        autoPlay
-                                                                        playsInline
-                                                                        controlsList="nodownload"
-                                                                        onContextMenu={(e) => e.preventDefault()}
-                                                                        onTimeUpdate={(e: any) => {
-                                                                            const limit = video.trailerDurationSeconds || 30
-                                                                            if (e.target.currentTime >= limit) {
-                                                                                e.target.pause()
-                                                                                setIsTrailerEnded(true)
-                                                                                toast.error('Preview ended', { id: 'trailer-end', icon: '🔒' })
-                                                                            }
-                                                                        }}
-                                                                        className="w-full h-full bg-black object-contain"
-                                                                        onError={() => setPlayerError('The trailer video file could not be played.')}
-                                                                    />
-                                                                )}
-                                                                <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
-                                                                    Preview Mode - {video.trailerDurationSeconds || 30}s
+                                                        // Direct File Trailer (Cloudinary or Local)
+                                                        if (isDirectFile) {
+                                                            return (
+                                                                <div className="w-full h-full relative">
+                                                                    {!isTrailerEnded && (
+                                                                        <video
+                                                                            key={`trailer-direct-${video.id}`}
+                                                                            ref={videoRef}
+                                                                            src={video.videoUrl}
+                                                                            controls
+                                                                            autoPlay
+                                                                            playsInline
+                                                                            controlsList="nodownload"
+                                                                            onContextMenu={(e) => e.preventDefault()}
+                                                                            onTimeUpdate={(e: any) => {
+                                                                                const limit = video.trailerDurationSeconds || 30
+                                                                                if (e.target.currentTime >= limit) {
+                                                                                    e.target.pause()
+                                                                                    setIsTrailerEnded(true)
+                                                                                    toast.error('Preview ended', { id: 'trailer-end', icon: '🔒' })
+                                                                                }
+                                                                            }}
+                                                                            className="w-full h-full bg-black object-contain"
+                                                                            onError={() => setPlayerError('The trailer video file could not be played.')}
+                                                                        />
+                                                                    )}
+                                                                    <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
+                                                                        Preview Mode - {video.trailerDurationSeconds || 30}s
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        )
+                                                            )
+                                                        }
                                                     }
 
                                                     // B. Full Video - YouTube
@@ -323,8 +331,8 @@ export default function VideoPage() {
                                                         )
                                                     }
 
-                                                    // C. Full Video - Local
-                                                    if (isLocal) {
+                                                    // C. Full Video - Direct File (Cloudinary or Local)
+                                                    if (isDirectFile) {
                                                         return (
                                                             <div className="w-full h-full relative" onDoubleClick={(e) => {
                                                                 if (!videoRef.current) return
@@ -339,7 +347,7 @@ export default function VideoPage() {
                                                                 }
                                                             }}>
                                                                 <video
-                                                                    key={`full-local-${video.id}`}
+                                                                    key={`full-direct-${video.id}`}
                                                                     ref={videoRef}
                                                                     src={video.videoUrl}
                                                                     controls
@@ -348,13 +356,13 @@ export default function VideoPage() {
                                                                     controlsList="nodownload"
                                                                     onContextMenu={(e) => e.preventDefault()}
                                                                     className="w-full h-full bg-black object-contain"
-                                                                    onError={() => setPlayerError('The local video file could not be played.')}
+                                                                    onError={() => setPlayerError('The video file could not be played.')}
                                                                 />
                                                             </div>
                                                         )
                                                     }
 
-                                                    // D. Fallback
+                                                    // D. Fallback (ReactPlayer for other sources)
                                                     return (
                                                         <ReactPlayer
                                                             url={video.videoUrl}

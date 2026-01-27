@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/prisma'
 import { authOptions } from '@/lib/auth'
-import { writeFile, mkdir, unlink } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
+import { uploadToCloudinary, deleteFromCloudinary, extractPublicId } from '@/lib/cloudinary'
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 export async function POST(request: NextRequest) {
     try {
@@ -22,34 +22,36 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
         }
 
-        // Get current user to see if we need to delete old photo
+        // Validate image type
+        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+            return NextResponse.json({
+                error: 'Invalid file type. Only JPG, PNG and WEBP are allowed.'
+            }, { status: 400 })
+        }
+
+        // Get current user to delete old photo from Cloudinary
         const dbUser = await prisma.user.findUnique({
             where: { id: user.id }
         })
 
-        if (dbUser?.image && dbUser.image.startsWith('/uploads/profile/')) {
-            const oldFilePath = path.join(process.cwd(), 'public', dbUser.image)
-            if (existsSync(oldFilePath)) {
-                await unlink(oldFilePath).catch(err => console.error('Failed to delete old photo:', err))
+        if (dbUser?.image) {
+            const publicId = extractPublicId(dbUser.image)
+            if (publicId) {
+                await deleteFromCloudinary(publicId, 'image').catch(err =>
+                    console.error('Failed to delete old Cloudinary photo:', err)
+                )
             }
         }
 
         const buffer = Buffer.from(await file.arrayBuffer())
-        const filename = `${user.id}_${Date.now()}.jpg`
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'profile')
-
-        await mkdir(uploadDir, { recursive: true })
-        const filepath = path.join(uploadDir, filename)
-        await writeFile(filepath, buffer)
-
-        const fileUrl = `/uploads/profile/${filename}`
+        const result = await uploadToCloudinary(buffer, 'profiles', 'image')
 
         await prisma.user.update({
             where: { id: user.id },
-            data: { image: fileUrl }
+            data: { image: result.url }
         })
 
-        return NextResponse.json({ url: fileUrl })
+        return NextResponse.json({ url: result.url })
     } catch (error) {
         console.error('Error uploading profile photo:', error)
         return NextResponse.json({ error: 'Failed to upload photo' }, { status: 500 })
@@ -69,10 +71,12 @@ export async function DELETE() {
             where: { id: user.id }
         })
 
-        if (dbUser?.image && dbUser.image.startsWith('/uploads/profile/')) {
-            const filePath = path.join(process.cwd(), 'public', dbUser.image)
-            if (existsSync(filePath)) {
-                await unlink(filePath).catch(err => console.error('Failed to delete photo from disk:', err))
+        if (dbUser?.image) {
+            const publicId = extractPublicId(dbUser.image)
+            if (publicId) {
+                await deleteFromCloudinary(publicId, 'image').catch(err =>
+                    console.error('Failed to delete Cloudinary photo:', err)
+                )
             }
         }
 

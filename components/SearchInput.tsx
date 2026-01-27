@@ -45,10 +45,10 @@ export default function SearchInput({
                 animate={{
                     scale: isFocused ? 1.02 : 1,
                     boxShadow: isFocused
-                        ? '0 0 20px rgba(168, 85, 247, 0.15)'
+                        ? '0 0 20px rgba(77, 47, 178, 0.2)'
                         : '0 0 0px rgba(0,0,0,0)'
                 }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border transition-colors duration-300 ${isFocused ? 'border-purple-500/50 bg-white/10' : 'border-white/10'
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border transition-colors duration-300 ${isFocused ? 'border-primary-700/60 bg-white/10' : 'border-white/10'
                     }`}
             >
                 <MagnifyingGlassIcon className={`w-5 h-5 transition-colors ${isFocused ? 'text-purple-400' : 'text-gray-500'
@@ -80,7 +80,7 @@ export default function SearchInput({
             </motion.div>
 
             {/* Subtle glow effect behind */}
-            <div className={`absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
+            <div className={`absolute -inset-0.5 bg-gradient-to-r from-primary-700 to-primary-600 rounded-2xl blur opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-25' : ''
                 }`} />
         </div>
     )

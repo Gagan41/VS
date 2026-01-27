@@ -26,7 +26,6 @@ export default function MainLayout({ children, session }: { children: React.Reac
         <div className="min-h-screen">
             <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
             <Sidebar
-                session={session}
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
             />

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/prisma'
 import { authOptions } from '@/lib/auth'
+import { deleteFromCloudinary, extractPublicId } from '@/lib/cloudinary'
 
 export async function GET(
     request: NextRequest,
@@ -76,6 +77,13 @@ export async function PATCH(
         const { id: playlistId } = await params
         const { title, description, thumbnailUrl } = await request.json()
 
+        const existingPlaylist = await prisma.playlist.findUnique({ where: { id: playlistId } })
+
+        if (existingPlaylist && thumbnailUrl && thumbnailUrl !== existingPlaylist.thumbnailUrl) {
+            const publicId = extractPublicId(existingPlaylist.thumbnailUrl || '')
+            if (publicId) await deleteFromCloudinary(publicId, 'image').catch(() => { })
+        }
+
         const playlist = await prisma.playlist.update({
             where: { id: playlistId },
             data: {
@@ -113,6 +121,13 @@ export async function PUT(
         const { id: playlistId } = await params
         const { title, description, thumbnailUrl } = await request.json()
 
+        const existingPlaylist = await prisma.playlist.findUnique({ where: { id: playlistId } })
+
+        if (existingPlaylist && thumbnailUrl && thumbnailUrl !== existingPlaylist.thumbnailUrl) {
+            const publicId = extractPublicId(existingPlaylist.thumbnailUrl || '')
+            if (publicId) await deleteFromCloudinary(publicId, 'image').catch(() => { })
+        }
+
         const playlist = await prisma.playlist.update({
             where: { id: playlistId },
             data: {
@@ -148,6 +163,12 @@ export async function DELETE(
         }
 
         const { id: playlistId } = await params
+
+        const playlist = await prisma.playlist.findUnique({ where: { id: playlistId } })
+        if (playlist?.thumbnailUrl) {
+            const publicId = extractPublicId(playlist.thumbnailUrl)
+            if (publicId) await deleteFromCloudinary(publicId, 'image').catch(() => { })
+        }
 
         await prisma.playlist.delete({
             where: { id: playlistId }

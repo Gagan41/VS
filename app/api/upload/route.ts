@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { uploadToCloudinary } from '@/lib/cloudinary'
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 export async function POST(request: Request) {
     try {
@@ -20,18 +21,14 @@ export async function POST(request: Request) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer())
-        const filename = Date.now() + '_' + file.name.replace(/\s/g, '_')
+        const resourceType = type === 'videos' ? 'video' : 'image'
 
-        // Ensure upload directory exists
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', type)
-        await mkdir(uploadDir, { recursive: true })
+        const result = await uploadToCloudinary(buffer, type, resourceType)
 
-        const filepath = path.join(uploadDir, filename)
-        await writeFile(filepath, buffer)
-
-        const fileUrl = `/uploads/${type}/${filename}`
-
-        return NextResponse.json({ url: fileUrl }, { status: 201 })
+        return NextResponse.json({
+            url: result.url,
+            publicId: result.publicId
+        }, { status: 201 })
     } catch (error) {
         console.error('Error uploading file:', error)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
