@@ -42,15 +42,15 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4">
+        <div className="min-h-screen flex items-center justify-center gradient-deep px-4">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-md"
             >
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
+                <div className="glass-surface backdrop-blur-xl rounded-2xl shadow-deep p-8 border border-primary/30">
                     <div className="text-center mb-8">
-                        <h1 className="text-4xl font-bold text-white mb-2">Welcome Back</h1>
+                        <h1 className="text-4xl font-bold gradient-text-primary mb-2">Welcome Back</h1>
                         <p className="text-gray-300">Sign in to continue to Kushal Stream</p>
                     </div>
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                                className="w-full px-4 py-3 rounded-lg bg-deep/50 border border-primary/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                                 placeholder="you@example.com"
                             />
                         </div>
@@ -77,7 +77,7 @@ export default function LoginPage() {
                                 </label>
                                 <Link
                                     href="/auth/forgot-password"
-                                    className="text-sm text-purple-400 hover:text-purple-300 transition"
+                                    className="text-sm text-primary hover:text-primary-300 transition-colors"
                                 >
                                     Forgot Password?
                                 </Link>
@@ -88,7 +88,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                                className="w-full px-4 py-3 rounded-lg bg-deep/50 border border-primary/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -96,7 +96,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 px-4 gradient-primary text-white font-semibold rounded-lg hover:shadow-glow-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isLoading ? 'Signing in...' : 'Sign In'}
                         </button>
@@ -105,7 +105,7 @@ export default function LoginPage() {
                     <div className="mt-6">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-white/20"></div>
+                                <div className="w-full border-t border-primary/20"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
                                 <span className="px-2 bg-transparent text-gray-300">Or continue with</span>
@@ -140,7 +140,7 @@ export default function LoginPage() {
 
                     <p className="mt-6 text-center text-sm text-gray-300">
                         Don't have an account?{' '}
-                        <Link href="/auth/register" className="text-purple-400 hover:text-purple-300 font-semibold">
+                        <Link href="/auth/register" className="text-primary hover:text-primary-300 font-semibold transition-colors">
                             Sign up
                         </Link>
                     </p>

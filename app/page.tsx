@@ -6,14 +6,14 @@ import { PlayCircleIcon, SparklesIcon, ClockIcon, ChartBarIcon } from '@heroicon
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
+    <div className="min-h-screen gradient-deep">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-surface rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto text-center">
@@ -23,7 +23,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-6xl md:text-8xl font-bold text-white mb-6">
-              Kushal <span className="gradient-text">Stream</span>
+              Kushal <span className="gradient-text-primary">Stream</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
               Your exclusive destination for premium video content. Watch full-length videos, shorts, and reels from your favorite creator.
@@ -31,13 +31,13 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/auth/login"
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition shadow-lg"
+                className="px-8 py-4 gradient-primary text-white font-semibold rounded-full hover:shadow-glow-primary transform hover:scale-105 transition-all shadow-lg"
               >
                 Login
               </Link>
               <Link
                 href="/auth/register"
-                className="px-8 py-4 bg-white/10 backdrop-blur-lg text-white font-semibold rounded-full hover:bg-white/20 transform hover:scale-105 transition border border-white/20"
+                className="px-8 py-4 glass-surface backdrop-blur-lg text-white font-semibold rounded-full hover:bg-primary/20 transform hover:scale-105 transition-all border border-primary/30"
               >
                 Sign Up
               </Link>
@@ -100,9 +100,9 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="glass rounded-2xl p-6 hover:bg-white/20 transition"
+                className="glass-surface rounded-2xl p-6 hover:bg-primary/5 transition-all hover:shadow-glow-primary border border-primary/20"
               >
-                <feature.icon className="w-12 h-12 text-purple-400 mb-4" />
+                <feature.icon className="w-12 h-12 text-primary mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">
                   {feature.title}
                 </h3>
@@ -186,9 +186,9 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="glass rounded-2xl p-8 border-2 border-purple-500 relative"
+              className="glass-surface rounded-2xl p-8 border-2 border-primary relative shadow-glow-primary"
             >
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 gradient-primary text-white px-4 py-1 rounded-full text-sm font-semibold">
                 POPULAR
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Premium</h3>
@@ -229,7 +229,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/auth/register"
-                className="block w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition text-center"
+                className="block w-full py-3 px-4 gradient-primary text-white font-semibold rounded-lg hover:shadow-glow-primary transition-all text-center"
               >
                 Start Free Trial
               </Link>

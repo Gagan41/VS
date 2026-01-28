@@ -232,7 +232,7 @@ export default function VideoPage() {
 
     return (
         <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-6xl mx-auto py-8">
+            <main className="max-w-7xl mx-auto pb-20">
                 <div className="glass rounded-2xl overflow-hidden">
                     {/* Video Player */}
                     <VideoProtection videoId={video.id}>

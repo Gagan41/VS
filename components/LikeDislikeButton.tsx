@@ -99,37 +99,37 @@ export default function LikeDislikeButton({ videoId }: LikeDislikeButtonProps) {
     }
 
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
             <button
                 onClick={() => handleLike(true)}
                 disabled={loading}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${userStatus === 'like'
-                    ? 'bg-purple-600 text-white'
-                    : 'glass text-gray-300 hover:bg-white/20'
-                    } disabled:opacity-50`}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all hover:scale-105 ${userStatus === 'like'
+                    ? 'gradient-primary text-white shadow-glow-primary'
+                    : 'glass-surface text-gray-300 hover:bg-primary/10 hover:text-primary'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
                 {userStatus === 'like' ? (
                     <HandThumbUpSolidIcon className="w-5 h-5" />
                 ) : (
                     <HandThumbUpIcon className="w-5 h-5" />
                 )}
-                <span className="font-semibold">{likes || 0}</span>
+                <span className="font-semibold text-sm">{likes || 0}</span>
             </button>
 
             <button
                 onClick={() => handleLike(false)}
                 disabled={loading}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${userStatus === 'dislike'
-                    ? 'bg-red-600 text-white'
-                    : 'glass text-gray-300 hover:bg-white/20'
-                    } disabled:opacity-50`}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all hover:scale-105 ${userStatus === 'dislike'
+                    ? 'bg-red-600 text-white shadow-lg'
+                    : 'glass-surface text-gray-300 hover:bg-red-500/10 hover:text-red-400'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
                 {userStatus === 'dislike' ? (
                     <HandThumbDownSolidIcon className="w-5 h-5" />
                 ) : (
                     <HandThumbDownIcon className="w-5 h-5" />
                 )}
-                <span className="font-semibold">{dislikes || 0}</span>
+                <span className="font-semibold text-sm">{dislikes || 0}</span>
             </button>
         </div>
     )

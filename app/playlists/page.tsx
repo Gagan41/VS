@@ -35,8 +35,8 @@ export default function PlaylistsPage() {
     const userPlaylists = playlists.filter((p: any) => p.createdBy?.role !== 'ADMIN')
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-primary-950 to-gray-900 p-4 sm:p-6 lg:p-8">
-            <main className="max-w-7xl mx-auto py-6 space-y-10">
+        <div className="p-4 sm:p-6 lg:p-8">
+            <main className="max-w-7xl mx-auto pb-20 space-y-10">
 
                 {/* Header with Search */}
                 <div className="space-y-6">

@@ -59,20 +59,20 @@ function HomeContent() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-primary-950 to-gray-900 p-4 sm:p-6 lg:p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
             <main className="max-w-7xl mx-auto pb-20">
-                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
+                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-primary/10 pb-10">
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                            <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
-                            <span className="text-xs font-bold uppercase tracking-widest text-primary-400">
+                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse-primary"></span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-primary">
                                 {playlistName ? 'Featured Collection' : 'Personalized Stream'}
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">
                             {playlistName || (user?.name ? `Welcome back, ${user.name.split(' ')[0]}` : 'Discover High-Fidelity Content')}
                         </h1>
-                        <p className="text-gray-400 text-lg font-medium max-w-xl">
+                        <p className="text-gray-300 text-lg font-medium max-w-xl">
                             {playlistName
                                 ? `Now streaming: "${playlistName}". Handpicked selection for our library.`
                                 : "The absolute best in long-form entertainment and professional insights, curated specifically for you."}
@@ -101,9 +101,11 @@ function HomeContent() {
                         ))}
                     </div>
                 ) : videos.length === 0 ? (
-                    <div className="text-center py-40 glass rounded-3xl border border-white/5">
-                        <p className="text-white/20 font-black text-3xl uppercase tracking-widest mb-4">No Signal Detected</p>
-                        <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Awaiting new data transmissions.</p>
+                    <div className="glass-surface rounded-3xl border border-primary/20 p-8">
+                        <div className="text-center py-32">
+                            <p className="text-white/20 font-black text-3xl uppercase tracking-widest mb-4">No Signal Detected</p>
+                            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Awaiting new data transmissions.</p>
+                        </div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

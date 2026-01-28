@@ -29,7 +29,7 @@ export default function MainLayout({ children, session }: { children: React.Reac
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
             />
-            <div className={`transition-all duration-300 ${isSidebarOpen ? 'blur-sm lg:blur-none' : ''} lg:pl-64 pt-16`}>
+            <div className={`transition-all duration-300 ${isSidebarOpen ? 'blur-sm lg:blur-none' : ''} lg:pl-64 min-h-screen gradient-deep`}>
                 <main>{children}</main>
             </div>
             <Toaster position="top-right" />

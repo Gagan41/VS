@@ -46,7 +46,7 @@ export default function ManageVideosPage() {
 
     return (
         <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-7xl mx-auto py-8">
+            <main className="max-w-7xl mx-auto pb-20">
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-4xl font-bold text-white mb-2">Manage Videos</h1>
@@ -54,7 +54,7 @@ export default function ManageVideosPage() {
                     </div>
                     <Link
                         href="/admin/videos/new"
-                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition"
+                        className="px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-glow-primary transition-all"
                     >
                         Upload New Video
                     </Link>
@@ -69,15 +69,15 @@ export default function ManageVideosPage() {
                         <p className="text-gray-400 text-lg mb-4">No videos uploaded yet</p>
                         <Link
                             href="/admin/videos/new"
-                            className="inline-block px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700"
+                            className="inline-block px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-glow-primary transition-all"
                         >
                             Upload Your First Video
                         </Link>
                     </div>
                 ) : (
-                    <div className="glass rounded-2xl overflow-hidden">
+                    <div className="glass-surface rounded-2xl overflow-hidden border border-primary/20">
                         <table className="w-full">
-                            <thead className="bg-white/5">
+                            <thead className="bg-deep/30">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-200">Title</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-200">Access</th>
@@ -85,9 +85,9 @@ export default function ManageVideosPage() {
                                     <th className="px-6 py-4 text-right text-sm font-semibold text-gray-200">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/10">
+                            <tbody className="divide-y divide-primary/10">
                                 {videos.map((video: any) => (
-                                    <tr key={video.id} className="hover:bg-white/5 transition">
+                                    <tr key={video.id} className="hover:bg-primary/5 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-24 h-16 bg-gray-800 rounded overflow-hidden flex-shrink-0">
@@ -103,8 +103,8 @@ export default function ManageVideosPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${video.accessType === 'PREMIUM'
-                                                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
-                                                : 'bg-green-500 text-white'
+                                                ? 'gradient-primary text-white'
+                                                : 'bg-green-600 text-white'
                                                 }`}>
                                                 {video.accessType}
                                             </span>
@@ -116,13 +116,13 @@ export default function ManageVideosPage() {
                                             <div className="flex justify-end gap-2">
                                                 <Link
                                                     href={`/admin/videos/${video.id}/edit`}
-                                                    className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded transition"
+                                                    className="p-2 text-primary hover:text-primary-300 hover:bg-primary/10 rounded-lg transition-all"
                                                 >
                                                     <PencilIcon className="w-5 h-5" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(video.id)}
-                                                    className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition"
+                                                    className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all"
                                                 >
                                                     <TrashIcon className="w-5 h-5" />
                                                 </button>

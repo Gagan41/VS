@@ -36,129 +36,153 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-4 sm:p-6 lg:p-8">
-
-            <main className="max-w-7xl mx-auto py-8">
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-                    <p className="text-gray-300">Manage your content and platform</p>
+        <div className="p-4 sm:p-6 lg:p-8">
+            <main className="max-w-7xl mx-auto pb-20">
+                {/* Header Section */}
+                <div className="mb-12 border-b border-primary/10 pb-10">
+                    <div className="flex items-center gap-3 mb-4">
+                        <span className="w-2 h-2 rounded-full bg-primary animate-pulse-primary"></span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                            Control Center
+                        </span>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">Admin Dashboard</h1>
+                    <p className="text-gray-300 text-lg font-medium">Manage your content, monitor analytics, and control your platform</p>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="glass rounded-2xl p-6">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div className="glass-surface rounded-2xl border border-primary/20 p-6 hover:border-primary/30 transition-smooth shadow-deep">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-gray-400 text-sm">Total Videos</p>
-                                <p className="text-3xl font-bold text-white mt-1">{stats.totalVideos}</p>
+                                <p className="text-secondary-400 text-sm font-semibold uppercase tracking-wide mb-2">Total Videos</p>
+                                <p className="text-4xl font-black text-white">{stats.totalVideos}</p>
                             </div>
-                            <FilmIcon className="w-12 h-12 text-purple-400" />
+                            <div className="p-4 bg-primary/20 rounded-2xl border border-primary/30">
+                                <FilmIcon className="w-10 h-10 text-primary" />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="glass rounded-2xl p-6">
+                    <div className="glass-surface rounded-2xl border border-primary/20 p-6 hover:border-primary/30 transition-smooth shadow-deep">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-gray-400 text-sm">Total Shorts</p>
-                                <p className="text-3xl font-bold text-white mt-1">{stats.totalShorts}</p>
+                                <p className="text-secondary-400 text-sm font-semibold uppercase tracking-wide mb-2">Total Shorts</p>
+                                <p className="text-4xl font-black text-white">{stats.totalShorts}</p>
                             </div>
-                            <VideoCameraIcon className="w-12 h-12 text-blue-400" />
+                            <div className="p-4 bg-primary/20 rounded-2xl border border-primary/30">
+                                <VideoCameraIcon className="w-10 h-10 text-primary" />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="glass rounded-2xl p-6">
+                    <div className="glass-surface rounded-2xl border border-primary/20 p-6 hover:border-primary/30 transition-smooth shadow-deep">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-gray-400 text-sm">Total Content</p>
-                                <p className="text-3xl font-bold text-white mt-1">{stats.totalVideos + stats.totalShorts}</p>
+                                <p className="text-secondary-400 text-sm font-semibold uppercase tracking-wide mb-2">Total Content</p>
+                                <p className="text-4xl font-black text-white">{stats.totalVideos + stats.totalShorts}</p>
                             </div>
-                            <PlusIcon className="w-12 h-12 text-green-400" />
+                            <div className="p-4 bg-primary/20 rounded-2xl border border-primary/30">
+                                <PlusIcon className="w-10 h-10 text-primary" />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Quick Actions */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Link
-                        href="/admin/videos/new"
-                        className="glass rounded-2xl p-8 hover:bg-white/20 transition group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-4 bg-purple-600 rounded-full group-hover:scale-110 transition">
-                                <FilmIcon className="w-8 h-8 text-white" />
+                {/* Quick Actions Section */}
+                <div className="mb-12">
+                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span className="w-1 h-6 bg-primary rounded-full"></span>
+                        Quick Actions
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Link
+                            href="/admin/videos/new"
+                            className="glass-surface rounded-2xl border border-primary/20 p-8 hover:border-primary/40 hover:shadow-glow-primary transition-smooth group"
+                        >
+                            <div className="flex items-center gap-6">
+                                <div className="p-5 gradient-primary rounded-2xl group-hover:scale-110 transition-smooth shadow-glow-primary">
+                                    <FilmIcon className="w-10 h-10 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-smooth">Upload Long Video</h3>
+                                    <p className="text-gray-400 font-medium">Add a new full-length video to your library</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-1">Upload Long Video</h3>
-                                <p className="text-gray-400">Add a new full-length video</p>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
 
-                    <Link
-                        href="/admin/shorts/new"
-                        className="glass rounded-2xl p-8 hover:bg-white/20 transition group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-4 bg-blue-600 rounded-full group-hover:scale-110 transition">
-                                <VideoCameraIcon className="w-8 h-8 text-white" />
+                        <Link
+                            href="/admin/shorts/new"
+                            className="glass-surface rounded-2xl border border-primary/20 p-8 hover:border-primary/40 hover:shadow-glow-primary transition-smooth group"
+                        >
+                            <div className="flex items-center gap-6">
+                                <div className="p-5 gradient-primary rounded-2xl group-hover:scale-110 transition-smooth shadow-glow-primary">
+                                    <VideoCameraIcon className="w-10 h-10 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-smooth">Upload Short</h3>
+                                    <p className="text-gray-400 font-medium">Add a new short-form video or reel</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-1">Upload Short</h3>
-                                <p className="text-gray-400">Add a new short/reel</p>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
 
-                    <Link
-                        href="/admin/videos"
-                        className="glass rounded-2xl p-8 hover:bg-white/20 transition group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-4 bg-green-600 rounded-full group-hover:scale-110 transition">
-                                <FilmIcon className="w-8 h-8 text-white" />
+                        <Link
+                            href="/admin/videos"
+                            className="glass-surface rounded-2xl border border-primary/20 p-8 hover:border-primary/40 hover:shadow-glow-primary transition-smooth group"
+                        >
+                            <div className="flex items-center gap-6">
+                                <div className="p-5 gradient-surface rounded-2xl group-hover:scale-110 transition-smooth border border-primary/20">
+                                    <FilmIcon className="w-10 h-10 text-primary" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-smooth">Manage Videos</h3>
+                                    <p className="text-gray-400 font-medium">Edit or delete existing long-form videos</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-1">Manage Videos</h3>
-                                <p className="text-gray-400">Edit or delete existing videos</p>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
 
-                    <Link
-                        href="/admin/shorts"
-                        className="glass rounded-2xl p-8 hover:bg-white/20 transition group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-4 bg-orange-600 rounded-full group-hover:scale-110 transition">
-                                <VideoCameraIcon className="w-8 h-8 text-white" />
+                        <Link
+                            href="/admin/shorts"
+                            className="glass-surface rounded-2xl border border-primary/20 p-8 hover:border-primary/40 hover:shadow-glow-primary transition-smooth group"
+                        >
+                            <div className="flex items-center gap-6">
+                                <div className="p-5 gradient-surface rounded-2xl group-hover:scale-110 transition-smooth border border-primary/20">
+                                    <VideoCameraIcon className="w-10 h-10 text-primary" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-smooth">Manage Shorts</h3>
+                                    <p className="text-gray-400 font-medium">Edit or delete existing short videos</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-1">Manage Shorts</h3>
-                                <p className="text-gray-400">Edit or delete existing shorts</p>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
 
-                    <Link
-                        href="/admin/playlists"
-                        className="glass rounded-2xl p-8 hover:bg-white/20 transition group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-4 bg-pink-600 rounded-full group-hover:scale-110 transition">
-                                <QueueListIcon className="w-8 h-8 text-white" />
+                        <Link
+                            href="/admin/playlists"
+                            className="glass-surface rounded-2xl border border-primary/20 p-8 hover:border-primary/40 hover:shadow-glow-primary transition-smooth group md:col-span-2"
+                        >
+                            <div className="flex items-center gap-6">
+                                <div className="p-5 gradient-surface rounded-2xl group-hover:scale-110 transition-smooth border border-primary/20">
+                                    <QueueListIcon className="w-10 h-10 text-primary" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-smooth">Manage Playlists</h3>
+                                    <p className="text-gray-400 font-medium">Create, organize, and manage video playlists</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-1">Manage Playlists</h3>
-                                <p className="text-gray-400">Create and organize playlists</p>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Analytics Section */}
-                <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <ViewAnalyticsChart />
-                    <TopVideosTable />
+                <div>
+                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span className="w-1 h-6 bg-primary rounded-full"></span>
+                        Analytics Overview
+                    </h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <ViewAnalyticsChart />
+                        <TopVideosTable />
+                    </div>
                 </div>
             </main>
         </div>
