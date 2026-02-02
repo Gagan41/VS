@@ -31,8 +31,8 @@ export default function ShortsRow({ shorts }: ShortsRowProps) {
 
     return (
         <div className="w-full">
-            <h3 className="text-sm font-bold text-white mb-3 px-2 flex items-center gap-2">
-                <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+            <h3 className="text-sm font-bold text-black mb-3 px-2 flex items-center gap-2">
+                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M10 4.5V19.5L17 12L10 4.5Z" />
                 </svg>
                 Shorts
@@ -48,7 +48,7 @@ export default function ShortsRow({ shorts }: ShortsRowProps) {
                             className="group flex-shrink-0 w-[140px]"
                         >
                             {/* Vertical Thumbnail (9:16) */}
-                            <div className="relative aspect-[9/16] rounded-xl overflow-hidden bg-gray-800 mb-2">
+                            <div className="relative aspect-[9/16] rounded-xl overflow-hidden bg-gray-200 mb-2">
                                 {short.thumbnailUrl ? (
                                     <Image
                                         src={short.thumbnailUrl}
@@ -58,8 +58,8 @@ export default function ShortsRow({ shorts }: ShortsRowProps) {
                                         sizes="140px"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-900/50 to-primary-800/50">
-                                        <PlayIcon className="w-10 h-10 text-white/30" />
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                                        <PlayIcon className="w-10 h-10 text-gray-400" />
                                     </div>
                                 )}
 
@@ -72,7 +72,7 @@ export default function ShortsRow({ shorts }: ShortsRowProps) {
                                 )}
                             </div>
 
-                            <h4 className="text-white text-xs font-semibold line-clamp-2 leading-tight group-hover:text-primary-400 transition-colors">
+                            <h4 className="text-black text-xs font-semibold line-clamp-2 leading-tight group-hover:text-primary transition-colors">
                                 {short.title}
                             </h4>
                         </Link>
@@ -88,7 +88,7 @@ export default function ShortsRow({ shorts }: ShortsRowProps) {
                         href={`/video/${short.id}`}
                         className="group"
                     >
-                        <div className="relative aspect-[9/16] rounded-lg overflow-hidden bg-gray-800 mb-1.5">
+                        <div className="relative aspect-[9/16] rounded-lg overflow-hidden bg-gray-200 mb-1.5">
                             {short.thumbnailUrl ? (
                                 <Image
                                     src={short.thumbnailUrl}
@@ -98,15 +98,15 @@ export default function ShortsRow({ shorts }: ShortsRowProps) {
                                     sizes="(min-width: 1024px) 180px, 140px"
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-900/50 to-primary-800/50">
-                                    <PlayIcon className="w-8 h-8 text-white/30" />
+                                <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                                    <PlayIcon className="w-8 h-8 text-gray-400" />
                                 </div>
                             )}
 
                             {short.durationSeconds && <DurationBadge durationSeconds={short.durationSeconds} />}
                         </div>
 
-                        <h4 className="text-white text-[11px] font-semibold line-clamp-2 leading-tight group-hover:text-primary-400 transition-colors">
+                        <h4 className="text-black text-[11px] font-semibold line-clamp-2 leading-tight group-hover:text-primary transition-colors">
                             {short.title}
                         </h4>
                     </Link>

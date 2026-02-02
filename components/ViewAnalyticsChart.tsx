@@ -43,20 +43,20 @@ export default function ViewAnalyticsChart({ className = '' }: ViewAnalyticsChar
     }
 
     return (
-        <div className={`glass rounded-2xl p-6 ${className}`}>
+        <div className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-sm ${className}`}>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-2xl font-bold text-white mb-1">View Analytics</h2>
-                    <p className="text-gray-400">Total Views: {totalViews.toLocaleString()}</p>
+                    <h2 className="text-2xl font-bold text-black mb-1">View Analytics</h2>
+                    <p className="text-gray-600 font-medium">Total Views: {totalViews.toLocaleString()}</p>
                 </div>
                 <div className="flex gap-2">
                     {['7d', '30d', '90d', '1y'].map((p) => (
                         <button
                             key={p}
                             onClick={() => setPeriod(p)}
-                            className={`px-3 py-1 rounded-lg text-sm font-medium transition ${period === p
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                            className={`px-3 py-1 rounded-lg text-sm font-bold transition ${period === p
+                                ? 'bg-primary text-black shadow-[0_8px_20px_-4px_rgba(37,99,235,0.6)]'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                         >
                             {p}
@@ -70,7 +70,7 @@ export default function ViewAnalyticsChart({ className = '' }: ViewAnalyticsChar
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
                 </div>
             ) : data.length === 0 ? (
-                <div className="flex items-center justify-center h-64 text-gray-400">
+                <div className="flex items-center justify-center h-64 text-gray-500 font-medium">
                     No view data available for this period
                 </div>
             ) : (
@@ -82,23 +82,24 @@ export default function ViewAnalyticsChart({ className = '' }: ViewAnalyticsChar
                                 <stop offset="95%" stopColor="#9333ea" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                         <XAxis
                             dataKey="date"
                             tickFormatter={formatDate}
-                            stroke="#9ca3af"
-                            style={{ fontSize: '12px' }}
+                            stroke="#4b5563"
+                            style={{ fontSize: '12px', fontWeight: '500' }}
                         />
                         <YAxis
-                            stroke="#9ca3af"
-                            style={{ fontSize: '12px' }}
+                            stroke="#4b5563"
+                            style={{ fontSize: '12px', fontWeight: '500' }}
                         />
                         <Tooltip
                             contentStyle={{
-                                backgroundColor: 'rgba(17, 24, 39, 0.9)',
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                backgroundColor: '#fff',
+                                border: '1px solid #e5e7eb',
                                 borderRadius: '8px',
-                                color: '#fff'
+                                color: '#000',
+                                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                             }}
                             labelFormatter={formatDate}
                         />

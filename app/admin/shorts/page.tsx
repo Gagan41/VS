@@ -45,16 +45,16 @@ export default function ManageShortsPage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-7xl mx-auto py-8">
-                <div className="flex justify-between items-center mb-8">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
+            <main className="max-w-7xl mx-auto pt-6 pb-8">
+                <div className="flex justify-between items-center mb-8 pb-6 border-b border-gray-100">
                     <div>
-                        <h1 className="text-4xl font-bold text-white mb-2">Manage Shorts</h1>
-                        <p className="text-gray-300">Edit or delete your shorts/reels</p>
+                        <h1 className="text-4xl font-bold text-black mb-2">Manage Shorts</h1>
+                        <p className="text-gray-600 font-medium">Edit or delete your shorts/reels</p>
                     </div>
                     <Link
                         href="/admin/shorts/new"
-                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition"
+                        className="px-6 py-3 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm"
                     >
                         Upload New Short
                     </Link>
@@ -65,11 +65,11 @@ export default function ManageShortsPage() {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
                     </div>
                 ) : shorts.length === 0 ? (
-                    <div className="text-center py-20">
-                        <p className="text-gray-400 text-lg mb-4">No shorts uploaded yet</p>
+                    <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
+                        <p className="text-gray-500 text-lg mb-4 font-bold">No shorts uploaded yet</p>
                         <Link
                             href="/admin/shorts/new"
-                            className="inline-block px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700"
+                            className="inline-block px-8 py-3 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm"
                         >
                             Upload Your First Short
                         </Link>
@@ -77,23 +77,23 @@ export default function ManageShortsPage() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {shorts.map((short: any) => (
-                            <div key={short.id} className="glass rounded-2xl overflow-hidden group">
-                                <div className="aspect-[9/16] bg-gray-800 relative">
+                            <div key={short.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden group shadow-sm hover:shadow-md transition-all">
+                                <div className="aspect-[9/16] bg-gray-100 relative overflow-hidden">
                                     {short.thumbnailUrl && (
                                         <img src={short.thumbnailUrl} alt={short.title} className="w-full h-full object-cover" />
                                     )}
                                     {short.accessType === 'PREMIUM' && (
-                                        <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold rounded">
+                                        <div className="absolute top-2 right-2 px-2 py-1 bg-black text-white text-xs font-black rounded shadow-lg uppercase italic">
                                             PREMIUM
                                         </div>
                                     )}
                                 </div>
                                 <div className="p-4">
-                                    <h3 className="text-white font-semibold mb-1 line-clamp-2">{short.title}</h3>
-                                    <p className="text-gray-400 text-sm line-clamp-2 mb-3">{short.description}</p>
+                                    <h3 className="text-black font-bold mb-1 line-clamp-2 group-hover:text-primary transition-colors">{short.title}</h3>
+                                    <p className="text-gray-600 text-sm line-clamp-2 mb-4 font-medium">{short.description}</p>
                                     <button
                                         onClick={() => handleDelete(short.id)}
-                                        className="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+                                        className="w-full py-2.5 px-4 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-all flex items-center justify-center gap-2 shadow-md shadow-red-200"
                                     >
                                         <TrashIcon className="w-4 h-4" />
                                         Delete

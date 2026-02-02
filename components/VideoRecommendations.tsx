@@ -57,22 +57,21 @@ export default function VideoRecommendations({ currentVideoId }: VideoRecommenda
             {/* Continue Watching Section */}
             <ContinueWatchingSection currentVideoId={currentVideoId} />
 
-            {/* Section Header */}
             <div className="hidden lg:block">
-                <h2 className="text-base font-bold text-white px-2">
+                <h2 className="text-base font-black text-black px-2 uppercase tracking-tight">
                     Recommended
                 </h2>
             </div>
 
             <div className="lg:hidden">
-                <h2 className="text-lg font-bold text-white px-2 border-b border-white/10 pb-3">
+                <h2 className="text-lg font-black text-black px-2 border-b border-gray-100 pb-3 uppercase tracking-tight">
                     Up next
                 </h2>
             </div>
 
             {/* Shorts Section */}
             {shorts.length > 0 && (
-                <div className="border-b border-white/5 pb-4">
+                <div className="border-b border-gray-100 pb-4">
                     <ShortsRow shorts={shorts} />
                 </div>
             )}

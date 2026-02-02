@@ -106,16 +106,16 @@ export default function PlaylistsPage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-7xl mx-auto py-8">
-                <div className="flex justify-between items-center mb-8">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
+            <main className="max-w-7xl mx-auto pt-6 pb-8">
+                <div className="flex justify-between items-center mb-8 pb-6 border-b border-gray-100">
                     <div>
-                        <h1 className="text-4xl font-bold text-white mb-2">Manage Playlists</h1>
-                        <p className="text-gray-300">Create and organize video playlists</p>
+                        <h1 className="text-4xl font-bold text-black mb-2">Manage Playlists</h1>
+                        <p className="text-gray-600 font-medium">Create and organize video playlists</p>
                     </div>
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition flex items-center gap-2"
+                        className="px-6 py-3 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm flex items-center gap-2"
                     >
                         <PlusIcon className="w-5 h-5" />
                         Create Playlist
@@ -127,11 +127,11 @@ export default function PlaylistsPage() {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
                     </div>
                 ) : playlists.length === 0 ? (
-                    <div className="text-center py-20">
-                        <p className="text-gray-400 text-lg mb-4">No playlists created yet</p>
+                    <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
+                        <p className="text-gray-500 text-lg mb-4 font-bold">No playlists created yet</p>
                         <button
                             onClick={() => setShowCreateModal(true)}
-                            className="inline-block px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700"
+                            className="inline-block px-8 py-3 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm"
                         >
                             Create Your First Playlist
                         </button>
@@ -139,8 +139,8 @@ export default function PlaylistsPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {playlists.map((playlist) => (
-                            <div key={playlist.id} className="glass rounded-2xl overflow-hidden group">
-                                <div className="aspect-video bg-gray-800 relative">
+                            <div key={playlist.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden group shadow-sm hover:shadow-md transition-all">
+                                <div className="aspect-video bg-gray-100 relative overflow-hidden">
                                     {playlist.thumbnailUrl ? (
                                         <img
                                             src={playlist.thumbnailUrl}
@@ -159,23 +159,23 @@ export default function PlaylistsPage() {
                                     </div>
                                 </div>
                                 <div className="p-4">
-                                    <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">
+                                    <h3 className="text-black font-bold text-lg mb-1 line-clamp-1 group-hover:text-primary transition-colors">
                                         {playlist.title}
                                     </h3>
-                                    <p className="text-gray-400 text-sm line-clamp-2 mb-4">
+                                    <p className="text-gray-600 text-sm line-clamp-2 mb-4 font-medium">
                                         {playlist.description}
                                     </p>
                                     <div className="flex gap-2">
                                         <Link
                                             href={`/admin/playlists/${playlist.id}`}
-                                            className="flex-1 py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-center flex items-center justify-center gap-2"
+                                            className="flex-1 py-2.5 px-4 bg-black text-white font-bold rounded-xl hover:bg-gray-800 transition shadow-lg text-center flex items-center justify-center gap-2"
                                         >
                                             <PencilIcon className="w-4 h-4" />
                                             Edit
                                         </Link>
                                         <button
                                             onClick={() => handleDeletePlaylist(playlist.id)}
-                                            className="py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+                                            className="py-2.5 px-4 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2 shadow-md shadow-red-200"
                                         >
                                             <TrashIcon className="w-4 h-4" />
                                         </button>
@@ -188,51 +188,51 @@ export default function PlaylistsPage() {
 
                 {/* Create Playlist Modal */}
                 {showCreateModal && (
-                    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                        <div className="glass rounded-2xl p-6 max-w-md w-full">
-                            <h2 className="text-2xl font-bold text-white mb-4">Create New Playlist</h2>
+                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                        <div className="bg-white border border-gray-200 rounded-2xl p-6 max-w-md w-full shadow-2xl">
+                            <h2 className="text-2xl font-bold text-black mb-6">Create New Playlist</h2>
                             <form onSubmit={handleCreatePlaylist}>
                                 <div className="mb-4">
-                                    <label className="block text-gray-300 mb-2">Title</label>
+                                    <label className="block text-sm font-bold text-black mb-2">Title</label>
                                     <input
                                         type="text"
                                         value={newPlaylist.title}
                                         onChange={(e) => setNewPlaylist({ ...newPlaylist, title: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                         required
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-300 mb-2">Description</label>
+                                    <label className="block text-sm font-bold text-black mb-2">Description</label>
                                     <textarea
                                         value={newPlaylist.description}
                                         onChange={(e) => setNewPlaylist({ ...newPlaylist, description: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500 resize-none"
+                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
                                         rows={3}
                                         required
                                     />
                                 </div>
                                 <div className="mb-6">
-                                    <label className="block text-gray-300 mb-2">Thumbnail URL (optional)</label>
+                                    <label className="block text-sm font-bold text-black mb-2">Thumbnail URL (optional)</label>
                                     <input
                                         type="url"
                                         value={newPlaylist.thumbnailUrl}
                                         onChange={(e) => setNewPlaylist({ ...newPlaylist, thumbnailUrl: e.target.value })}
-                                        className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                     />
                                 </div>
                                 <div className="flex gap-3">
                                     <button
                                         type="submit"
                                         disabled={creating}
-                                        className="flex-1 py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
+                                        className="flex-1 py-3 px-4 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
                                     >
                                         {creating ? 'Creating...' : 'Create'}
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setShowCreateModal(false)}
-                                        className="py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                                        className="px-6 py-3 bg-white border-2 border-black text-black font-bold rounded-xl hover:bg-gray-50 transition-all font-bold"
                                     >
                                         Cancel
                                     </button>

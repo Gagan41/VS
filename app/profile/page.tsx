@@ -159,22 +159,22 @@ export default function ProfilePage() {
     ]
 
     return (
-        <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+        <div className="min-h-screen pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
             <main className="max-w-6xl mx-auto pb-20">
-                <div className="mb-10">
-                    <h1 className="text-4xl font-black text-white mb-2">My Profile</h1>
-                    <p className="text-gray-400 font-medium">Manage your personal settings and activity.</p>
+                <div className="mb-12 border-b border-gray-200 pb-10">
+                    <h1 className="text-5xl font-black text-black mb-3">My Profile</h1>
+                    <p className="text-gray-700 text-lg font-medium">Manage your personal settings and consumption data.</p>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex flex-wrap gap-2 mb-8 bg-white/5 p-1 rounded-2xl w-fit">
+                <div className="flex flex-wrap gap-2 mb-10 bg-gray-100 p-1.5 rounded-2xl w-fit border border-gray-200">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === tab.id
-                                ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/40'
-                                : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                            className={`flex items-center gap-2 px-8 py-3.5 rounded-xl font-black uppercase tracking-wider text-[10px] transition-all ${activeTab === tab.id
+                                ? 'bg-black text-white shadow-lg'
+                                : 'text-gray-600 hover:bg-gray-200 hover:text-black'
                                 }`}
                         >
                             <tab.icon className="w-4 h-4" />
@@ -187,18 +187,18 @@ export default function ProfilePage() {
                 {activeTab === 'account' && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                         <div className="lg:col-span-1">
-                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 text-center">
+                            <div className="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm text-center">
                                 <div className="relative inline-block group">
-                                    <div className="w-40 h-40 rounded-[2rem] overflow-hidden bg-gray-800 border-4 border-white/5 mx-auto transition-transform duration-500 group-hover:scale-105">
+                                    <div className="w-40 h-40 rounded-[2rem] overflow-hidden bg-gray-100 border-4 border-gray-50 mx-auto transition-transform duration-500 group-hover:scale-105 shadow-inner">
                                         {user?.image ? (
                                             <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-gray-500">
+                                            <div className="w-full h-full flex items-center justify-center text-4xl font-black text-gray-300">
                                                 {user?.name?.[0] || 'U'}
                                             </div>
                                         )}
                                     </div>
-                                    <label htmlFor="photo-upload" className="absolute bottom-0 right-0 p-3 bg-purple-600 text-white rounded-2xl shadow-xl cursor-pointer hover:scale-110 transition group/icon">
+                                    <label htmlFor="photo-upload" className="absolute bottom-0 right-0 p-3 bg-black text-white rounded-2xl shadow-xl cursor-pointer hover:scale-110 transition group/icon">
                                         <CameraIcon className="w-5 h-5" />
                                         <input
                                             type="file"
@@ -216,9 +216,9 @@ export default function ProfilePage() {
                                     </label>
                                 </div>
                                 <div className="mt-6 space-y-2">
-                                    <h2 className="text-2xl font-bold text-white">{user?.name}</h2>
-                                    <p className="text-gray-400 text-sm">{user?.email}</p>
-                                    <div className="inline-block px-4 py-1.5 bg-purple-600/20 text-purple-400 rounded-full text-xs font-black uppercase tracking-widest mt-2 border border-purple-600/30">
+                                    <h2 className="text-2xl font-black text-black">{user?.name}</h2>
+                                    <p className="text-gray-600 font-bold">{user?.email}</p>
+                                    <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest mt-2 border border-primary/20">
                                         {user?.role} Access
                                     </div>
                                     {user?.image && (
@@ -235,9 +235,9 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="lg:col-span-2 space-y-6">
-                            <div className="glass p-10 rounded-[2.5rem] border border-white/5 space-y-8">
-                                <h3 className="text-xl font-bold text-white flex items-center gap-3">
-                                    <span className="w-1.5 h-6 bg-purple-600 rounded-full"></span>
+                            <div className="bg-white p-10 rounded-[2.5rem] border border-gray-200 shadow-sm space-y-10">
+                                <h3 className="text-xl font-black text-black flex items-center gap-3 uppercase tracking-tight">
+                                    <span className="w-2 h-7 bg-black rounded-full"></span>
                                     Identity Details
                                 </h3>
 
@@ -250,29 +250,29 @@ export default function ProfilePage() {
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
                                                 disabled={!isEditing}
-                                                className={`flex-1 glass px-6 py-4 rounded-2xl text-white font-bold transition-all focus:ring-2 focus:ring-purple-600 outline-none ${isEditing ? 'border-purple-600/50' : 'border-white/5 opacity-80'
+                                                className={`flex-1 bg-gray-50 px-6 py-4 rounded-2xl text-black font-black transition-all focus:ring-2 focus:ring-primary outline-none ${isEditing ? 'border-primary' : 'border-gray-200 opacity-80'
                                                     }`}
                                             />
                                             {isEditing ? (
                                                 <div className="flex gap-2">
-                                                    <button onClick={handleUpdateName} className="p-4 bg-green-500/20 text-green-500 rounded-2xl hover:bg-green-500/30 transition">
+                                                    <button onClick={handleUpdateName} className="p-4 bg-green-100 text-green-600 rounded-2xl hover:bg-green-200 transition">
                                                         <CheckIcon className="w-5 h-5" />
                                                     </button>
-                                                    <button onClick={() => setIsEditing(false)} className="p-4 bg-red-500/20 text-red-500 rounded-2xl hover:bg-red-500/30 transition">
+                                                    <button onClick={() => setIsEditing(false)} className="p-4 bg-red-100 text-red-600 rounded-2xl hover:bg-red-200 transition">
                                                         <XIcon className="w-5 h-5" />
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <button onClick={() => setIsEditing(true)} className="px-6 py-4 bg-white/5 text-white rounded-2xl font-bold hover:bg-white/10 transition">
+                                                <button onClick={() => setIsEditing(true)} className="px-8 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-800 transition shadow-md">
                                                     Change
                                                 </button>
                                             )}
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2 opacity-60">
+                                    <div className="space-y-2 opacity-80">
                                         <label className="text-xs font-black text-gray-500 uppercase tracking-widest px-1">Email Address</label>
-                                        <div className="glass px-6 py-4 rounded-2xl text-white font-medium border border-white/5">
+                                        <div className="bg-gray-100 px-6 py-4 rounded-2xl text-black font-bold border border-gray-200">
                                             {user?.email}
                                         </div>
                                     </div>
@@ -280,13 +280,13 @@ export default function ProfilePage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="glass p-8 rounded-[2.5rem] border border-white/5">
+                                <div className="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
                                     <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Member Since</p>
-                                    <p className="text-xl font-bold text-white">December 2025</p>
+                                    <p className="text-2xl font-black text-black tracking-tight">December 2025</p>
                                 </div>
-                                <div className="glass p-8 rounded-[2.5rem] border border-white/5">
+                                <div className="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
                                     <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Account Type</p>
-                                    <p className="text-xl font-bold text-purple-400 capitalize">{user?.subscriptionStatus?.toLowerCase() || 'Standard'}</p>
+                                    <p className="text-2xl font-black text-primary tracking-tight uppercase">{user?.subscriptionStatus?.toLowerCase() || 'Standard'}</p>
                                 </div>
                             </div>
                         </div>
@@ -295,30 +295,30 @@ export default function ProfilePage() {
 
                 {/* Watch History */}
                 {activeTab === 'history' && (
-                    <div className="glass p-8 rounded-[2.5rem] border border-white/5 space-y-8">
+                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-200 shadow-sm space-y-10">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-2xl font-black text-white">Chronological Records</h3>
-                            <span className="px-4 py-1.5 bg-white/5 text-gray-400 rounded-full text-xs font-bold border border-white/5">
+                            <h3 className="text-2xl font-black text-black uppercase tracking-tight">Chronological Records</h3>
+                            <span className="px-5 py-2 bg-gray-100 text-gray-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200">
                                 {watchHistory.length} Entries
                             </span>
                         </div>
 
                         {watchHistory.length === 0 ? (
-                            <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
-                                <p className="text-gray-500 font-bold">No historical data found.</p>
+                            <div className="text-center py-32 bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200">
+                                <p className="text-gray-400 font-black uppercase tracking-widest text-sm">No historical data detected.</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {watchHistory.map((item: any) => (
-                                    <div key={item.id} className="group relative glass rounded-[2rem] border border-white/5 overflow-hidden transition-all hover:scale-[1.02]">
-                                        <div className="aspect-video bg-gray-900">
+                                    <div key={item.id} className="group relative bg-white rounded-[2rem] border border-gray-200 overflow-hidden transition-all hover:scale-[1.02] shadow-sm hover:shadow-md">
+                                        <div className="aspect-video bg-gray-100">
                                             {item.video.thumbnailUrl && (
-                                                <img src={item.video.thumbnailUrl} alt={item.video.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" />
+                                                <img src={item.video.thumbnailUrl} alt={item.video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             )}
                                         </div>
                                         <div className="p-6">
-                                            <h4 className="text-white font-bold truncate mb-2">{item.video.title}</h4>
-                                            <div className="flex justify-between text-xs text-gray-400 font-medium">
+                                            <h4 className="text-black font-black truncate mb-2 group-hover:text-primary transition-colors">{item.video.title}</h4>
+                                            <div className="flex justify-between text-[10px] text-gray-600 font-black uppercase tracking-wider">
                                                 <span>{formatWatchTime(item.totalWatchTimeSeconds)}</span>
                                                 <span>{formatDate(item.lastWatchedAt)}</span>
                                             </div>
@@ -333,13 +333,13 @@ export default function ProfilePage() {
                 {/* Analytics */}
                 {activeTab === 'analytics' && (
                     <div className="flex items-center justify-center py-10">
-                        <div className="glass p-12 rounded-[3.5rem] border border-white/5 text-center max-w-lg w-full">
-                            <div className="w-20 h-20 bg-purple-600/20 text-purple-500 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-inner">
+                        <div className="bg-white p-12 rounded-[3.5rem] border border-gray-200 shadow-xl text-center max-w-lg w-full">
+                            <div className="w-20 h-20 bg-primary/10 text-primary rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-inner">
                                 <HistoryIcon className="w-10 h-10" />
                             </div>
-                            <h3 className="text-gray-500 font-black uppercase tracking-[0.2em] text-xs mb-4">Total Watch Experience</h3>
-                            <p className="text-7xl font-black text-white mb-4">{formatWatchTime(totalWatchTime)}</p>
-                            <p className="text-gray-400 font-medium tracking-wide">Aggregate duration of all content consumed across all signal nodes.</p>
+                            <h3 className="text-gray-500 font-black uppercase tracking-[0.2em] text-[10px] mb-4">Total Consumption Metric</h3>
+                            <p className="text-7xl font-black text-black mb-6 tracking-tighter">{formatWatchTime(totalWatchTime)}</p>
+                            <p className="text-gray-700 font-bold leading-relaxed">Aggregate duration of all content consumed across our high-fidelity streaming relay.</p>
                         </div>
                     </div>
                 )}

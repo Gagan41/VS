@@ -24,24 +24,28 @@ export default function ShortsPage() {
     }
 
     return (
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="mb-8">
-                <h1 className="text-4xl font-bold text-white mb-2">Shorts</h1>
-                <p className="text-gray-300">Quick bursts of entertainment</p>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
+            <div className="mb-12 border-b border-gray-200 pb-10">
+                <h1 className="text-5xl font-black text-black mb-3">Shorts</h1>
+                <p className="text-gray-700 text-lg font-medium">Quick bursts of entertainment and professional insights.</p>
             </div>
 
             {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {[...Array(8)].map((_, i) => (
                         <div key={i} className="animate-pulse">
-                            <div className="aspect-[9/16] bg-gray-800 rounded-lg"></div>
-                            <div className="mt-3 h-4 bg-gray-800 rounded w-3/4"></div>
+                            <div className="aspect-[9/16] bg-gray-100 rounded-2xl"></div>
+                            <div className="mt-4 space-y-2">
+                                <div className="h-4 bg-gray-100 rounded-full w-3/4"></div>
+                                <div className="h-3 bg-gray-100 rounded-full w-1/2"></div>
+                            </div>
                         </div>
                     ))}
                 </div>
             ) : videos.length === 0 ? (
-                <div className="text-center py-20">
-                    <p className="text-gray-400 text-lg">No shorts available yet.</p>
+                <div className="bg-gray-50 rounded-3xl border border-gray-200 p-8 shadow-md text-center py-32">
+                    <p className="text-gray-300 font-black text-3xl uppercase tracking-widest mb-4">No Shorts Detected</p>
+                    <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Check back soon for new quick content.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

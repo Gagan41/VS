@@ -99,13 +99,13 @@ export default function NewShortPage() {
         <div className="p-4 sm:p-6 lg:p-8">
             <main className="max-w-3xl mx-auto py-8">
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-white mb-2">Upload New Short</h1>
-                    <p className="text-gray-300">Add a new short/reel to your platform</p>
+                    <h1 className="text-4xl font-bold text-black mb-2">Upload New Short</h1>
+                    <p className="text-gray-600">Add a new short/reel to your platform</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="glass rounded-2xl p-8 space-y-6">
+                <form onSubmit={handleSubmit} className="bg-gray-50 border border-gray-200 rounded-2xl p-8 space-y-6 shadow-sm">
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-bold text-black mb-2">
                             Title *
                         </label>
                         <input
@@ -113,47 +113,47 @@ export default function NewShortPage() {
                             required
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                             placeholder="Enter short title"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-bold text-black mb-2">
                             Description
                         </label>
                         <textarea
                             rows={3}
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                             placeholder="Enter short description"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-bold text-black mb-2">
                             Video Source *
                         </label>
                         <div className="flex flex-wrap gap-4 mb-4">
                             <button
                                 type="button"
                                 onClick={() => setInputType('URL')}
-                                className={`px-4 py-2 rounded-lg transition ${inputType === 'URL' ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'URL' ? 'bg-black text-white' : 'bg-white text-black border-2 border-black hover:bg-gray-50'}`}
                             >
                                 External Link
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setInputType('REMOTE')}
-                                className={`px-4 py-2 rounded-lg transition ${inputType === 'REMOTE' ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'REMOTE' ? 'bg-black text-white' : 'bg-white text-black border-2 border-black hover:bg-gray-50'}`}
                             >
                                 Import from Link
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setInputType('FILE')}
-                                className={`px-4 py-2 rounded-lg transition ${inputType === 'FILE' ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'FILE' ? 'bg-black text-white' : 'bg-white text-black border-2 border-black hover:bg-gray-50'}`}
                             >
                                 Upload File
                             </button>
@@ -166,7 +166,7 @@ export default function NewShortPage() {
                                 required={inputType === 'URL'}
                                 value={formData.videoUrl}
                                 onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                 placeholder="https://youtube.com/shorts/... or direct URL"
                             />
                         ) : inputType === 'REMOTE' ? (
@@ -176,7 +176,7 @@ export default function NewShortPage() {
                                         type="url"
                                         value={remoteUrl}
                                         onChange={(e) => setRemoteUrl(e.target.value)}
-                                        className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        className="flex-1 px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                         placeholder="Paste a direct video link (MP4, etc.)"
                                     />
                                     <button
@@ -196,7 +196,7 @@ export default function NewShortPage() {
                                 accept="video/*"
                                 required={inputType === 'FILE'}
                                 onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
-                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white"
+                                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-black file:text-white"
                             />
                         )}
                         {formData.videoUrl.startsWith('/uploads') && (
@@ -205,29 +205,29 @@ export default function NewShortPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-bold text-black mb-2">
                             Thumbnail URL
                         </label>
                         <input
                             type="url"
                             value={formData.thumbnailUrl}
                             onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                             placeholder="https://example.com/thumbnail.jpg"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-bold text-black mb-2">
                             Access Type *
                         </label>
                         <select
                             value={formData.accessType}
                             onChange={(e) => setFormData({ ...formData, accessType: e.target.value as 'FREE' | 'PREMIUM' })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                         >
-                            <option value="FREE" className="bg-gray-800">Free</option>
-                            <option value="PREMIUM" className="bg-gray-800">Premium</option>
+                            <option value="FREE" className="bg-white text-black">Free</option>
+                            <option value="PREMIUM" className="bg-white text-black">Premium</option>
                         </select>
                     </div>
 
@@ -235,14 +235,14 @@ export default function NewShortPage() {
                         <button
                             type="submit"
                             disabled={loading || isImporting}
-                            className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50"
+                            className="flex-1 py-3 px-4 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
                         >
                             {loading ? 'Processing...' : 'Upload Short'}
                         </button>
                         <button
                             type="button"
                             onClick={() => router.back()}
-                            className="px-6 py-3 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition"
+                            className="px-6 py-3 bg-white border-2 border-black text-black font-bold rounded-lg hover:bg-gray-50 transition-all font-bold"
                         >
                             Cancel
                         </button>

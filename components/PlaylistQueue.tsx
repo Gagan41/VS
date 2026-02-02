@@ -90,10 +90,10 @@ export default function PlaylistQueue({ playlistId, currentVideoId }: PlaylistQu
 
     if (loading) {
         return (
-            <div className="mb-6 glass-surface rounded-2xl p-4 border border-primary/20">
+            <div className="mb-6 bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
                 <div className="animate-pulse">
-                    <div className="h-6 bg-white/10 rounded w-1/3 mb-4" />
-                    <div className="h-20 bg-white/10 rounded" />
+                    <div className="h-6 bg-gray-100 rounded w-1/3 mb-4" />
+                    <div className="h-20 bg-gray-100 rounded" />
                 </div>
             </div>
         )
@@ -102,42 +102,44 @@ export default function PlaylistQueue({ playlistId, currentVideoId }: PlaylistQu
     if (!videos.length) return null
 
     return (
-        <div className="mb-6 glass-surface rounded-2xl border border-primary/20 overflow-hidden">
+        <div className="mb-6 bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-md">
             {/* Header */}
             <div
-                className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors"
                 onClick={() => setIsCollapsed(!isCollapsed)}
             >
                 <div className="flex items-center gap-3">
-                    <Bars3Icon className="w-5 h-5 text-primary" />
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                        <Bars3Icon className="w-5 h-5 text-primary" />
+                    </div>
                     <div>
-                        <h3 className="text-white font-bold">{playlistTitle}</h3>
-                        <p className="text-xs text-gray-400">
+                        <h3 className="text-black font-black uppercase tracking-tight text-sm">{playlistTitle}</h3>
+                        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-wider">
                             {currentIndex + 1} / {videos.length} videos
                         </p>
                     </div>
                 </div>
-                <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
                     {isCollapsed ? (
-                        <ChevronDownIcon className="w-5 h-5 text-gray-400" />
+                        <ChevronDownIcon className="w-5 h-5 text-gray-600" />
                     ) : (
-                        <ChevronUpIcon className="w-5 h-5 text-gray-400" />
+                        <ChevronUpIcon className="w-5 h-5 text-gray-600" />
                     )}
                 </button>
             </div>
 
             {/* Playlist Videos */}
             {!isCollapsed && (
-                <div className="border-t border-primary/20">
+                <div className="border-t border-gray-200">
                     {/* Next Video Highlight */}
                     {nextVideo && (
-                        <div className="p-4 bg-primary/10 border-b border-primary/20">
+                        <div className="p-4 bg-primary/5 border-b border-gray-200">
                             <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">
                                 Up Next
                             </p>
                             <Link
                                 href={`/video/${nextVideo.id}?playlist=${playlistId}`}
-                                className="group flex gap-3 hover:bg-white/5 p-2 rounded-xl transition-all"
+                                className="group flex gap-3 hover:bg-gray-100 p-2 rounded-xl transition-all"
                             >
                                 <div className="relative w-40 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800">
                                     {nextVideo.thumbnailUrl ? (
@@ -160,11 +162,11 @@ export default function PlaylistQueue({ playlistId, currentVideoId }: PlaylistQu
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="text-white text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors">
+                                    <h4 className="text-black text-sm font-bold line-clamp-2 group-hover:text-primary transition-colors">
                                         {nextVideo.title}
                                     </h4>
                                     <span className={`inline-block mt-1 text-[10px] font-bold px-1.5 py-0.5 rounded ${nextVideo.accessType === 'PREMIUM'
-                                        ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
+                                        ? 'bg-primary/10 text-primary border border-primary/20'
                                         : 'bg-green-500/10 text-green-500 border border-green-500/20'
                                         }`}>
                                         {nextVideo.accessType}
@@ -175,7 +177,7 @@ export default function PlaylistQueue({ playlistId, currentVideoId }: PlaylistQu
                     )}
 
                     {/* All Videos - Draggable List */}
-                    <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent p-4 space-y-2">
+                    <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent p-4 space-y-2">
                         {videos.map((video, index) => (
                             <div
                                 key={video.id}
@@ -183,9 +185,9 @@ export default function PlaylistQueue({ playlistId, currentVideoId }: PlaylistQu
                                 onDragStart={() => handleDragStart(index)}
                                 onDragOver={(e) => handleDragOver(e, index)}
                                 onDragEnd={handleDragEnd}
-                                className={`group flex gap-3 p-2 rounded-xl transition-all cursor-move ${video.id === currentVideoId
-                                    ? 'bg-primary/20 border-2 border-primary'
-                                    : 'hover:bg-white/5 border-2 border-transparent'
+                                className={`group flex gap-3 p-2 rounded-xl transition-all cursor-move border-2 ${video.id === currentVideoId
+                                    ? 'bg-primary/5 border-primary shadow-sm'
+                                    : 'hover:bg-gray-100 border-transparent'
                                     } ${draggedIndex === index ? 'opacity-50' : 'opacity-100'}`}
                             >
                                 {/* Drag Handle */}
@@ -233,14 +235,14 @@ export default function PlaylistQueue({ playlistId, currentVideoId }: PlaylistQu
                                     href={`/video/${video.id}?playlist=${playlistId}`}
                                     className="flex-1 min-w-0"
                                 >
-                                    <h4 className={`text-sm font-semibold line-clamp-2 transition-colors ${video.id === currentVideoId
+                                    <h4 className={`text-sm font-bold line-clamp-2 transition-colors ${video.id === currentVideoId
                                         ? 'text-primary'
-                                        : 'text-white group-hover:text-primary'
+                                        : 'text-black group-hover:text-primary'
                                         }`}>
                                         {video.title}
                                     </h4>
                                     <span className={`inline-block mt-1 text-[9px] font-bold px-1.5 py-0.5 rounded ${video.accessType === 'PREMIUM'
-                                        ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
+                                        ? 'bg-primary/10 text-primary border border-primary/20'
                                         : 'bg-green-500/10 text-green-500 border border-green-500/20'
                                         }`}>
                                         {video.accessType}

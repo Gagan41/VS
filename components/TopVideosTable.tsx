@@ -48,15 +48,15 @@ export default function TopVideosTable() {
     }
 
     return (
-        <div className="glass rounded-2xl p-6">
-            <h2 className="text-2xl font-bold text-white mb-6">Top Videos</h2>
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-black mb-6">Top Videos</h2>
 
             {loading ? (
                 <div className="flex items-center justify-center py-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
                 </div>
             ) : topVideos.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-gray-500 font-medium">
                     No video data available
                 </div>
             ) : (
@@ -65,13 +65,13 @@ export default function TopVideosTable() {
                         <Link
                             key={video.id}
                             href={`/video/${video.id}`}
-                            className="flex items-center gap-4 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition group"
+                            className="flex items-center gap-4 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all group border border-transparent hover:border-gray-200"
                         >
-                            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-purple-600 text-white font-bold">
+                            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary text-black font-black shadow-[0_4px_12px_-2px_rgba(37,99,235,0.6)]">
                                 {index + 1}
                             </div>
 
-                            <div className="flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden bg-gray-800">
+                            <div className="flex-shrink-0 w-24 h-14 rounded-lg overflow-hidden bg-gray-200">
                                 {video.thumbnailUrl ? (
                                     <img
                                         src={video.thumbnailUrl}
@@ -88,14 +88,14 @@ export default function TopVideosTable() {
                             </div>
 
                             <div className="flex-1 min-w-0">
-                                <h3 className="text-white font-medium line-clamp-1 group-hover:text-purple-400 transition">
+                                <h3 className="text-black font-bold line-clamp-1 group-hover:text-primary transition-colors">
                                     {video.title}
                                 </h3>
                             </div>
 
-                            <div className="flex items-center gap-2 text-gray-300">
+                            <div className="flex items-center gap-2 text-gray-600">
                                 <EyeIcon className="w-5 h-5" />
-                                <span className="font-semibold">{formatViews(video.views)}</span>
+                                <span className="font-bold">{formatViews(video.views)}</span>
                             </div>
                         </Link>
                     ))}

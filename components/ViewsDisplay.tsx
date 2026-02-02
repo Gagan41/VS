@@ -59,9 +59,9 @@ export default function ViewsDisplay({ videoId }: ViewsDisplayProps) {
     }
 
     return (
-        <div className="flex items-center gap-2 text-gray-300">
+        <div className="flex items-center gap-2 text-gray-600">
             <EyeIcon className="w-5 h-5" />
-            <span className="text-sm font-medium">
+            <span className="text-sm font-bold">
                 {formatViews(viewCount)} {viewCount === 1 ? 'view' : 'views'}
             </span>
         </div>

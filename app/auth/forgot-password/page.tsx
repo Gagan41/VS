@@ -38,24 +38,24 @@ export default function ForgotPasswordPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-white px-4">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-md"
             >
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
+                <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
                     <Link
                         href="/auth/login"
-                        className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition"
+                        className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition"
                     >
                         <ArrowLeftIcon className="w-4 h-4" />
                         Back to Login
                     </Link>
 
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-white mb-2">Forgot Password?</h1>
-                        <p className="text-gray-300">
+                        <h1 className="text-3xl font-bold text-black mb-2">Forgot Password?</h1>
+                        <p className="text-gray-600">
                             Enter your email address and we'll send you a link to reset your password.
                         </p>
                     </div>
@@ -63,7 +63,7 @@ export default function ForgotPasswordPage() {
                     {!isSubmitted ? (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+                                <label htmlFor="email" className="block text-sm font-medium text-black mb-2">
                                     Email Address
                                 </label>
                                 <input
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                                    className="w-full px-4 py-3 rounded-lg bg-white border border-black text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
                                     placeholder="you@example.com"
                                 />
                             </div>
@@ -80,25 +80,25 @@ export default function ForgotPasswordPage() {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full py-3 px-4 bg-primary text-white font-semibold rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                             >
                                 {isLoading ? 'Sending Link...' : 'Send Reset Link'}
                             </button>
                         </form>
                     ) : (
-                        <div className="text-center bg-green-500/20 border border-green-500/50 rounded-lg p-6">
+                        <div className="text-center bg-green-50 border border-green-200 rounded-lg p-6">
                             <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold text-white mb-2">Check your email</h3>
-                            <p className="text-gray-300 mb-6">
+                            <h3 className="text-xl font-semibold text-black mb-2">Check your email</h3>
+                            <p className="text-gray-700 mb-6">
                                 We've sent a password reset link to <strong>{email}</strong>.
                             </p>
                             <button
                                 onClick={() => setIsSubmitted(false)}
-                                className="text-purple-400 hover:text-purple-300 font-medium"
+                                className="text-primary hover:text-secondary font-medium"
                             >
                                 Try another email
                             </button>

@@ -90,79 +90,79 @@ export default function EditVideoPage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] text-white">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+            <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] text-primary">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
         )
     }
 
     return (
         <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-3xl mx-auto py-8 min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 text-white">
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold mb-2">Edit Video</h1>
-                    <p className="text-gray-300">Update video details and metadata</p>
+            <main className="max-w-3xl mx-auto py-8 text-black">
+                <div className="mb-8 border-b border-gray-100 pb-6">
+                    <h1 className="text-4xl font-black mb-2">Edit Video</h1>
+                    <p className="text-gray-600 font-medium text-lg">Update video details and metadata</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="glass rounded-2xl p-8 space-y-6">
+                <form onSubmit={handleSubmit} className="bg-gray-50 border border-gray-200 rounded-2xl p-8 space-y-6 shadow-sm">
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Title *</label>
+                        <label className="block text-sm font-bold text-black mb-2">Title *</label>
                         <input
                             type="text"
                             required
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Description</label>
+                        <label className="block text-sm font-bold text-black mb-2">Description</label>
                         <textarea
                             rows={4}
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Thumbnail</label>
-                        <div className="space-y-3">
+                        <label className="block text-sm font-bold text-black mb-2">Thumbnail</label>
+                        <div className="space-y-4">
                             <input
                                 type="url"
                                 value={formData.thumbnailUrl}
                                 onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                 placeholder="Thumbnail URL"
                             />
-                            <div className="space-y-2">
-                                <p className="text-sm text-gray-400">Or upload new thumbnail file:</p>
+                            <div className="space-y-3 p-4 bg-white border border-gray-200 rounded-xl">
+                                <p className="text-sm text-gray-600 font-bold">Or upload new thumbnail file:</p>
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-black file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-black file:text-white hover:file:bg-gray-800"
                                 />
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Access Type *</label>
+                        <label className="block text-sm font-bold text-black mb-2">Access Type *</label>
                         <select
                             value={formData.accessType}
                             onChange={(e) => setFormData({ ...formData, accessType: e.target.value as 'FREE' | 'PREMIUM' })}
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all cursor-pointer"
                         >
-                            <option value="FREE" className="bg-gray-800">Free</option>
-                            <option value="PREMIUM" className="bg-gray-800">Premium</option>
+                            <option value="FREE" className="bg-white text-black">Free</option>
+                            <option value="PREMIUM" className="bg-white text-black">Premium</option>
                         </select>
                     </div>
 
                     {formData.accessType === 'PREMIUM' && (
-                        <div>
-                            <label className="block text-sm font-medium text-gray-200 mb-2">Trailer Duration (seconds)</label>
+                        <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl">
+                            <label className="block text-sm font-bold text-black mb-2">Trailer Duration (seconds)</label>
                             <input
                                 type="number"
                                 min="10"
@@ -172,7 +172,7 @@ export default function EditVideoPage() {
                                     const val = parseInt(e.target.value)
                                     setFormData({ ...formData, trailerDurationSeconds: isNaN(val) ? 0 : val })
                                 }}
-                                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                             />
                         </div>
                     )}
@@ -181,14 +181,14 @@ export default function EditVideoPage() {
                         <button
                             type="submit"
                             disabled={saving}
-                            className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50"
+                            className="flex-1 py-3.5 px-6 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
                         >
                             {saving ? 'Saving...' : 'Save Changes'}
                         </button>
                         <button
                             type="button"
                             onClick={() => router.back()}
-                            className="px-6 py-3 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition"
+                            className="px-6 py-3.5 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all uppercase tracking-wider text-sm"
                         >
                             Cancel
                         </button>

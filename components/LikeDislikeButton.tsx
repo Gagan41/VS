@@ -103,9 +103,9 @@ export default function LikeDislikeButton({ videoId }: LikeDislikeButtonProps) {
             <button
                 onClick={() => handleLike(true)}
                 disabled={loading}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all hover:scale-105 ${userStatus === 'like'
-                    ? 'gradient-primary text-white shadow-glow-primary'
-                    : 'glass-surface text-gray-300 hover:bg-primary/10 hover:text-primary'
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold ${userStatus === 'like'
+                    ? 'bg-black text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
                     } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
                 {userStatus === 'like' ? (
@@ -113,15 +113,15 @@ export default function LikeDislikeButton({ videoId }: LikeDislikeButtonProps) {
                 ) : (
                     <HandThumbUpIcon className="w-5 h-5" />
                 )}
-                <span className="font-semibold text-sm">{likes || 0}</span>
+                <span className="text-sm">{likes || 0}</span>
             </button>
 
             <button
                 onClick={() => handleLike(false)}
                 disabled={loading}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all hover:scale-105 ${userStatus === 'dislike'
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold ${userStatus === 'dislike'
                     ? 'bg-red-600 text-white shadow-lg'
-                    : 'glass-surface text-gray-300 hover:bg-red-500/10 hover:text-red-400'
+                    : 'bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600 border border-gray-200'
                     } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
                 {userStatus === 'dislike' ? (
@@ -129,7 +129,7 @@ export default function LikeDislikeButton({ videoId }: LikeDislikeButtonProps) {
                 ) : (
                     <HandThumbDownIcon className="w-5 h-5" />
                 )}
-                <span className="font-semibold text-sm">{dislikes || 0}</span>
+                <span className="text-sm">{dislikes || 0}</span>
             </button>
         </div>
     )

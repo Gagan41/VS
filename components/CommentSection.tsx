@@ -90,18 +90,18 @@ const ReplyItem = ({
                 />
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-white text-sm">
+                        <span className="font-bold text-black text-sm">
                             {reply?.user?.name || 'Anonymous'}
                         </span>
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-500">
                             {formatDate(reply.createdAt)}
                         </span>
                     </div>
-                    <p className="text-gray-300 text-sm">{reply.content}</p>
+                    <p className="text-gray-700 text-sm font-medium">{reply.content}</p>
                     <div className="flex items-center gap-4 mt-1">
                         <button
                             onClick={() => setReplyingTo({ id: reply.id, type: 'reply' })}
-                            className="text-xs text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                            className="text-xs text-primary hover:underline flex items-center gap-1 transition-colors font-bold"
                         >
                             <ChatBubbleLeftIcon className="w-3 h-3" />
                             Reply
@@ -109,7 +109,7 @@ const ReplyItem = ({
                         {nestedReplies.length > 0 && (
                             <button
                                 onClick={() => toggleReplyCollapse(reply.id)}
-                                className="text-xs text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                                className="text-xs text-primary hover:underline flex items-center gap-1 transition-colors font-bold"
                             >
                                 {isCollapsed ? (
                                     <>
@@ -141,7 +141,7 @@ const ReplyItem = ({
                             value={replyContent}
                             onChange={(e) => setReplyContent(e.target.value)}
                             placeholder="Write a reply..."
-                            className="w-full px-3 py-2 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-xs transition-all"
+                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-xs transition-all font-medium"
                             rows={2}
                             maxLength={500}
                             autoFocus
@@ -150,7 +150,7 @@ const ReplyItem = ({
                             <button
                                 onClick={() => handleSubmitReply(commentId, reply.id)}
                                 disabled={submitting || !replyContent.trim()}
-                                className="px-3 py-1.5 gradient-primary text-white text-xs font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50"
+                                className="px-3 py-1.5 bg-black text-white text-xs font-bold rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50"
                             >
                                 Reply
                             </button>
@@ -159,7 +159,7 @@ const ReplyItem = ({
                                     setReplyingTo(null)
                                     setReplyContent('')
                                 }}
-                                className="px-2 py-1 text-gray-400 text-xs hover:text-white transition"
+                                className="px-2 py-1 text-gray-500 text-xs font-bold hover:text-black transition"
                             >
                                 Cancel
                             </button>
@@ -170,7 +170,7 @@ const ReplyItem = ({
 
             {/* Recursive Nested Replies */}
             {!isCollapsed && nestedReplies.length > 0 && (
-                <div className="ml-11 space-y-3 border-l-2 border-primary/30 pl-4">
+                <div className="ml-11 space-y-3 border-l-2 border-gray-200 pl-4">
                     {nestedReplies.map((nested) => (
                         <ReplyItem
                             key={nested.id}
@@ -378,10 +378,10 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
     const user = session?.user as any
 
     return (
-        <div className="glass-surface rounded-2xl p-6 border border-primary/20 shadow-surface">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            <h2 className="text-2xl font-black text-black mb-6 flex items-center gap-2">
                 <span>Comments</span>
-                <span className="text-primary">({comments.length})</span>
+                <span className="text-primary font-bold">({comments.length})</span>
             </h2>
 
             {/* Comment Input */}
@@ -398,18 +398,18 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
                                 placeholder="Add a comment..."
-                                className="w-full px-4 py-3 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 resize-none transition-all"
+                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-black placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all font-medium"
                                 rows={3}
                                 maxLength={500}
                             />
                             <div className="flex items-center justify-between mt-2">
-                                <span className="text-sm text-gray-400">
+                                <span className="text-sm text-gray-500 font-medium">
                                     {newComment.length}/500
                                 </span>
                                 <button
                                     type="submit"
                                     disabled={submitting || !newComment.trim()}
-                                    className="px-5 py-2 gradient-primary text-white font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-6 py-2.5 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {submitting ? 'Posting...' : 'Comment'}
                                 </button>
@@ -418,8 +418,8 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     </div>
                 </form>
             ) : (
-                <div className="mb-8 p-4 bg-surface/30 border border-primary/20 rounded-lg text-center">
-                    <p className="text-gray-300">Sign in to leave a comment</p>
+                <div className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-2xl text-center">
+                    <p className="text-gray-700 font-bold">Sign in to leave a comment</p>
                 </div>
             )}
 
@@ -429,7 +429,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
                 </div>
             ) : comments.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-12 text-gray-500 font-bold text-lg">
                     No comments yet. Be the first to comment!
                 </div>
             ) : (
@@ -456,18 +456,18 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                         />
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className="font-semibold text-white">
+                                                <span className="font-bold text-black">
                                                     {comment?.user?.name || 'Anonymous'}
                                                 </span>
-                                                <span className="text-sm text-gray-400">
+                                                <span className="text-sm text-gray-500">
                                                     {formatDate(comment.createdAt)}
                                                 </span>
                                             </div>
-                                            <p className="text-gray-300 mb-2">{comment.content}</p>
+                                            <p className="text-gray-700 font-medium mb-2">{comment.content}</p>
                                             <div className="flex items-center gap-4">
                                                 <button
                                                     onClick={() => setReplyingTo({ id: comment.id, type: 'comment' })}
-                                                    className="text-sm text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                                                    className="text-sm text-primary hover:underline flex items-center gap-1 transition-colors font-bold"
                                                 >
                                                     <ChatBubbleLeftIcon className="w-4 h-4" />
                                                     Reply
@@ -475,7 +475,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                 {topLevelReplies.length > 0 && (
                                                     <button
                                                         onClick={() => toggleCommentCollapse(comment.id)}
-                                                        className="text-sm text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                                                        className="text-sm text-primary hover:underline flex items-center gap-1 transition-colors font-bold"
                                                     >
                                                         {isCommentCollapsed ? (
                                                             <>
@@ -493,7 +493,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                 {user?.id === comment?.user?.id && (
                                                     <button
                                                         onClick={() => handleDeleteComment(comment.id)}
-                                                        className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+                                                        className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1 font-bold"
                                                     >
                                                         <TrashIcon className="w-4 h-4" />
                                                         Delete
@@ -516,15 +516,16 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                     value={replyContent}
                                                     onChange={(e) => setReplyContent(e.target.value)}
                                                     placeholder="Write a reply..."
-                                                    className="w-full px-3 py-2 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-sm transition-all"
+                                                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-sm transition-all font-medium"
                                                     rows={2}
                                                     maxLength={500}
+                                                    autoFocus
                                                 />
                                                 <div className="flex items-center gap-2 mt-2">
                                                     <button
                                                         onClick={() => handleSubmitReply(comment.id)}
                                                         disabled={submitting || !replyContent.trim()}
-                                                        className="px-4 py-1.5 gradient-primary text-white text-sm font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50"
+                                                        className="px-4 py-1.5 bg-black text-white text-sm font-bold rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50"
                                                     >
                                                         Reply
                                                     </button>
@@ -533,7 +534,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                             setReplyingTo(null)
                                                             setReplyContent('')
                                                         }}
-                                                        className="px-3 py-1 text-gray-400 text-sm hover:text-white transition"
+                                                        className="px-3 py-1 text-gray-500 text-sm font-bold hover:text-black transition"
                                                     >
                                                         Cancel
                                                     </button>
@@ -574,7 +575,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     <div className="mt-4 flex justify-center">
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="px-6 py-2 bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary font-semibold rounded-lg transition-all flex items-center gap-2"
+                            className="px-8 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-black font-black rounded-xl transition-all flex items-center gap-2 uppercase tracking-wider text-sm shadow-sm"
                         >
                             {isExpanded ? (
                                 <>

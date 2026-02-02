@@ -10,15 +10,15 @@ import toast from 'react-hot-toast'
 import LikeDislikeButton from '@/components/LikeDislikeButton'
 import ViewsDisplay from '@/components/ViewsDisplay'
 const CommentSection = dynamic(() => import('@/components/CommentSection'), {
-    loading: () => <div className="animate-pulse h-40 bg-white/5 rounded-2xl" />,
+    loading: () => <div className="animate-pulse h-40 bg-gray-100 rounded-2xl" />,
     ssr: false
 })
 const VideoRecommendations = dynamic(() => import('@/components/VideoRecommendations'), {
-    loading: () => <div className="animate-pulse h-40 bg-white/5 rounded-2xl" />,
+    loading: () => <div className="animate-pulse h-40 bg-gray-100 rounded-2xl" />,
     ssr: false
 })
 const PlaylistQueue = dynamic(() => import('@/components/PlaylistQueue'), {
-    loading: () => <div className="animate-pulse h-32 bg-white/5 rounded-2xl" />,
+    loading: () => <div className="animate-pulse h-32 bg-gray-100 rounded-2xl" />,
     ssr: false
 })
 import VideoProtection from '@/components/VideoProtection'
@@ -295,7 +295,7 @@ export default function VideoPage() {
     if (loading || sessionStatus === 'loading') {
         return (
             <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
         )
     }
@@ -303,8 +303,8 @@ export default function VideoPage() {
     if (!video) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
-                <p className="text-white text-xl mb-4">Video not found</p>
-                <Link href="/home" className="text-purple-400 hover:text-purple-300">
+                <p className="text-black text-xl mb-4 font-bold">Video not found</p>
+                <Link href="/home" className="text-primary hover:underline font-bold">
                     Go back home
                 </Link>
             </div>
@@ -312,14 +312,14 @@ export default function VideoPage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
             <main className="max-w-[1800px] mx-auto pb-20">
                 {/* Desktop: Side-by-side layout, Mobile: Stacked */}
                 <div className="flex flex-col lg:flex-row gap-6">
 
                     {/* Left Column: Video Player + Info + Comments */}
                     <div className="flex-1 min-w-0">
-                        <div className="glass rounded-2xl overflow-hidden">
+                        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
                             {/* Video Player */}
                             <VideoProtection videoId={video.id}>
                                 <div className="aspect-video bg-black relative group overflow-hidden">
@@ -594,16 +594,16 @@ export default function VideoPage() {
                             <div className="p-6">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex-1">
-                                        <h1 className="text-3xl font-bold text-white mb-2">{video.title}</h1>
+                                        <h1 className="text-3xl font-black text-black mb-2">{video.title}</h1>
                                         <div className="flex items-center gap-4 mb-3">
                                             <ViewsDisplay videoId={video.id} />
                                             {video.accessType === 'PREMIUM' && (
-                                                <span className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-sm font-bold rounded-full">
+                                                <span className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-sm font-bold rounded-full">
                                                     PREMIUM
                                                 </span>
                                             )}
                                             {video.accessType === 'FREE' && (
-                                                <span className="px-3 py-1 bg-green-500 text-white text-sm font-bold rounded-full">
+                                                <span className="px-3 py-1 bg-green-500 text-black text-sm font-bold rounded-full">
                                                     FREE
                                                 </span>
                                             )}
@@ -613,9 +613,9 @@ export default function VideoPage() {
                                             <button
                                                 onClick={toggleWatchLater}
                                                 disabled={togglingWatchLater}
-                                                className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${isWatchLater
-                                                    ? 'bg-purple-600 text-white'
-                                                    : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                                                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold text-sm ${isWatchLater
+                                                    ? 'bg-black text-white shadow-lg'
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
                                                     }`}
                                             >
                                                 {isWatchLater ? (
@@ -631,21 +631,21 @@ export default function VideoPage() {
                                     </div>
                                 </div>
 
-                                <p className="text-gray-300 mb-6">{video.description}</p>
+                                <p className="text-gray-700 text-lg font-medium leading-relaxed mb-6">{video.description}</p>
 
                                 {/* Premium Content Warning */}
                                 {!canWatchFull && (
-                                    <div className="glass rounded-lg p-6 border-2 border-purple-500 mb-6">
-                                        <h3 className="text-xl font-bold text-white mb-2">
-                                            🔒 Premium Content
+                                    <div className="bg-blue-50 rounded-2xl p-6 border-2 border-primary/30 mb-6 shadow-sm">
+                                        <h3 className="text-xl font-black text-black mb-2 flex items-center gap-2">
+                                            <span>🔒</span> Premium Content
                                         </h3>
-                                        <p className="text-gray-300 mb-4">
+                                        <p className="text-gray-700 font-medium mb-4">
                                             This is a premium video. You're currently watching the trailer (first {video.trailerDurationSeconds} seconds).
                                             Upgrade to Premium to watch the full video!
                                         </p>
                                         <Link
                                             href="/pricing"
-                                            className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition"
+                                            className="inline-block px-8 py-3.5 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm"
                                         >
                                             Upgrade to Premium
                                         </Link>
@@ -670,7 +670,7 @@ export default function VideoPage() {
 
                     {/* Right Column: Playlist Queue & Recommendations (Desktop only, hidden on mobile) */}
                     <aside className="hidden lg:block lg:w-[400px] xl:w-[420px] flex-shrink-0">
-                        <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 pr-2">
+                        <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent hover:scrollbar-thumb-gray-300 pr-2">
                             {playlistId && (
                                 <PlaylistQueue playlistId={playlistId} currentVideoId={video.id} />
                             )}

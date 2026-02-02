@@ -15,7 +15,7 @@ export default function MainLayout({ children, session }: { children: React.Reac
 
     if (isGuestPage) {
         return (
-            <div className="min-h-screen">
+            <div className="min-h-screen bg-white">
                 {children}
                 <Toaster position="top-right" />
             </div>
@@ -23,14 +23,23 @@ export default function MainLayout({ children, session }: { children: React.Reac
     }
 
     return (
-        <div className="min-h-screen">
-            <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
-            <Sidebar
-                isOpen={isSidebarOpen}
-                onClose={() => setIsSidebarOpen(false)}
-            />
-            <div className={`transition-all duration-300 ${isSidebarOpen ? 'blur-sm lg:blur-none' : ''} lg:pl-64 min-h-screen gradient-deep`}>
-                <main>{children}</main>
+        <div className="min-h-screen bg-white">
+            {/* Navbar with blue shadow */}
+            <div className="shadow-[0_2px_8px_rgba(37,99,235,0.15)]">
+                <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+            </div>
+
+            {/* Sidebar with blue shadow */}
+            <div className="shadow-[2px_0_8px_rgba(37,99,235,0.15)]">
+                <Sidebar
+                    isOpen={isSidebarOpen}
+                    onClose={() => setIsSidebarOpen(false)}
+                />
+            </div>
+
+            {/* Main content area with white background */}
+            <div className={`transition-all duration-300 ${isSidebarOpen ? 'blur-sm lg:blur-none' : ''} lg:pl-64 min-h-screen bg-white pt-6`}>
+                <main className="bg-white">{children}</main>
             </div>
             <Toaster position="top-right" />
         </div>

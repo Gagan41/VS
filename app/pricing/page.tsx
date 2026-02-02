@@ -36,21 +36,21 @@ export default function PricingPage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-6xl mx-auto py-16">
-                <div className="text-center mb-16">
-                    <h1 className="text-5xl font-bold text-white mb-4">Choose Your Plan</h1>
-                    <p className="text-xl text-gray-300">Unlock premium content and exclusive features</p>
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
+            <main className="max-w-6xl mx-auto pt-10 pb-16">
+                <div className="text-center mb-16 border-b border-gray-200 pb-12">
+                    <h1 className="text-6xl font-black text-black mb-4 uppercase tracking-tight">Choose Your Plan</h1>
+                    <p className="text-xl text-gray-700 font-medium">Unlock exclusive high-fidelity content and elite features</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Free Plan */}
-                    <div className="glass rounded-2xl p-8">
-                        <h3 className="text-2xl font-bold text-white mb-2">Free</h3>
-                        <div className="text-5xl font-bold text-white mb-6">
-                            $0<span className="text-lg text-gray-300">/month</span>
+                    <div className="bg-white rounded-3xl p-10 border border-gray-200 shadow-sm">
+                        <h3 className="text-2xl font-black text-black mb-2 uppercase tracking-tight">Free</h3>
+                        <div className="text-6xl font-black text-black mb-8 flex items-baseline">
+                            $0<span className="text-lg text-gray-500 font-bold ml-1">/month</span>
                         </div>
-                        <ul className="space-y-4 mb-8">
+                        <ul className="space-y-5 mb-10">
                             {[
                                 'Watch trailers of premium videos',
                                 'Full access to free videos',
@@ -58,30 +58,30 @@ export default function PricingPage() {
                                 'Watch history tracking',
                                 'Basic analytics',
                             ].map((feature, i) => (
-                                <li key={i} className="flex items-start text-gray-300">
-                                    <CheckIcon className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" />
+                                <li key={i} className="flex items-start text-gray-700 font-bold text-sm">
+                                    <CheckIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
                                     {feature}
                                 </li>
                             ))}
                         </ul>
                         <button
                             disabled
-                            className="w-full py-3 px-4 bg-white/10 text-gray-400 font-semibold rounded-lg cursor-not-allowed"
+                            className="w-full py-4 px-6 bg-gray-100 text-gray-500 font-black rounded-2xl cursor-not-allowed uppercase tracking-widest text-xs"
                         >
                             Current Plan
                         </button>
                     </div>
 
                     {/* Premium Plan */}
-                    <div className="glass rounded-2xl p-8 border-2 border-purple-500 relative">
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                    <div className="bg-white rounded-3xl p-10 border-2 border-primary relative shadow-xl transform scale-105">
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
                             RECOMMENDED
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">Premium</h3>
-                        <div className="text-5xl font-bold text-white mb-6">
-                            $9.99<span className="text-lg text-gray-300">/month</span>
+                        <h3 className="text-2xl font-black text-black mb-2 uppercase tracking-tight">Premium</h3>
+                        <div className="text-6xl font-black text-black mb-8 flex items-baseline line-clamp-1">
+                            $9.99<span className="text-lg text-gray-500 font-bold ml-1">/month</span>
                         </div>
-                        <ul className="space-y-4 mb-8">
+                        <ul className="space-y-5 mb-10">
                             {[
                                 'Full access to ALL premium videos',
                                 'All free content included',
@@ -90,8 +90,8 @@ export default function PricingPage() {
                                 'Watch history tracking',
                                 'Cancel anytime',
                             ].map((feature, i) => (
-                                <li key={i} className="flex items-start text-gray-300">
-                                    <CheckIcon className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" />
+                                <li key={i} className="flex items-start text-gray-700 font-bold text-sm">
+                                    <CheckIcon className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
                                     {feature}
                                 </li>
                             ))}
@@ -99,9 +99,9 @@ export default function PricingPage() {
                         <button
                             onClick={handleSubscribe}
                             disabled={loading || user?.subscriptionStatus === 'ACTIVE'}
-                            className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-4 px-6 bg-black text-white font-black rounded-2xl hover:bg-gray-800 transition-all shadow-[0_12px_30px_-5px_rgba(0,0,0,0.3)] uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loading ? 'Loading...' : user?.subscriptionStatus === 'ACTIVE' ? 'Current Plan' : 'Subscribe Now'}
+                            {loading ? 'Processing...' : user?.subscriptionStatus === 'ACTIVE' ? 'Current Plan' : 'Subscribe Now'}
                         </button>
                     </div>
                 </div>

@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { TrashIcon, PlusIcon, ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, PlusIcon, ArrowLeftIcon, PencilIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
+import SearchInput from '@/components/SearchInput'
 
 interface PlaylistVideo {
     id: string
@@ -37,6 +38,7 @@ export default function PlaylistEditorPage() {
     const [isEditing, setIsEditing] = useState(false)
     const [editedPlaylist, setEditedPlaylist] = useState({ title: '', description: '', thumbnailUrl: '' })
     const [saving, setSaving] = useState(false)
+    const [searchTerm, setSearchTerm] = useState('')
 
     useEffect(() => {
         if (id) {
@@ -155,9 +157,9 @@ export default function PlaylistEditorPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
+            <div className="min-h-screen bg-white">
                 <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                 </div>
             </div>
         )
@@ -165,10 +167,10 @@ export default function PlaylistEditorPage() {
 
     if (!playlist) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
+            <div className="min-h-screen bg-white">
                 <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)]">
-                    <p className="text-white text-xl mb-4">Playlist not found</p>
-                    <Link href="/admin/playlists" className="text-purple-400 hover:text-purple-300">
+                    <p className="text-black text-xl mb-4 font-bold">Playlist not found</p>
+                    <Link href="/admin/playlists" className="text-primary hover:underline font-bold">
                         Go back to playlists
                     </Link>
                 </div>
@@ -180,59 +182,70 @@ export default function PlaylistEditorPage() {
         video => !(playlist.videos || []).some(pv => pv.video.id === video.id)
     )
 
+    const filteredAvailableVideos = availableVideos.filter(video =>
+        video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        video.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <main className="max-w-7xl mx-auto py-8">
                 <Link
                     href="/admin/playlists"
-                    className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 mb-6"
+                    className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-6 font-bold"
                 >
                     <ArrowLeftIcon className="w-5 h-5" />
                     Back to Playlists
                 </Link>
 
-                <div className="glass rounded-2xl p-6 mb-8">
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 mb-8 shadow-sm">
                     <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                             {isEditing ? (
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-gray-300 mb-2 text-sm font-semibold">Title</label>
+                                        <label className="block text-black mb-2 text-sm font-bold">Title</label>
                                         <input
                                             type="text"
                                             value={editedPlaylist.title}
                                             onChange={(e) => setEditedPlaylist({ ...editedPlaylist, title: e.target.value })}
-                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white text-2xl font-bold focus:outline-none focus:border-purple-500"
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-gray-300 mb-2 text-sm font-semibold">Description</label>
+                                        <label className="block text-black mb-2 text-sm font-bold">Description</label>
                                         <textarea
                                             value={editedPlaylist.description}
                                             onChange={(e) => setEditedPlaylist({ ...editedPlaylist, description: e.target.value })}
-                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500 resize-none"
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
                                             rows={2}
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-gray-300 mb-2 text-sm font-semibold">Thumbnail URL</label>
+                                        <label className="block text-black mb-2 text-sm font-bold">Thumbnail URL</label>
                                         <input
                                             type="url"
                                             value={editedPlaylist.thumbnailUrl}
                                             onChange={(e) => setEditedPlaylist({ ...editedPlaylist, thumbnailUrl: e.target.value })}
-                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                             placeholder="https://example.com/image.jpg"
                                         />
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    <h1 className="text-4xl font-bold text-white mb-2">{playlist.title}</h1>
-                                    <p className="text-gray-300">{playlist.description}</p>
+                                    <h1 className="text-4xl font-black text-black mb-2">{playlist.title}</h1>
+                                    <p className="text-gray-600 text-lg font-medium">{playlist.description}</p>
                                     {playlist.thumbnailUrl && (
-                                        <p className="text-gray-400 text-sm mt-2 line-clamp-1">Thumbnail: {playlist.thumbnailUrl}</p>
+                                        <p className="text-gray-500 text-sm mt-3 font-medium flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                            Thumbnail: {playlist.thumbnailUrl}
+                                        </p>
                                     )}
-                                    <p className="text-gray-400 mt-2">{playlist.videos?.length || 0} videos</p>
+                                    <p className="text-primary font-bold mt-2 flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                        {playlist.videos?.length || 0} videos
+                                    </p>
                                 </div>
                             )}
                         </div>
@@ -242,14 +255,14 @@ export default function PlaylistEditorPage() {
                                     <button
                                         onClick={handleSavePlaylist}
                                         disabled={saving}
-                                        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition disabled:opacity-50 flex items-center gap-2"
+                                        className="px-6 py-3 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm disabled:opacity-50 flex items-center gap-2"
                                     >
-                                        {saving ? 'Saving...' : 'Save'}
+                                        {saving ? 'Saving...' : 'Save Changes'}
                                     </button>
                                     <button
                                         onClick={handleCancelEdit}
                                         disabled={saving}
-                                        className="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition disabled:opacity-50"
+                                        className="px-6 py-3 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all uppercase tracking-wider text-sm disabled:opacity-50"
                                     >
                                         Cancel
                                     </button>
@@ -258,14 +271,14 @@ export default function PlaylistEditorPage() {
                                 <>
                                     <button
                                         onClick={() => setIsEditing(true)}
-                                        className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition flex items-center gap-2"
+                                        className="px-6 py-3 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all shadow-sm uppercase tracking-wider text-sm flex items-center gap-2"
                                     >
                                         <PencilIcon className="w-5 h-5" />
                                         Edit Info
                                     </button>
                                     <button
                                         onClick={() => setShowAddModal(true)}
-                                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition flex items-center gap-2"
+                                        className="px-6 py-3 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm flex items-center gap-2"
                                     >
                                         <PlusIcon className="w-5 h-5" />
                                         Add Video
@@ -278,11 +291,11 @@ export default function PlaylistEditorPage() {
 
                 {
                     (playlist.videos || []).length === 0 ? (
-                        <div className="text-center py-20 glass rounded-2xl">
-                            <p className="text-gray-400 text-lg mb-4">No videos in this playlist yet</p>
+                        <div className="text-center py-20 bg-gray-50 border border-gray-200 rounded-2xl shadow-sm">
+                            <p className="text-gray-500 text-lg mb-4 font-bold">No videos in this playlist yet</p>
                             <button
                                 onClick={() => setShowAddModal(true)}
-                                className="inline-block px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700"
+                                className="inline-block px-8 py-3 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm"
                             >
                                 Add Your First Video
                             </button>
@@ -292,22 +305,22 @@ export default function PlaylistEditorPage() {
                             {(playlist.videos || []).map((playlistVideo, index) => (
                                 <div
                                     key={playlistVideo.id}
-                                    className="glass rounded-2xl p-4 flex items-center gap-4"
+                                    className="bg-white border border-gray-200 rounded-2xl p-5 flex items-center gap-6 shadow-sm hover:shadow-md transition-all group"
                                 >
-                                    <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-purple-600 text-white font-bold">
+                                    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-black font-black shadow-[0_8px_20px_-4px_rgba(37,99,235,0.6)]">
                                         {index + 1}
                                     </div>
 
-                                    <div className="flex-shrink-0 w-40 h-24 rounded-lg overflow-hidden bg-gray-800">
+                                    <div className="flex-shrink-0 w-40 h-24 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
                                         {playlistVideo.video.thumbnailUrl ? (
                                             <img
                                                 src={playlistVideo.video.thumbnailUrl}
                                                 alt={playlistVideo.video.title}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
-                                                <svg className="w-10 h-10 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg className="w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
                                                 </svg>
                                             </div>
@@ -315,20 +328,20 @@ export default function PlaylistEditorPage() {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-white font-semibold text-lg line-clamp-1">
+                                        <h3 className="text-black font-bold text-lg line-clamp-1 group-hover:text-primary transition-colors">
                                             {playlistVideo.video.title}
                                         </h3>
-                                        <p className="text-gray-400 text-sm line-clamp-1">
+                                        <p className="text-gray-600 text-sm line-clamp-1 font-medium">
                                             {playlistVideo.video.description}
                                         </p>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <span className={`px-2 py-0.5 text-xs font-semibold rounded ${playlistVideo.video.accessType === 'PREMIUM'
-                                                ? 'bg-yellow-500 text-black'
-                                                : 'bg-green-500 text-white'
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <span className={`px-2.5 py-0.5 text-[10px] font-black rounded uppercase tracking-wider ${playlistVideo.video.accessType === 'PREMIUM'
+                                                ? 'bg-black text-white'
+                                                : 'bg-green-100 text-green-700 border border-green-200'
                                                 }`}>
                                                 {playlistVideo.video.accessType}
                                             </span>
-                                            <span className="text-xs text-gray-500">
+                                            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest bg-gray-100 px-2.5 py-0.5 rounded">
                                                 {playlistVideo.video.videoType}
                                             </span>
                                         </div>
@@ -336,7 +349,7 @@ export default function PlaylistEditorPage() {
 
                                     <button
                                         onClick={() => handleRemoveVideo(playlistVideo.video.id)}
-                                        className="flex-shrink-0 p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                                        className="flex-shrink-0 p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
                                     >
                                         <TrashIcon className="w-5 h-5" />
                                     </button>
@@ -349,41 +362,61 @@ export default function PlaylistEditorPage() {
                 {/* Add Video Modal */}
                 {
                     showAddModal && (
-                        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                            <div className="glass rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto">
-                                <h2 className="text-2xl font-bold text-white mb-4">Add Video to Playlist</h2>
+                        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                            <div className="bg-white border border-gray-200 rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+                                <h2 className="text-3xl font-black text-black mb-6">Add Video to Playlist</h2>
+
+                                <div className="mb-8">
+                                    <SearchInput
+                                        value={searchTerm}
+                                        onSearch={setSearchTerm}
+                                        placeholder="Search videos by title or description..."
+                                        className="max-w-none"
+                                        delay={0}
+                                    />
+                                </div>
 
                                 {availableVideos.length === 0 ? (
-                                    <p className="text-gray-400 text-center py-8">
+                                    <p className="text-gray-500 text-center py-12 font-bold text-lg">
                                         All videos have been added to this playlist
                                     </p>
+                                ) : filteredAvailableVideos.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <p className="text-gray-500 font-bold text-lg mb-2">No videos found matching "{searchTerm}"</p>
+                                        <button
+                                            onClick={() => setSearchTerm('')}
+                                            className="text-primary font-bold hover:underline"
+                                        >
+                                            Clear search
+                                        </button>
+                                    </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        {availableVideos.map((video) => (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                        {filteredAvailableVideos.map((video) => (
                                             <div
                                                 key={video.id}
-                                                className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition cursor-pointer"
+                                                className="bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:border-primary/40 hover:shadow-xl transition-all cursor-pointer group"
                                                 onClick={() => handleAddVideo(video.id)}
                                             >
-                                                <div className="aspect-video bg-gray-800 rounded-lg mb-3 overflow-hidden">
+                                                <div className="aspect-video bg-gray-200 rounded-xl mb-4 overflow-hidden border border-gray-100">
                                                     {video.thumbnailUrl ? (
                                                         <img
                                                             src={video.thumbnailUrl}
                                                             alt={video.title}
-                                                            className="w-full h-full object-cover"
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                         />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center">
-                                                            <svg className="w-12 h-12 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                                                                 <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
                                                             </svg>
                                                         </div>
                                                     )}
                                                 </div>
-                                                <h3 className="text-white font-semibold line-clamp-1 mb-1">
+                                                <h3 className="text-black font-bold line-clamp-1 mb-1 group-hover:text-primary transition-colors">
                                                     {video.title}
                                                 </h3>
-                                                <p className="text-gray-400 text-sm line-clamp-2">
+                                                <p className="text-gray-600 text-sm line-clamp-2 font-medium">
                                                     {video.description}
                                                 </p>
                                             </div>
@@ -392,8 +425,11 @@ export default function PlaylistEditorPage() {
                                 )}
 
                                 <button
-                                    onClick={() => setShowAddModal(false)}
-                                    className="w-full py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                                    onClick={() => {
+                                        setShowAddModal(false)
+                                        setSearchTerm('')
+                                    }}
+                                    className="w-full py-4 px-4 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all uppercase tracking-wider text-sm"
                                 >
                                     Close
                                 </button>

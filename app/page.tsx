@@ -6,14 +6,14 @@ import { PlayCircleIcon, SparklesIcon, ClockIcon, ChartBarIcon } from '@heroicon
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen gradient-deep">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
-        {/* Animated background elements */}
+        {/* Animated background elements - adjusted for white theme */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-surface rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-100/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto text-center">
@@ -22,22 +22,22 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-6xl md:text-8xl font-bold text-white mb-6">
-              Kushal <span className="gradient-text-primary">Stream</span>
+            <h1 className="text-6xl md:text-8xl font-black text-black mb-6 tracking-tight">
+              Kushal <span className="text-black italic">Stream</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-700 mb-12 max-w-3xl mx-auto font-medium">
               Your exclusive destination for premium video content. Watch full-length videos, shorts, and reels from your favorite creator.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/auth/login"
-                className="px-8 py-4 gradient-primary text-white font-semibold rounded-full hover:shadow-glow-primary transform hover:scale-105 transition-all shadow-lg"
+                className="px-8 py-4 bg-black text-white font-bold rounded-full hover:bg-gray-800 transform hover:scale-105 transition-all shadow-lg"
               >
                 Login
               </Link>
               <Link
                 href="/auth/register"
-                className="px-8 py-4 glass-surface backdrop-blur-lg text-white font-semibold rounded-full hover:bg-primary/20 transform hover:scale-105 transition-all border border-primary/30"
+                className="px-8 py-4 bg-white text-black border-2 border-black font-bold rounded-full hover:bg-gray-50 transform hover:scale-105 transition-all"
               >
                 Sign Up
               </Link>
@@ -47,14 +47,14 @@ export default function LandingPage() {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <svg className="w-6 h-6 text-white" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-8 h-8 text-black" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" viewBox="0 0 24 24" stroke="currentColor">
             <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
           </svg>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 bg-black/20">
+      <section className="py-20 px-4 bg-gray-50 border-y border-gray-100">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -63,10 +63,10 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
               Why Choose Kushal Stream?
             </h2>
-            <p className="text-xl text-gray-300">
+            <p className="text-xl text-gray-600 font-medium">
               Experience premium content like never before
             </p>
           </motion.div>
@@ -100,13 +100,13 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-surface rounded-2xl p-6 hover:bg-primary/5 transition-all hover:shadow-glow-primary border border-primary/20"
+                className="bg-white rounded-2xl p-6 hover:shadow-xl transition-all border border-gray-100 group"
               >
-                <feature.icon className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <feature.icon className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-bold text-black mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-300">
+                <p className="text-gray-600 font-medium">
                   {feature.description}
                 </p>
               </motion.div>
@@ -116,7 +116,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -125,10 +125,10 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-xl text-gray-300">
+            <p className="text-xl text-gray-600 font-medium">
               Choose the plan that works for you
             </p>
           </motion.div>
@@ -140,33 +140,33 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="glass rounded-2xl p-8"
+              className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm"
             >
-              <h3 className="text-2xl font-bold text-white mb-2">Free</h3>
-              <div className="text-4xl font-bold text-white mb-6">
-                $0<span className="text-lg text-gray-300">/month</span>
+              <h3 className="text-2xl font-bold text-black mb-2">Free</h3>
+              <div className="text-4xl font-black text-black mb-6">
+                $0<span className="text-lg text-gray-500">/month</span>
               </div>
               <ul className="space-y-4 mb-8">
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-700 font-medium">
+                  <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Watch trailers of premium videos
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-700 font-medium">
+                  <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Full access to free videos
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-700 font-medium">
+                  <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Free shorts only
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-700 font-medium">
+                  <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Watch history tracking
@@ -174,7 +174,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/auth/register"
-                className="block w-full py-3 px-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition text-center"
+                className="block w-full py-4 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition text-center shadow-lg"
               >
                 Get Started
               </Link>
@@ -186,42 +186,42 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="glass-surface rounded-2xl p-8 border-2 border-primary relative shadow-glow-primary"
+              className="bg-blue-50 rounded-3xl p-8 border-2 border-primary relative shadow-xl"
             >
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 gradient-primary text-white px-4 py-1 rounded-full text-sm font-semibold">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-1.5 rounded-full text-xs font-black tracking-widest uppercase shadow-lg">
                 POPULAR
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Premium</h3>
-              <div className="text-4xl font-bold text-white mb-6">
-                $9.99<span className="text-lg text-gray-300">/month</span>
+              <h3 className="text-2xl font-bold text-black mb-2">Premium</h3>
+              <div className="text-4xl font-black text-black mb-6">
+                $9.99<span className="text-lg text-gray-500">/month</span>
               </div>
               <ul className="space-y-4 mb-8">
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-800 font-bold">
+                  <svg className="w-6 h-6 text-primary mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Full access to ALL premium videos
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-800 font-bold">
+                  <svg className="w-6 h-6 text-primary mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   All free content included
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-800 font-bold">
+                  <svg className="w-6 h-6 text-primary mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Premium + free shorts feed
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-800 font-bold">
+                  <svg className="w-6 h-6 text-primary mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Advanced analytics
                 </li>
-                <li className="flex items-start text-gray-300">
-                  <svg className="w-6 h-6 text-green-400 mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                <li className="flex items-start text-gray-800 font-bold">
+                  <svg className="w-6 h-6 text-primary mr-2 flex-shrink-0" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M5 13l4 4L19 7"></path>
                   </svg>
                   Cancel anytime
@@ -229,7 +229,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/auth/register"
-                className="block w-full py-3 px-4 gradient-primary text-white font-semibold rounded-lg hover:shadow-glow-primary transition-all text-center"
+                className="block w-full py-4 bg-primary text-black font-bold rounded-2xl hover:bg-secondary transition-all text-center shadow-[0_12px_30px_-5px_rgba(37,99,235,0.6)]"
               >
                 Start Free Trial
               </Link>
@@ -239,8 +239,13 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 bg-black/40 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center text-gray-400">
+      <footer className="py-12 px-4 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-6xl mx-auto text-center text-gray-600 font-medium">
+          <div className="mb-6 flex justify-center gap-8">
+            <Link href="/" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/" className="hover:text-primary transition-colors">Terms of Service</Link>
+            <Link href="/" className="hover:text-primary transition-colors">Contact Support</Link>
+          </div>
           <p>&copy; 2025 Kushal Stream. All rights reserved.</p>
         </div>
       </footer>

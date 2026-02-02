@@ -26,8 +26,6 @@ function HomeContent() {
         try {
             let url = `/api/videos?type=LONG${searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : ''}`
             if (playlistId) {
-                // ... same as before but maybe search within playlist if possible, 
-                // but for now we'll stick to general search or just playlist content
                 const playlistRes = await fetch(`/api/admin/playlists/${playlistId}`)
                 const playlistData = await playlistRes.json()
                 if (!playlistData.error) {
@@ -59,20 +57,20 @@ function HomeContent() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white">
             <main className="max-w-7xl mx-auto pb-20">
-                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-primary/10 pb-10">
+                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-10">
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse-primary"></span>
-                            <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-black">
                                 {playlistName ? 'Featured Collection' : 'Personalized Stream'}
                             </span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">
+                        <h1 className="text-4xl md:text-5xl font-black text-black leading-tight">
                             {playlistName || (user?.name ? `Welcome back, ${user.name.split(' ')[0]}` : 'Discover High-Fidelity Content')}
                         </h1>
-                        <p className="text-gray-300 text-lg font-medium max-w-xl">
+                        <p className="text-gray-700 text-lg font-medium max-w-xl">
                             {playlistName
                                 ? `Now streaming: "${playlistName}". Handpicked selection for our library.`
                                 : "The absolute best in long-form entertainment and professional insights, curated specifically for you."}
@@ -92,18 +90,18 @@ function HomeContent() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {[...Array(8)].map((_, i) => (
                             <div key={i} className="space-y-4 animate-pulse">
-                                <div className="aspect-video bg-white/5 rounded-2xl"></div>
+                                <div className="aspect-video bg-gray-200 rounded-2xl"></div>
                                 <div className="space-y-2">
-                                    <div className="h-4 bg-white/5 rounded-full w-3/4"></div>
-                                    <div className="h-3 bg-white/5 rounded-full w-1/2"></div>
+                                    <div className="h-4 bg-gray-200 rounded-full w-3/4"></div>
+                                    <div className="h-3 bg-gray-200 rounded-full w-1/2"></div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : videos.length === 0 ? (
-                    <div className="glass-surface rounded-3xl border border-primary/20 p-8">
+                    <div className="bg-gray-50 rounded-3xl border border-gray-200 p-8 shadow-md">
                         <div className="text-center py-32">
-                            <p className="text-white/20 font-black text-3xl uppercase tracking-widest mb-4">No Signal Detected</p>
+                            <p className="text-gray-300 font-black text-3xl uppercase tracking-widest mb-4">No Signal Detected</p>
                             <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Awaiting new data transmissions.</p>
                         </div>
                     </div>
@@ -122,10 +120,10 @@ function HomeContent() {
 export default function HomePage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center bg-black">
+            <div className="min-h-screen flex items-center justify-center bg-white">
                 <div className="relative w-16 h-16">
-                    <div className="absolute inset-0 border-4 border-white/5 rounded-full"></div>
-                    <div className="absolute inset-0 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
+                    <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
                 </div>
             </div>
         }>
