@@ -50,6 +50,9 @@ export default function VideoPage() {
     const [isTrailerEnded, setIsTrailerEnded] = useState(false)
     const [isWatchLater, setIsWatchLater] = useState(false)
     const [togglingWatchLater, setTogglingWatchLater] = useState(false)
+    const [isVideoEnded, setIsVideoEnded] = useState(false)
+    const [nextVideoId, setNextVideoId] = useState<string | null>(null)
+    const [playlistVideos, setPlaylistVideos] = useState<any[]>([])
     const [trailerStartTime, setTrailerStartTime] = useState<number | null>(null)
 
     const getYouTubeId = (url: string) => {
@@ -114,8 +117,31 @@ export default function VideoPage() {
             setIsTrailerEnded(false)
             setPlayerError(null)
             setTrailerStartTime(null)
+            setIsVideoEnded(false)
         }
     }, [id])
+
+    // Fetch playlist videos when playlistId changes
+    useEffect(() => {
+        if (playlistId) {
+            fetchPlaylistVideos()
+        } else {
+            setPlaylistVideos([])
+            setNextVideoId(null)
+        }
+    }, [playlistId])
+
+    // Determine next video when playlist videos or current video changes
+    useEffect(() => {
+        if (playlistId && playlistVideos.length > 0 && id) {
+            const currentIndex = playlistVideos.findIndex(v => v.id === id)
+            if (currentIndex >= 0 && currentIndex < playlistVideos.length - 1) {
+                setNextVideoId(playlistVideos[currentIndex + 1].id)
+            } else {
+                setNextVideoId(null)
+            }
+        }
+    }, [playlistId, playlistVideos, id])
 
     // Timer-based trailer enforcement for YouTube videos
     useEffect(() => {
@@ -182,6 +208,40 @@ export default function VideoPage() {
             }
         } catch (error) {
             console.error('Error checking watch later status:', error)
+        }
+    }
+
+    const fetchPlaylistVideos = async () => {
+        if (!playlistId) return
+        try {
+            const response = await fetch(`/api/playlists/${playlistId}`)
+            if (!response.ok) throw new Error('Failed to fetch playlist')
+            const data = await response.json()
+
+            // Sort by order and extract video IDs
+            const sortedVideos = data.videos?.map((pv: any) => ({
+                id: pv.video.id,
+                order: pv.order
+            })).sort((a: any, b: any) => a.order - b.order) || []
+
+            setPlaylistVideos(sortedVideos)
+        } catch (error) {
+            console.error('Error fetching playlist videos:', error)
+        }
+    }
+
+    const handleVideoEnded = () => {
+        console.log('Video ended. PlaylistId:', playlistId, 'NextVideoId:', nextVideoId)
+
+        // If in playlist context and there's a next video, navigate to it (autoplay)
+        if (playlistId && nextVideoId) {
+            toast.success('Playing next video...', { icon: '▶️' })
+            setTimeout(() => {
+                router.push(`/video/${nextVideoId}?playlist=${playlistId}`)
+            }, 1000) // Small delay for better UX
+        } else {
+            // If not in playlist context, show rewatch button
+            setIsVideoEnded(true)
         }
     }
 
@@ -330,6 +390,7 @@ export default function VideoPage() {
                                                                                     }}
                                                                                     className="w-full h-full bg-black object-contain"
                                                                                     onError={() => setPlayerError('The trailer video file could not be played.')}
+                                                                                    onEnded={handleVideoEnded}
                                                                                 />
                                                                             )}
                                                                             <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
@@ -383,6 +444,7 @@ export default function VideoPage() {
                                                                             onContextMenu={(e) => e.preventDefault()}
                                                                             className="w-full h-full bg-black object-contain"
                                                                             onError={() => setPlayerError('The video file could not be played.')}
+                                                                            onEnded={handleVideoEnded}
                                                                         />
                                                                     </div>
                                                                 )
@@ -499,6 +561,26 @@ export default function VideoPage() {
                                                             className="px-10 py-4 bg-white text-black rounded-2xl font-black hover:bg-gray-200 active:scale-95 transition-all shadow-xl"
                                                         >
                                                             RETRIEVE STREAM
+                                                        </button>
+                                                    </div>
+                                                )}
+
+                                                {/* 4. Rewatch Button Overlay (for non-playlist videos) */}
+                                                {isVideoEnded && !playlistId && (
+                                                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                                                        <button
+                                                            onClick={() => {
+                                                                setIsVideoEnded(false)
+                                                                setIsPlaying(true)
+                                                                if (videoRef.current) {
+                                                                    videoRef.current.currentTime = 0
+                                                                    videoRef.current.play().catch(() => { })
+                                                                }
+                                                            }}
+                                                            className="group relative flex items-center justify-center w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 hover:scale-110 active:scale-95 transition-all duration-300 shadow-2xl"
+                                                            aria-label="Rewatch video"
+                                                        >
+                                                            <span className="text-5xl text-white font-light">⟲</span>
                                                         </button>
                                                     </div>
                                                 )}
