@@ -12,7 +12,7 @@ export async function GET(
         const session = await getServerSession(authOptions)
         const userId = (session?.user as any)?.id
 
-        // 1. Get current video info
+        // Get current video info
         const currentVideo = await prisma.video.findUnique({
             where: { id: videoId },
             select: { id: true, videoType: true, accessType: true }
@@ -22,78 +22,22 @@ export async function GET(
             return NextResponse.json({ error: 'Video not found' }, { status: 404 })
         }
 
-        // @ts-ignore - Handle possible initial TS lag after refresh
-        const mlRecs = await prisma.videoSimilarity.findMany({
-            where: {
-                videoId: videoId,
-                algorithm: 'collaborative'
-            },
-            orderBy: { score: 'desc' },
-            take: 6,
-            include: {
-                similarVideo: {
-                    select: {
-                        id: true,
-                        title: true,
-                        thumbnailUrl: true,
-                        accessType: true,
-                        videoType: true,
-                        // @ts-ignore
-                        durationSeconds: true,
-                        createdAt: true
-                    }
-                }
-            }
-        })
-
-        const mlVideos = mlRecs.map((r: any) => r.similarVideo)
-
-        // 3. Personalized Recommendations (Based on user interests)
-        let personalizedVideos: any[] = []
+        // Get user's watch history for personalized recommendations
+        let watchedVideoIds: string[] = []
         if (userId) {
-            // Find videos liked/watched by the user that they haven't seen yet (or recently)
-            // @ts-ignore
-            const interactions = await prisma.videoInteraction.findMany({
-                where: { userId, score: { gt: 5 } }, // Highly rated by user
+            const watchHistory = await prisma.watchHistory.findMany({
+                where: { userId },
                 select: { videoId: true },
+                orderBy: { lastWatchedAt: 'desc' },
                 take: 10
             })
-
-            const likedIds = interactions.map((i: any) => i.videoId)
-
-            if (likedIds.length > 0) {
-                personalizedVideos = await prisma.video.findMany({
-                    where: {
-                        id: {
-                            notIn: [videoId, ...likedIds], // Not current, not already liked
-                        },
-                        // Similar to what they like
-                        // @ts-ignore
-                        similarFrom: {
-                            some: {
-                                videoId: { in: likedIds }
-                            }
-                        }
-                    },
-                    select: {
-                        id: true,
-                        title: true,
-                        thumbnailUrl: true,
-                        accessType: true,
-                        videoType: true,
-                        // @ts-ignore
-                        durationSeconds: true,
-                        createdAt: true
-                    },
-                    take: 4
-                })
-            }
+            watchedVideoIds = watchHistory.map(w => w.videoId)
         }
 
-        // 4. Content-Based Fallback (Same type/access)
-        const contentBased = await prisma.video.findMany({
+        // Get videos similar to current video (same type and access)
+        const similarVideos = await prisma.video.findMany({
             where: {
-                id: { notIn: [videoId, ...mlVideos.map((v: any) => v.id), ...personalizedVideos.map((v: any) => v.id)] },
+                id: { not: videoId },
                 videoType: currentVideo.videoType,
                 accessType: currentVideo.accessType
             },
@@ -103,29 +47,69 @@ export async function GET(
                 thumbnailUrl: true,
                 accessType: true,
                 videoType: true,
-                // @ts-ignore
-                durationSeconds: true,
-                createdAt: true
+                createdAt: true,
+                views: {
+                    select: { id: true }
+                }
             },
-            take: 12
+            take: 8,
+            orderBy: {
+                createdAt: 'desc'
+            }
         })
 
-        // 5. Merge and Deduplicate
-        const combined = [
-            ...mlVideos,
-            ...personalizedVideos,
-            ...contentBased
-        ]
+        // Get mixed content (different types)
+        const mixedVideos = await prisma.video.findMany({
+            where: {
+                id: {
+                    notIn: [videoId, ...similarVideos.map(v => v.id)]
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                thumbnailUrl: true,
+                accessType: true,
+                videoType: true,
+                createdAt: true,
+                views: {
+                    select: { id: true }
+                }
+            },
+            take: 7,
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
 
-        // Shifting/Shuffling slightly for variety
-        const unique = Array.from(new Map(combined.map((v: any) => [v.id, v])).values())
-        const result = unique.slice(0, 15)
+        // Combine and add view counts
+        const allRecommendations = [...similarVideos, ...mixedVideos].map(video => ({
+            id: video.id,
+            title: video.title,
+            thumbnailUrl: video.thumbnailUrl,
+            accessType: video.accessType,
+            videoType: video.videoType,
+            durationSeconds: null, // Not available in schema, set to null
+            createdAt: video.createdAt.toISOString(),
+            viewCount: video.views.length
+        }))
+
+        // Prioritize unwatched videos if user is logged in
+        let orderedRecommendations = allRecommendations
+        if (userId && watchedVideoIds.length > 0) {
+            const unwatched = allRecommendations.filter(v => !watchedVideoIds.includes(v.id))
+            const watched = allRecommendations.filter(v => watchedVideoIds.includes(v.id))
+            orderedRecommendations = [...unwatched, ...watched]
+        }
+
+        // Return top 15 recommendations
+        const result = orderedRecommendations.slice(0, 15)
 
         return NextResponse.json({ recommendations: result })
     } catch (error) {
-        console.error('Error in hybrid recommendations API:', error)
+        console.error('Error in recommendations API:', error)
         return NextResponse.json(
-            { error: 'Internal server error' },
+            { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         )
     }

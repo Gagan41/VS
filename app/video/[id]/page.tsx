@@ -13,6 +13,14 @@ const CommentSection = dynamic(() => import('@/components/CommentSection'), {
     loading: () => <div className="animate-pulse h-40 bg-white/5 rounded-2xl" />,
     ssr: false
 })
+const VideoRecommendations = dynamic(() => import('@/components/VideoRecommendations'), {
+    loading: () => <div className="animate-pulse h-40 bg-white/5 rounded-2xl" />,
+    ssr: false
+})
+const PlaylistQueue = dynamic(() => import('@/components/PlaylistQueue'), {
+    loading: () => <div className="animate-pulse h-32 bg-white/5 rounded-2xl" />,
+    ssr: false
+})
 import VideoProtection from '@/components/VideoProtection'
 import { BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/24/outline'
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid'
@@ -20,6 +28,19 @@ import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid'
 export default function VideoPage() {
     const { id } = useParams()
     const router = useRouter()
+
+    // Get playlist ID from URL - using window.location as fallback for SSR
+    const [playlistId, setPlaylistId] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search)
+            const playlist = urlParams.get('playlist')
+            setPlaylistId(playlist)
+            console.log('Playlist ID from URL:', playlist)
+        }
+    }, [])
+
     const { data: session, status: sessionStatus } = useSession()
     const [video, setVideo] = useState<any>(null)
     const [loading, setLoading] = useState(true)
@@ -232,61 +253,127 @@ export default function VideoPage() {
 
     return (
         <div className="p-4 sm:p-6 lg:p-8">
-            <main className="max-w-7xl mx-auto pb-20">
-                <div className="glass rounded-2xl overflow-hidden">
-                    {/* Video Player */}
-                    <VideoProtection videoId={video.id}>
-                        <div className="aspect-video bg-black relative group overflow-hidden">
-                            {(() => {
-                                const youtubeId = getYouTubeId(video.videoUrl)
-                                const isLocal = video.videoUrl.startsWith('/uploads')
+            <main className="max-w-[1800px] mx-auto pb-20">
+                {/* Desktop: Side-by-side layout, Mobile: Stacked */}
+                <div className="flex flex-col lg:flex-row gap-6">
 
-                                return (
-                                    <>
-                                        {/* 1. Playback Layer */}
-                                        {isPlaying && (
-                                            <div className={`w-full h-full transition-opacity duration-700 ${isTrailerEnded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                                                {(() => {
-                                                    const isCloudinary = video.videoUrl.includes('res.cloudinary.com')
-                                                    const isDirectFile = isLocal || isCloudinary
+                    {/* Left Column: Video Player + Info + Comments */}
+                    <div className="flex-1 min-w-0">
+                        <div className="glass rounded-2xl overflow-hidden">
+                            {/* Video Player */}
+                            <VideoProtection videoId={video.id}>
+                                <div className="aspect-video bg-black relative group overflow-hidden">
+                                    {(() => {
+                                        const youtubeId = getYouTubeId(video.videoUrl)
+                                        const isLocal = video.videoUrl.startsWith('/uploads')
 
-                                                    // A. Trailer Mode
-                                                    if (!canWatchFull) {
-                                                        if (youtubeId) {
-                                                            return (
-                                                                <div className="w-full h-full relative">
-                                                                    {!isTrailerEnded && (
-                                                                        <iframe
-                                                                            key={`trailer-yt-${video.id}`}
-                                                                            width="100%"
-                                                                            height="100%"
-                                                                            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1&disablekb=1`}
-                                                                            title={video.title}
-                                                                            frameBorder="0"
-                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                            allowFullScreen
-                                                                            className="w-full h-full"
-                                                                            onLoad={() => {
-                                                                                if (!trailerStartTime) {
-                                                                                    setTrailerStartTime(Date.now())
-                                                                                }
-                                                                            }}
-                                                                        />
-                                                                    )}
-                                                                    <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
-                                                                        Preview Mode - {video.trailerDurationSeconds || 30}s
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        }
+                                        return (
+                                            <>
+                                                {/* 1. Playback Layer */}
+                                                {isPlaying && (
+                                                    <div className={`w-full h-full transition-opacity duration-700 ${isTrailerEnded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                                                        {(() => {
+                                                            const isCloudinary = video.videoUrl.includes('res.cloudinary.com')
+                                                            const isDirectFile = isLocal || isCloudinary
 
-                                                        // Direct File Trailer (Cloudinary or Local)
-                                                        if (isDirectFile) {
-                                                            return (
-                                                                <div className="w-full h-full relative">
-                                                                    {!isTrailerEnded && (
+                                                            // A. Trailer Mode
+                                                            if (!canWatchFull) {
+                                                                if (youtubeId) {
+                                                                    return (
+                                                                        <div className="w-full h-full relative">
+                                                                            {!isTrailerEnded && (
+                                                                                <iframe
+                                                                                    key={`trailer-yt-${video.id}`}
+                                                                                    width="100%"
+                                                                                    height="100%"
+                                                                                    src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1&disablekb=1`}
+                                                                                    title={video.title}
+                                                                                    frameBorder="0"
+                                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                    allowFullScreen
+                                                                                    className="w-full h-full"
+                                                                                    onLoad={() => {
+                                                                                        if (!trailerStartTime) {
+                                                                                            setTrailerStartTime(Date.now())
+                                                                                        }
+                                                                                    }}
+                                                                                />
+                                                                            )}
+                                                                            <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
+                                                                                Preview Mode - {video.trailerDurationSeconds || 30}s
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                                }
+
+                                                                // Direct File Trailer (Cloudinary or Local)
+                                                                if (isDirectFile) {
+                                                                    return (
+                                                                        <div className="w-full h-full relative">
+                                                                            {!isTrailerEnded && (
+                                                                                <video
+                                                                                    key={`trailer-direct-${video.id}`}
+                                                                                    ref={videoRef}
+                                                                                    src={video.videoUrl}
+                                                                                    controls
+                                                                                    autoPlay
+                                                                                    playsInline
+                                                                                    controlsList="nodownload"
+                                                                                    onContextMenu={(e) => e.preventDefault()}
+                                                                                    onTimeUpdate={(e: any) => {
+                                                                                        const limit = video.trailerDurationSeconds || 30
+                                                                                        if (e.target.currentTime >= limit) {
+                                                                                            e.target.pause()
+                                                                                            setIsTrailerEnded(true)
+                                                                                            toast.error('Preview ended', { id: 'trailer-end', icon: '🔒' })
+                                                                                        }
+                                                                                    }}
+                                                                                    className="w-full h-full bg-black object-contain"
+                                                                                    onError={() => setPlayerError('The trailer video file could not be played.')}
+                                                                                />
+                                                                            )}
+                                                                            <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
+                                                                                Preview Mode - {video.trailerDurationSeconds || 30}s
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            }
+
+                                                            // B. Full Video - YouTube
+                                                            if (youtubeId) {
+                                                                return (
+                                                                    <iframe
+                                                                        key={`full-yt-${video.id}`}
+                                                                        width="100%"
+                                                                        height="100%"
+                                                                        src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3`}
+                                                                        title={video.title}
+                                                                        frameBorder="0"
+                                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                        allowFullScreen
+                                                                        className="w-full h-full"
+                                                                    />
+                                                                )
+                                                            }
+
+                                                            // C. Full Video - Direct File (Cloudinary or Local)
+                                                            if (isDirectFile) {
+                                                                return (
+                                                                    <div className="w-full h-full relative" onDoubleClick={(e) => {
+                                                                        if (!videoRef.current) return
+                                                                        const rect = e.currentTarget.getBoundingClientRect()
+                                                                        const x = e.clientX - rect.left
+                                                                        if (x < rect.width / 2) {
+                                                                            videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 5)
+                                                                            toast.success('-5s', { id: 'seek', duration: 1000, icon: '⏪' })
+                                                                        } else {
+                                                                            videoRef.current.currentTime = Math.min(videoRef.current.duration, videoRef.current.currentTime + 5)
+                                                                            toast.success('+5s', { id: 'seek', duration: 1000, icon: '⏩' })
+                                                                        }
+                                                                    }}>
                                                                         <video
-                                                                            key={`trailer-direct-${video.id}`}
+                                                                            key={`full-direct-${video.id}`}
                                                                             ref={videoRef}
                                                                             src={video.videoUrl}
                                                                             controls
@@ -294,261 +381,220 @@ export default function VideoPage() {
                                                                             playsInline
                                                                             controlsList="nodownload"
                                                                             onContextMenu={(e) => e.preventDefault()}
-                                                                            onTimeUpdate={(e: any) => {
-                                                                                const limit = video.trailerDurationSeconds || 30
-                                                                                if (e.target.currentTime >= limit) {
-                                                                                    e.target.pause()
-                                                                                    setIsTrailerEnded(true)
-                                                                                    toast.error('Preview ended', { id: 'trailer-end', icon: '🔒' })
-                                                                                }
-                                                                            }}
                                                                             className="w-full h-full bg-black object-contain"
-                                                                            onError={() => setPlayerError('The trailer video file could not be played.')}
+                                                                            onError={() => setPlayerError('The video file could not be played.')}
                                                                         />
-                                                                    )}
-                                                                    <div className="absolute top-4 left-4 bg-purple-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border border-white/20 z-10">
-                                                                        Preview Mode - {video.trailerDurationSeconds || 30}s
                                                                     </div>
-                                                                </div>
-                                                            )
-                                                        }
-                                                    }
+                                                                )
+                                                            }
 
-                                                    // B. Full Video - YouTube
-                                                    if (youtubeId) {
-                                                        return (
-                                                            <iframe
-                                                                key={`full-yt-${video.id}`}
-                                                                width="100%"
-                                                                height="100%"
-                                                                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3`}
-                                                                title={video.title}
-                                                                frameBorder="0"
-                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                allowFullScreen
-                                                                className="w-full h-full"
-                                                            />
-                                                        )
-                                                    }
-
-                                                    // C. Full Video - Direct File (Cloudinary or Local)
-                                                    if (isDirectFile) {
-                                                        return (
-                                                            <div className="w-full h-full relative" onDoubleClick={(e) => {
-                                                                if (!videoRef.current) return
-                                                                const rect = e.currentTarget.getBoundingClientRect()
-                                                                const x = e.clientX - rect.left
-                                                                if (x < rect.width / 2) {
-                                                                    videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 5)
-                                                                    toast.success('-5s', { id: 'seek', duration: 1000, icon: '⏪' })
-                                                                } else {
-                                                                    videoRef.current.currentTime = Math.min(videoRef.current.duration, videoRef.current.currentTime + 5)
-                                                                    toast.success('+5s', { id: 'seek', duration: 1000, icon: '⏩' })
-                                                                }
-                                                            }}>
-                                                                <video
-                                                                    key={`full-direct-${video.id}`}
-                                                                    ref={videoRef}
-                                                                    src={video.videoUrl}
+                                                            // D. Fallback (ReactPlayer for other sources)
+                                                            return (
+                                                                <ReactPlayer
+                                                                    url={video.videoUrl}
+                                                                    width="100%"
+                                                                    height="100%"
                                                                     controls
-                                                                    autoPlay
-                                                                    playsInline
-                                                                    controlsList="nodownload"
-                                                                    onContextMenu={(e) => e.preventDefault()}
-                                                                    className="w-full h-full bg-black object-contain"
-                                                                    onError={() => setPlayerError('The video file could not be played.')}
+                                                                    playing
+                                                                    playsinline
+                                                                    onError={(e: any) => setPlayerError('This format is not supported.')}
                                                                 />
+                                                            )
+                                                        })()}
+                                                    </div>
+                                                )}
+
+                                                {/* 2. Overlay Layer (Play Button / Trailer Ended) */}
+                                                {(!isPlaying || isTrailerEnded) && (
+                                                    <div
+                                                        className="absolute inset-0 flex items-center justify-center bg-cover bg-center cursor-pointer z-10 transition-all duration-500"
+                                                        style={{
+                                                            backgroundImage: `url(${video.thumbnailUrl || (youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : '/placeholder-thumbnail.jpg')})`
+                                                        }}
+                                                        onClick={() => {
+                                                            if (isTrailerEnded) return
+                                                            setIsPlaying(true)
+                                                        }}
+                                                    >
+                                                        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] transition-colors" />
+
+                                                        {isTrailerEnded ? (
+                                                            <div className="relative z-20 text-center p-8 bg-black/80 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl max-w-sm mx-4 transform animate-in fade-in zoom-in duration-300">
+                                                                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 rotate-3 shadow-xl">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-white">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                                                    </svg>
+                                                                </div>
+                                                                <h3 className="text-2xl font-black text-white mb-3 tracking-tight">Access Restricted</h3>
+                                                                <p className="text-gray-300 text-sm mb-8 leading-relaxed font-medium">
+                                                                    {session
+                                                                        ? "Your preview has ended. This premium title requires an active subscription to view in full."
+                                                                        : "Your preview has ended. Sign in and upgrade to Premium to continue watching this exclusive content."
+                                                                    }
+                                                                </p>
+                                                                <div className="flex flex-col gap-3">
+                                                                    <Link
+                                                                        href="/pricing"
+                                                                        className="block w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-purple-500/25"
+                                                                    >
+                                                                        Unlock Full Video
+                                                                    </Link>
+                                                                    {!session && (
+                                                                        <Link
+                                                                            href="/auth/login"
+                                                                            className="block w-full py-4 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all border border-white/10"
+                                                                        >
+                                                                            Sign In
+                                                                        </Link>
+                                                                    )}
+                                                                </div>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setIsTrailerEnded(false)
+                                                                        setIsPlaying(true)
+                                                                        setTrailerStartTime(Date.now())
+                                                                        // Reset local video player if applicable
+                                                                        if (videoRef.current) {
+                                                                            videoRef.current.currentTime = 0
+                                                                            videoRef.current.play().catch(() => { })
+                                                                        }
+                                                                    }}
+                                                                    className="mt-4 text-gray-400 text-xs font-bold uppercase tracking-widest hover:text-white transition"
+                                                                >
+                                                                    Watch Preview Again
+                                                                </button>
                                                             </div>
-                                                        )
-                                                    }
+                                                        ) : (
+                                                            <button
+                                                                className="relative z-20 w-24 h-24 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:scale-110 active:scale-95 transition-all duration-300 shadow-2xl"
+                                                            >
+                                                                <div className="w-0 h-0 border-t-[18px] border-t-transparent border-l-[30px] border-l-white border-b-[18px] border-b-transparent ml-2 shadow-sm" />
+                                                            </button>
+                                                        )}
 
-                                                    // D. Fallback (ReactPlayer for other sources)
-                                                    return (
-                                                        <ReactPlayer
-                                                            url={video.videoUrl}
-                                                            width="100%"
-                                                            height="100%"
-                                                            controls
-                                                            playing
-                                                            playsinline
-                                                            onError={(e: any) => setPlayerError('This format is not supported.')}
-                                                        />
-                                                    )
-                                                })()}
-                                            </div>
-                                        )}
+                                                        {!isTrailerEnded && (
+                                                            <div className="absolute bottom-8 left-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 text-center">
+                                                                <h2 className="text-white text-2xl font-black drop-shadow-2xl line-clamp-1 uppercase tracking-wider">{video.title}</h2>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
 
-                                        {/* 2. Overlay Layer (Play Button / Trailer Ended) */}
-                                        {(!isPlaying || isTrailerEnded) && (
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center bg-cover bg-center cursor-pointer z-10 transition-all duration-500"
-                                                style={{
-                                                    backgroundImage: `url(${video.thumbnailUrl || (youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : '/placeholder-thumbnail.jpg')})`
-                                                }}
-                                                onClick={() => {
-                                                    if (isTrailerEnded) return
-                                                    setIsPlaying(true)
-                                                }}
-                                            >
-                                                <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] transition-colors" />
-
-                                                {isTrailerEnded ? (
-                                                    <div className="relative z-20 text-center p-8 bg-black/80 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl max-w-sm mx-4 transform animate-in fade-in zoom-in duration-300">
-                                                        <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 rotate-3 shadow-xl">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-white">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                                {/* 3. Error Layer */}
+                                                {playerError && (
+                                                    <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/95 text-white p-8 text-center backdrop-blur-lg">
+                                                        <div className="text-red-500 mb-6 bg-red-500/10 p-4 rounded-full">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                                                             </svg>
                                                         </div>
-                                                        <h3 className="text-2xl font-black text-white mb-3 tracking-tight">Access Restricted</h3>
-                                                        <p className="text-gray-300 text-sm mb-8 leading-relaxed font-medium">
-                                                            {session
-                                                                ? "Your preview has ended. This premium title requires an active subscription to view in full."
-                                                                : "Your preview has ended. Sign in and upgrade to Premium to continue watching this exclusive content."
-                                                            }
-                                                        </p>
-                                                        <div className="flex flex-col gap-3">
-                                                            <Link
-                                                                href="/pricing"
-                                                                className="block w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-purple-500/25"
-                                                            >
-                                                                Unlock Full Video
-                                                            </Link>
-                                                            {!session && (
-                                                                <Link
-                                                                    href="/auth/login"
-                                                                    className="block w-full py-4 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all border border-white/10"
-                                                                >
-                                                                    Sign In
-                                                                </Link>
-                                                            )}
-                                                        </div>
+                                                        <h2 className="text-2xl font-black mb-2 uppercase tracking-tight">Playback Failure</h2>
+                                                        <p className="text-gray-400 text-sm mb-8 max-w-sm font-medium leading-relaxed">{playerError}</p>
                                                         <button
                                                             onClick={() => {
+                                                                setPlayerError(null)
+                                                                setIsPlaying(false)
                                                                 setIsTrailerEnded(false)
-                                                                setIsPlaying(true)
-                                                                setTrailerStartTime(Date.now())
-                                                                // Reset local video player if applicable
-                                                                if (videoRef.current) {
-                                                                    videoRef.current.currentTime = 0
-                                                                    videoRef.current.play().catch(() => { })
-                                                                }
                                                             }}
-                                                            className="mt-4 text-gray-400 text-xs font-bold uppercase tracking-widest hover:text-white transition"
+                                                            className="px-10 py-4 bg-white text-black rounded-2xl font-black hover:bg-gray-200 active:scale-95 transition-all shadow-xl"
                                                         >
-                                                            Watch Preview Again
+                                                            RETRIEVE STREAM
                                                         </button>
                                                     </div>
+                                                )}
+                                            </>
+                                        )
+                                    })()}
+                                </div>
+                            </VideoProtection>
+
+                            {/* Video Info */}
+                            <div className="p-6">
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className="flex-1">
+                                        <h1 className="text-3xl font-bold text-white mb-2">{video.title}</h1>
+                                        <div className="flex items-center gap-4 mb-3">
+                                            <ViewsDisplay videoId={video.id} />
+                                            {video.accessType === 'PREMIUM' && (
+                                                <span className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-sm font-bold rounded-full">
+                                                    PREMIUM
+                                                </span>
+                                            )}
+                                            {video.accessType === 'FREE' && (
+                                                <span className="px-3 py-1 bg-green-500 text-white text-sm font-bold rounded-full">
+                                                    FREE
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <LikeDislikeButton videoId={video.id} />
+                                            <button
+                                                onClick={toggleWatchLater}
+                                                disabled={togglingWatchLater}
+                                                className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${isWatchLater
+                                                    ? 'bg-purple-600 text-white'
+                                                    : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                                                    }`}
+                                            >
+                                                {isWatchLater ? (
+                                                    <BookmarkIconSolid className="w-5 h-5 text-white" />
                                                 ) : (
-                                                    <button
-                                                        className="relative z-20 w-24 h-24 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:scale-110 active:scale-95 transition-all duration-300 shadow-2xl"
-                                                    >
-                                                        <div className="w-0 h-0 border-t-[18px] border-t-transparent border-l-[30px] border-l-white border-b-[18px] border-b-transparent ml-2 shadow-sm" />
-                                                    </button>
+                                                    <BookmarkIconOutline className="w-5 h-5" />
                                                 )}
-
-                                                {!isTrailerEnded && (
-                                                    <div className="absolute bottom-8 left-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 text-center">
-                                                        <h2 className="text-white text-2xl font-black drop-shadow-2xl line-clamp-1 uppercase tracking-wider">{video.title}</h2>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {/* 3. Error Layer */}
-                                        {playerError && (
-                                            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/95 text-white p-8 text-center backdrop-blur-lg">
-                                                <div className="text-red-500 mb-6 bg-red-500/10 p-4 rounded-full">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                                                    </svg>
-                                                </div>
-                                                <h2 className="text-2xl font-black mb-2 uppercase tracking-tight">Playback Failure</h2>
-                                                <p className="text-gray-400 text-sm mb-8 max-w-sm font-medium leading-relaxed">{playerError}</p>
-                                                <button
-                                                    onClick={() => {
-                                                        setPlayerError(null)
-                                                        setIsPlaying(false)
-                                                        setIsTrailerEnded(false)
-                                                    }}
-                                                    className="px-10 py-4 bg-white text-black rounded-2xl font-black hover:bg-gray-200 active:scale-95 transition-all shadow-xl"
-                                                >
-                                                    RETRIEVE STREAM
-                                                </button>
-                                            </div>
-                                        )}
-                                    </>
-                                )
-                            })()}
-                        </div>
-                    </VideoProtection>
-
-                    {/* Video Info */}
-                    <div className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="flex-1">
-                                <h1 className="text-3xl font-bold text-white mb-2">{video.title}</h1>
-                                <div className="flex items-center gap-4 mb-3">
-                                    <ViewsDisplay videoId={video.id} />
-                                    {video.accessType === 'PREMIUM' && (
-                                        <span className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-sm font-bold rounded-full">
-                                            PREMIUM
-                                        </span>
-                                    )}
-                                    {video.accessType === 'FREE' && (
-                                        <span className="px-3 py-1 bg-green-500 text-white text-sm font-bold rounded-full">
-                                            FREE
-                                        </span>
-                                    )}
+                                                <span className="font-semibold text-sm">
+                                                    {isWatchLater ? 'Saved' : 'Watch Later'}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-4">
-                                    <LikeDislikeButton videoId={video.id} />
-                                    <button
-                                        onClick={toggleWatchLater}
-                                        disabled={togglingWatchLater}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${isWatchLater
-                                            ? 'bg-purple-600 text-white'
-                                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                                            }`}
-                                    >
-                                        {isWatchLater ? (
-                                            <BookmarkIconSolid className="w-5 h-5 text-white" />
-                                        ) : (
-                                            <BookmarkIconOutline className="w-5 h-5" />
-                                        )}
-                                        <span className="font-semibold text-sm">
-                                            {isWatchLater ? 'Saved' : 'Watch Later'}
-                                        </span>
-                                    </button>
-                                </div>
+
+                                <p className="text-gray-300 mb-6">{video.description}</p>
+
+                                {/* Premium Content Warning */}
+                                {!canWatchFull && (
+                                    <div className="glass rounded-lg p-6 border-2 border-purple-500 mb-6">
+                                        <h3 className="text-xl font-bold text-white mb-2">
+                                            🔒 Premium Content
+                                        </h3>
+                                        <p className="text-gray-300 mb-4">
+                                            This is a premium video. You're currently watching the trailer (first {video.trailerDurationSeconds} seconds).
+                                            Upgrade to Premium to watch the full video!
+                                        </p>
+                                        <Link
+                                            href="/pricing"
+                                            className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition"
+                                        >
+                                            Upgrade to Premium
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <p className="text-gray-300 mb-6">{video.description}</p>
+                        {/* Mobile: Playlist Queue & Recommendations before comments */}
+                        <div className="lg:hidden mt-6">
+                            {playlistId && (
+                                <PlaylistQueue playlistId={playlistId} currentVideoId={video.id} />
+                            )}
+                            <VideoRecommendations currentVideoId={video.id} />
+                        </div>
 
-                        {/* Premium Content Warning */}
-                        {!canWatchFull && (
-                            <div className="glass rounded-lg p-6 border-2 border-purple-500 mb-6">
-                                <h3 className="text-xl font-bold text-white mb-2">
-                                    🔒 Premium Content
-                                </h3>
-                                <p className="text-gray-300 mb-4">
-                                    This is a premium video. You're currently watching the trailer (first {video.trailerDurationSeconds} seconds).
-                                    Upgrade to Premium to watch the full video!
-                                </p>
-                                <Link
-                                    href="/pricing"
-                                    className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition"
-                                >
-                                    Upgrade to Premium
-                                </Link>
-                            </div>
-                        )}
+                        {/* Comments Section */}
+                        <div className="mt-8">
+                            <CommentSection videoId={video.id} />
+                        </div>
                     </div>
-                </div>
 
-                {/* Comments Section */}
-                <div className="mt-8">
-                    <CommentSection videoId={video.id} />
+                    {/* Right Column: Playlist Queue & Recommendations (Desktop only, hidden on mobile) */}
+                    <aside className="hidden lg:block lg:w-[400px] xl:w-[420px] flex-shrink-0">
+                        <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 pr-2">
+                            {playlistId && (
+                                <PlaylistQueue playlistId={playlistId} currentVideoId={video.id} />
+                            )}
+                            <VideoRecommendations currentVideoId={video.id} />
+                        </div>
+                    </aside>
                 </div>
             </main>
         </div>

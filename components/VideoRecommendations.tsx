@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import RecommendationCard from './RecommendationCard'
+import ShortsRow from './ShortsRow'
 import ContinueWatchingSection from './ContinueWatchingSection'
-import { SparklesIcon } from '@heroicons/react/24/outline'
 
 interface Video {
     id: string
@@ -11,7 +11,9 @@ interface Video {
     thumbnailUrl: string | null
     accessType: string
     videoType: string
+    durationSeconds: number | null
     createdAt: string
+    viewCount?: number
 }
 
 interface VideoRecommendationsProps {
@@ -46,33 +48,56 @@ export default function VideoRecommendations({ currentVideoId }: VideoRecommenda
 
     if (error) return null
 
+    // Separate shorts from regular videos
+    const shorts = recommendations.filter(v => v.videoType === 'SHORT')
+    const regularVideos = recommendations.filter(v => v.videoType !== 'SHORT')
+
     return (
         <div className="flex flex-col gap-4">
+            {/* Continue Watching Section */}
             <ContinueWatchingSection currentVideoId={currentVideoId} />
 
-            <h2 className="text-lg font-black text-white px-2 flex items-center gap-2 uppercase tracking-tighter">
-                <SparklesIcon className="w-5 h-5 text-purple-500" />
-                Recommended for you
-            </h2>
+            {/* Section Header */}
+            <div className="hidden lg:block">
+                <h2 className="text-base font-bold text-white px-2">
+                    Recommended
+                </h2>
+            </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="lg:hidden">
+                <h2 className="text-lg font-bold text-white px-2 border-b border-white/10 pb-3">
+                    Up next
+                </h2>
+            </div>
+
+            {/* Shorts Section */}
+            {shorts.length > 0 && (
+                <div className="border-b border-white/5 pb-4">
+                    <ShortsRow shorts={shorts} />
+                </div>
+            )}
+
+            {/* Regular Video Recommendations */}
+            <div className="flex flex-col gap-0">
                 {loading ? (
                     // Skeleton Loaders
-                    Array.from({ length: 6 }).map((_, i) => (
+                    Array.from({ length: 8 }).map((_, i) => (
                         <RecommendationCard key={`skeleton-${i}`} isLoading />
                     ))
-                ) : recommendations.length > 0 ? (
-                    recommendations.map((video, index) => (
+                ) : regularVideos.length > 0 ? (
+                    regularVideos.map((video, index) => (
                         <RecommendationCard
                             key={video.id}
                             video={video}
-                            isUpNext={index === 0}
+                            isUpNext={index === 0 && shorts.length === 0}
                         />
                     ))
                 ) : (
-                    <p className="text-gray-500 text-sm px-2 italic">
-                        No similar videos found
-                    </p>
+                    <div className="px-4 py-8 text-center">
+                        <p className="text-gray-500 text-sm">
+                            No recommendations available
+                        </p>
+                    </div>
                 )}
             </div>
         </div>

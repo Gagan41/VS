@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { TrashIcon, ChatBubbleLeftIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, ChatBubbleLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 
 interface Comment {
@@ -45,6 +45,156 @@ const formatDate = (dateString: string) => {
     return date.toLocaleDateString()
 }
 
+// Move ReplyItem outside to prevent re-creation on every render
+interface ReplyItemProps {
+    reply: Reply
+    commentId: string
+    allReplies: Reply[]
+    replyingTo: { id: string, type: 'comment' | 'reply' } | null
+    setReplyingTo: (value: { id: string, type: 'comment' | 'reply' } | null) => void
+    replyContent: string
+    setReplyContent: (content: string) => void
+    handleSubmitReply: (commentId: string, parentId: string | null) => void
+    submitting: boolean
+    userImage: string | null
+    userName: string | null
+    collapsedReplies: Set<string>
+    toggleReplyCollapse: (replyId: string) => void
+}
+
+const ReplyItem = ({
+    reply,
+    commentId,
+    allReplies,
+    replyingTo,
+    setReplyingTo,
+    replyContent,
+    setReplyContent,
+    handleSubmitReply,
+    submitting,
+    userImage,
+    userName,
+    collapsedReplies,
+    toggleReplyCollapse
+}: ReplyItemProps) => {
+    const nestedReplies = allReplies.filter(r => r.parentId === reply.id)
+    const isCollapsed = collapsedReplies.has(reply.id)
+
+    return (
+        <div className="space-y-3">
+            <div className="flex gap-3">
+                <img
+                    src={reply?.user?.image || '/default-avatar.png'}
+                    alt={reply?.user?.name || 'User'}
+                    className="w-8 h-8 rounded-full flex-shrink-0"
+                />
+                <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-white text-sm">
+                            {reply?.user?.name || 'Anonymous'}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                            {formatDate(reply.createdAt)}
+                        </span>
+                    </div>
+                    <p className="text-gray-300 text-sm">{reply.content}</p>
+                    <div className="flex items-center gap-4 mt-1">
+                        <button
+                            onClick={() => setReplyingTo({ id: reply.id, type: 'reply' })}
+                            className="text-xs text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                        >
+                            <ChatBubbleLeftIcon className="w-3 h-3" />
+                            Reply
+                        </button>
+                        {nestedReplies.length > 0 && (
+                            <button
+                                onClick={() => toggleReplyCollapse(reply.id)}
+                                className="text-xs text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                            >
+                                {isCollapsed ? (
+                                    <>
+                                        <ChevronDownIcon className="w-3 h-3" />
+                                        Show {nestedReplies.length} {nestedReplies.length === 1 ? 'reply' : 'replies'}
+                                    </>
+                                ) : (
+                                    <>
+                                        <ChevronUpIcon className="w-3 h-3" />
+                                        Hide {nestedReplies.length} {nestedReplies.length === 1 ? 'reply' : 'replies'}
+                                    </>
+                                )}
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Reply Form for this reply */}
+            {replyingTo?.id === reply.id && (
+                <div className="ml-11 flex gap-3">
+                    <img
+                        src={userImage || '/default-avatar.png'}
+                        alt={userName || 'User'}
+                        className="w-7 h-7 rounded-full"
+                    />
+                    <div className="flex-1">
+                        <textarea
+                            value={replyContent}
+                            onChange={(e) => setReplyContent(e.target.value)}
+                            placeholder="Write a reply..."
+                            className="w-full px-3 py-2 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-xs transition-all"
+                            rows={2}
+                            maxLength={500}
+                            autoFocus
+                        />
+                        <div className="flex items-center gap-2 mt-2">
+                            <button
+                                onClick={() => handleSubmitReply(commentId, reply.id)}
+                                disabled={submitting || !replyContent.trim()}
+                                className="px-3 py-1.5 gradient-primary text-white text-xs font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50"
+                            >
+                                Reply
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setReplyingTo(null)
+                                    setReplyContent('')
+                                }}
+                                className="px-2 py-1 text-gray-400 text-xs hover:text-white transition"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Recursive Nested Replies */}
+            {!isCollapsed && nestedReplies.length > 0 && (
+                <div className="ml-11 space-y-3 border-l-2 border-primary/30 pl-4">
+                    {nestedReplies.map((nested) => (
+                        <ReplyItem
+                            key={nested.id}
+                            reply={nested}
+                            commentId={commentId}
+                            allReplies={allReplies}
+                            replyingTo={replyingTo}
+                            setReplyingTo={setReplyingTo}
+                            replyContent={replyContent}
+                            setReplyContent={setReplyContent}
+                            handleSubmitReply={handleSubmitReply}
+                            submitting={submitting}
+                            userImage={userImage}
+                            userName={userName}
+                            collapsedReplies={collapsedReplies}
+                            toggleReplyCollapse={toggleReplyCollapse}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}
+
 export default function CommentSection({ videoId }: CommentSectionProps) {
     const { data: session } = useSession()
     const [comments, setComments] = useState<Comment[]>([])
@@ -53,6 +203,9 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
     const [replyContent, setReplyContent] = useState('')
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
+    const [collapsedComments, setCollapsedComments] = useState<Set<string>>(new Set())
+    const [collapsedReplies, setCollapsedReplies] = useState<Set<string>>(new Set())
+    const [isExpanded, setIsExpanded] = useState(false)
 
     useEffect(() => {
         fetchComments()
@@ -65,7 +218,30 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                 throw new Error('Failed to fetch comments')
             }
             const data = await response.json()
-            setComments(Array.isArray(data) ? data : [])
+            const fetchedComments = Array.isArray(data) ? data : []
+            setComments(fetchedComments)
+
+            // Auto-collapse all comments and replies on initial load
+            const commentIds = new Set<string>()
+            const replyIds = new Set<string>()
+
+            fetchedComments.forEach((comment: Comment) => {
+                // Collapse all comments that have replies
+                if (comment.replies && comment.replies.length > 0) {
+                    commentIds.add(comment.id)
+                }
+
+                // Collapse all replies that have nested replies
+                comment.replies?.forEach((reply: Reply) => {
+                    const hasNestedReplies = comment.replies.some(r => r.parentId === reply.id)
+                    if (hasNestedReplies) {
+                        replyIds.add(reply.id)
+                    }
+                })
+            })
+
+            setCollapsedComments(commentIds)
+            setCollapsedReplies(replyIds)
         } catch (error) {
             console.error('Error fetching comments:', error)
             setComments([])
@@ -175,91 +351,31 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
         }
     }
 
-    const user = session?.user as any
-
-    const ReplyItem = ({ reply, commentId, allReplies }: { reply: Reply, commentId: string, allReplies: Reply[] }) => {
-        const nestedReplies = allReplies.filter(r => r.parentId === reply.id)
-
-        return (
-            <div className="space-y-3">
-                <div className="flex gap-3">
-                    <img
-                        src={reply?.user?.image || '/default-avatar.png'}
-                        alt={reply?.user?.name || 'User'}
-                        className="w-8 h-8 rounded-full flex-shrink-0"
-                    />
-                    <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-white text-sm">
-                                {reply?.user?.name || 'Anonymous'}
-                            </span>
-                            <span className="text-xs text-gray-400">
-                                {formatDate(reply.createdAt)}
-                            </span>
-                        </div>
-                        <p className="text-gray-300 text-sm">{reply.content}</p>
-                        <div className="flex items-center gap-4 mt-1">
-                            <button
-                                onClick={() => setReplyingTo({ id: reply.id, type: 'reply' })}
-                                className="text-xs text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
-                            >
-                                <ChatBubbleLeftIcon className="w-3 h-3" />
-                                Reply
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Reply Form for this reply */}
-                {replyingTo?.id === reply.id && (
-                    <div className="ml-11 flex gap-3">
-                        <img
-                            src={user?.image || '/default-avatar.png'}
-                            alt={user?.name || 'User'}
-                            className="w-7 h-7 rounded-full"
-                        />
-                        <div className="flex-1">
-                            <textarea
-                                value={replyContent}
-                                onChange={(e) => setReplyContent(e.target.value)}
-                                placeholder="Write a reply..."
-                                className="w-full px-3 py-2 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-xs transition-all"
-                                rows={2}
-                                maxLength={500}
-                            />
-                            <div className="flex items-center gap-2 mt-2">
-                                <button
-                                    onClick={() => handleSubmitReply(commentId, reply.id)}
-                                    disabled={submitting || !replyContent.trim()}
-                                    className="px-3 py-1.5 gradient-primary text-white text-xs font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50"
-                                >
-                                    Reply
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setReplyingTo(null)
-                                        setReplyContent('')
-                                    }}
-                                    className="px-2 py-1 text-gray-400 text-xs hover:text-white transition"
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Recursive Nested Replies */}
-                {nestedReplies.length > 0 && (
-                    <div className="ml-11 space-y-3 border-l-2 border-primary/30 pl-4">
-                        {nestedReplies.map((nested) => (
-                            <ReplyItem key={nested.id} reply={nested} commentId={commentId} allReplies={allReplies} />
-                        ))}
-                    </div>
-                )}
-            </div>
-        )
+    const toggleCommentCollapse = (commentId: string) => {
+        setCollapsedComments(prev => {
+            const newSet = new Set(prev)
+            if (newSet.has(commentId)) {
+                newSet.delete(commentId)
+            } else {
+                newSet.add(commentId)
+            }
+            return newSet
+        })
     }
+
+    const toggleReplyCollapse = (replyId: string) => {
+        setCollapsedReplies(prev => {
+            const newSet = new Set(prev)
+            if (newSet.has(replyId)) {
+                newSet.delete(replyId)
+            } else {
+                newSet.add(replyId)
+            }
+            return newSet
+        })
+    }
+
+    const user = session?.user as any
 
     return (
         <div className="glass-surface rounded-2xl p-6 border border-primary/20 shadow-surface">
@@ -307,7 +423,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                 </div>
             )}
 
-            {/* Comments List */}
+            {/* Comments List with Fixed Height and Scrolling */}
             {loading ? (
                 <div className="flex justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
@@ -317,103 +433,162 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     No comments yet. Be the first to comment!
                 </div>
             ) : (
-                <div className="space-y-6">
-                    {comments.map((comment) => (
-                        <div key={comment.id} className="space-y-3">
-                            {/* Comment */}
-                            <div className="flex gap-3">
-                                <img
-                                    src={comment?.user?.image || '/default-avatar.png'}
-                                    alt={comment?.user?.name || 'User'}
-                                    className="w-10 h-10 rounded-full flex-shrink-0"
-                                />
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-semibold text-white">
-                                            {comment?.user?.name || 'Anonymous'}
-                                        </span>
-                                        <span className="text-sm text-gray-400">
-                                            {formatDate(comment.createdAt)}
-                                        </span>
-                                    </div>
-                                    <p className="text-gray-300 mb-2">{comment.content}</p>
-                                    <div className="flex items-center gap-4">
-                                        <button
-                                            onClick={() => setReplyingTo({ id: comment.id, type: 'comment' })}
-                                            className="text-sm text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
-                                        >
-                                            <ChatBubbleLeftIcon className="w-4 h-4" />
-                                            Reply
-                                        </button>
-                                        {user?.id === comment?.user?.id && (
-                                            <button
-                                                onClick={() => handleDeleteComment(comment.id)}
-                                                className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
-                                            >
-                                                <TrashIcon className="w-4 h-4" />
-                                                Delete
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                <div>
+                    {/* Scrollable Comments Container */}
+                    <div
+                        className={`space-y-6 transition-all duration-300 ${isExpanded
+                            ? 'max-h-[600px] overflow-y-auto scrollbar-thin pr-2'
+                            : 'max-h-[400px] overflow-hidden'
+                            }`}
+                    >
+                        {comments.map((comment) => {
+                            const isCommentCollapsed = collapsedComments.has(comment.id)
+                            const topLevelReplies = comment.replies.filter(reply => !reply.parentId)
 
-                            {/* Reply Form for top-level comment */}
-                            {replyingTo?.id === comment.id && replyingTo.type === 'comment' && (
-                                <div className="ml-14 flex gap-3">
-                                    <img
-                                        src={user?.image || '/default-avatar.png'}
-                                        alt={user?.name || 'User'}
-                                        className="w-8 h-8 rounded-full"
-                                    />
-                                    <div className="flex-1">
-                                        <textarea
-                                            value={replyContent}
-                                            onChange={(e) => setReplyContent(e.target.value)}
-                                            placeholder="Write a reply..."
-                                            className="w-full px-3 py-2 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-sm transition-all"
-                                            rows={2}
-                                            maxLength={500}
+                            return (
+                                <div key={comment.id} className="space-y-3">
+                                    {/* Comment */}
+                                    <div className="flex gap-3">
+                                        <img
+                                            src={comment?.user?.image || '/default-avatar.png'}
+                                            alt={comment?.user?.name || 'User'}
+                                            className="w-10 h-10 rounded-full flex-shrink-0"
                                         />
-                                        <div className="flex items-center gap-2 mt-2">
-                                            <button
-                                                onClick={() => handleSubmitReply(comment.id)}
-                                                disabled={submitting || !replyContent.trim()}
-                                                className="px-4 py-1.5 gradient-primary text-white text-sm font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50"
-                                            >
-                                                Reply
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    setReplyingTo(null)
-                                                    setReplyContent('')
-                                                }}
-                                                className="px-3 py-1 text-gray-400 text-sm hover:text-white transition"
-                                            >
-                                                Cancel
-                                            </button>
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="font-semibold text-white">
+                                                    {comment?.user?.name || 'Anonymous'}
+                                                </span>
+                                                <span className="text-sm text-gray-400">
+                                                    {formatDate(comment.createdAt)}
+                                                </span>
+                                            </div>
+                                            <p className="text-gray-300 mb-2">{comment.content}</p>
+                                            <div className="flex items-center gap-4">
+                                                <button
+                                                    onClick={() => setReplyingTo({ id: comment.id, type: 'comment' })}
+                                                    className="text-sm text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                                                >
+                                                    <ChatBubbleLeftIcon className="w-4 h-4" />
+                                                    Reply
+                                                </button>
+                                                {topLevelReplies.length > 0 && (
+                                                    <button
+                                                        onClick={() => toggleCommentCollapse(comment.id)}
+                                                        className="text-sm text-primary hover:text-primary-300 flex items-center gap-1 transition-colors"
+                                                    >
+                                                        {isCommentCollapsed ? (
+                                                            <>
+                                                                <ChevronDownIcon className="w-4 h-4" />
+                                                                Show {topLevelReplies.length} {topLevelReplies.length === 1 ? 'reply' : 'replies'}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <ChevronUpIcon className="w-4 h-4" />
+                                                                Hide {topLevelReplies.length} {topLevelReplies.length === 1 ? 'reply' : 'replies'}
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                )}
+                                                {user?.id === comment?.user?.id && (
+                                                    <button
+                                                        onClick={() => handleDeleteComment(comment.id)}
+                                                        className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                        Delete
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
 
-                            {/* Replies Tree */}
-                            {comment.replies.length > 0 && (
-                                <div className="ml-14 space-y-3">
-                                    {comment.replies
-                                        .filter(reply => !reply.parentId)
-                                        .map((reply) => (
-                                            <ReplyItem
-                                                key={reply.id}
-                                                reply={reply}
-                                                commentId={comment.id}
-                                                allReplies={comment.replies}
+                                    {/* Reply Form for top-level comment */}
+                                    {replyingTo?.id === comment.id && replyingTo.type === 'comment' && (
+                                        <div className="ml-14 flex gap-3">
+                                            <img
+                                                src={user?.image || '/default-avatar.png'}
+                                                alt={user?.name || 'User'}
+                                                className="w-8 h-8 rounded-full"
                                             />
-                                        ))}
+                                            <div className="flex-1">
+                                                <textarea
+                                                    value={replyContent}
+                                                    onChange={(e) => setReplyContent(e.target.value)}
+                                                    placeholder="Write a reply..."
+                                                    className="w-full px-3 py-2 bg-deep/50 border border-primary/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-sm transition-all"
+                                                    rows={2}
+                                                    maxLength={500}
+                                                />
+                                                <div className="flex items-center gap-2 mt-2">
+                                                    <button
+                                                        onClick={() => handleSubmitReply(comment.id)}
+                                                        disabled={submitting || !replyContent.trim()}
+                                                        className="px-4 py-1.5 gradient-primary text-white text-sm font-semibold rounded-lg hover:shadow-glow-primary transition-all disabled:opacity-50"
+                                                    >
+                                                        Reply
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            setReplyingTo(null)
+                                                            setReplyContent('')
+                                                        }}
+                                                        className="px-3 py-1 text-gray-400 text-sm hover:text-white transition"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Replies Tree */}
+                                    {!isCommentCollapsed && topLevelReplies.length > 0 && (
+                                        <div className="ml-14 space-y-3">
+                                            {topLevelReplies.map((reply) => (
+                                                <ReplyItem
+                                                    key={reply.id}
+                                                    reply={reply}
+                                                    commentId={comment.id}
+                                                    allReplies={comment.replies}
+                                                    replyingTo={replyingTo}
+                                                    setReplyingTo={setReplyingTo}
+                                                    replyContent={replyContent}
+                                                    setReplyContent={setReplyContent}
+                                                    handleSubmitReply={handleSubmitReply}
+                                                    submitting={submitting}
+                                                    userImage={user?.image || null}
+                                                    userName={user?.name || null}
+                                                    collapsedReplies={collapsedReplies}
+                                                    toggleReplyCollapse={toggleReplyCollapse}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
+                            )
+                        })}
+                    </div>
+
+                    {/* Show More/Less Button */}
+                    <div className="mt-4 flex justify-center">
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="px-6 py-2 bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary font-semibold rounded-lg transition-all flex items-center gap-2"
+                        >
+                            {isExpanded ? (
+                                <>
+                                    <ChevronUpIcon className="w-5 h-5" />
+                                    Show Less
+                                </>
+                            ) : (
+                                <>
+                                    <ChevronDownIcon className="w-5 h-5" />
+                                    Show More
+                                </>
                             )}
-                        </div>
-                    ))}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

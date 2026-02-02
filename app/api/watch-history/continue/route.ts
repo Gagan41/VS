@@ -30,8 +30,6 @@ export async function GET(request: NextRequest) {
                         thumbnailUrl: true,
                         accessType: true,
                         videoType: true,
-                        // @ts-ignore
-                        durationSeconds: true,
                         createdAt: true
                     }
                 }

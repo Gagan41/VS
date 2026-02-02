@@ -11,11 +11,14 @@ interface VideoCardProps {
         accessType: 'FREE' | 'PREMIUM'
         videoType: 'LONG' | 'SHORT'
     }
+    playlistId?: string | null
 }
 
-export default function VideoCard({ video }: VideoCardProps) {
+export default function VideoCard({ video, playlistId }: VideoCardProps) {
+    const videoUrl = playlistId ? `/video/${video.id}?playlist=${playlistId}` : `/video/${video.id}`
+
     return (
-        <Link href={`/video/${video.id}`}>
+        <Link href={videoUrl}>
             <motion.div
                 whileHover={{ scale: 1.03, y: -4 }}
                 transition={{ duration: 0.2 }}
