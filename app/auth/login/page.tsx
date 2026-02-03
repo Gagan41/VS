@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import PostLoginIntro from '@/components/PostLoginIntro'
 
 export default function LoginPage() {
     const router = useRouter()
@@ -15,6 +16,8 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [rememberMe, setRememberMe] = useState(false)
+    const [showIntro, setShowIntro] = useState(false)
+    const { data: session } = useSession()
 
     useEffect(() => {
         const savedEmail = localStorage.getItem('rememberedEmail')
@@ -43,8 +46,9 @@ export default function LoginPage() {
                 } else {
                     localStorage.removeItem('rememberedEmail')
                 }
+
                 toast.success('Welcome back!')
-                router.push('/home')
+                setShowIntro(true)
             }
         } catch (error) {
             toast.error('Something went wrong')
@@ -55,6 +59,19 @@ export default function LoginPage() {
 
     const handleGoogleSignIn = () => {
         signIn('google', { callbackUrl: '/home' })
+    }
+
+    const handleIntroComplete = () => {
+        router.push('/home')
+    }
+
+    if (showIntro) {
+        return (
+            <PostLoginIntro
+                userName={session?.user?.name || email.split('@')[0]}
+                onEnter={handleIntroComplete}
+            />
+        )
     }
 
     return (
