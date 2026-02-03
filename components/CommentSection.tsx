@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { TrashIcon, ChatBubbleLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
+import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 
 interface Comment {
@@ -60,6 +61,8 @@ interface ReplyItemProps {
     userName: string | null
     collapsedReplies: Set<string>
     toggleReplyCollapse: (replyId: string) => void
+    currentUserId: string | null
+    setTargetToDelete: (target: { id: string, type: 'comment' | 'reply' } | null) => void
 }
 
 const ReplyItem = ({
@@ -75,7 +78,9 @@ const ReplyItem = ({
     userImage,
     userName,
     collapsedReplies,
-    toggleReplyCollapse
+    toggleReplyCollapse,
+    currentUserId,
+    setTargetToDelete
 }: ReplyItemProps) => {
     const nestedReplies = allReplies.filter(r => r.parentId === reply.id)
     const isCollapsed = collapsedReplies.has(reply.id)
@@ -106,6 +111,15 @@ const ReplyItem = ({
                             <ChatBubbleLeftIcon className="w-3 h-3" />
                             Reply
                         </button>
+                        {(currentUserId === reply?.user?.id || currentUserId === 'ADMIN') && (
+                            <button
+                                onClick={() => setTargetToDelete({ id: reply.id, type: 'reply' })}
+                                className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 font-bold"
+                            >
+                                <TrashIcon className="w-3 h-3" />
+                                Delete
+                            </button>
+                        )}
                         {nestedReplies.length > 0 && (
                             <button
                                 onClick={() => toggleReplyCollapse(reply.id)}
@@ -187,6 +201,8 @@ const ReplyItem = ({
                             userName={userName}
                             collapsedReplies={collapsedReplies}
                             toggleReplyCollapse={toggleReplyCollapse}
+                            currentUserId={currentUserId}
+                            setTargetToDelete={setTargetToDelete}
                         />
                     ))}
                 </div>
@@ -206,6 +222,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
     const [collapsedComments, setCollapsedComments] = useState<Set<string>>(new Set())
     const [collapsedReplies, setCollapsedReplies] = useState<Set<string>>(new Set())
     const [isExpanded, setIsExpanded] = useState(false)
+    const [targetToDelete, setTargetToDelete] = useState<{ id: string, type: 'comment' | 'reply' } | null>(null)
 
     useEffect(() => {
         fetchComments()
@@ -277,7 +294,6 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
             const comment = await response.json()
             setComments([comment, ...comments])
             setNewComment('')
-            toast.success('Comment posted!')
         } catch (error) {
             toast.error('Failed to post comment')
         } finally {
@@ -322,7 +338,6 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
 
             setReplyContent('')
             setReplyingTo(null)
-            toast.success('Reply posted!')
         } catch (error) {
             toast.error('Failed to post reply')
         } finally {
@@ -331,10 +346,6 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
     }
 
     const handleDeleteComment = async (commentId: string) => {
-        if (!confirm('Are you sure you want to delete this comment?')) {
-            return
-        }
-
         try {
             const response = await fetch(`/api/comments/${commentId}`, {
                 method: 'DELETE'
@@ -345,9 +356,28 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
             }
 
             setComments(comments.filter(c => c.id !== commentId))
-            toast.success('Comment deleted')
         } catch (error) {
             toast.error('Failed to delete comment')
+        }
+    }
+
+    const handleDeleteReply = async (replyId: string) => {
+        try {
+            const response = await fetch(`/api/comments/replies/${replyId}`, {
+                method: 'DELETE'
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to delete reply')
+            }
+
+            // Update comments by removing the reply from all possible locations
+            setComments(comments.map(comment => ({
+                ...comment,
+                replies: comment.replies.filter(r => r.id !== replyId)
+            })))
+        } catch (error) {
+            toast.error('Failed to delete reply')
         }
     }
 
@@ -492,7 +522,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                 )}
                                                 {user?.id === comment?.user?.id && (
                                                     <button
-                                                        onClick={() => handleDeleteComment(comment.id)}
+                                                        onClick={() => setTargetToDelete({ id: comment.id, type: 'comment' })}
                                                         className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1 font-bold"
                                                     >
                                                         <TrashIcon className="w-4 h-4" />
@@ -562,6 +592,8 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                     userName={user?.name || null}
                                                     collapsedReplies={collapsedReplies}
                                                     toggleReplyCollapse={toggleReplyCollapse}
+                                                    currentUserId={user?.id || null}
+                                                    setTargetToDelete={setTargetToDelete}
                                                 />
                                             ))}
                                         </div>
@@ -590,6 +622,42 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                             )}
                         </button>
                     </div>
+                </div>
+            )}
+            {/* Delete Confirmation Modal */}
+            {targetToDelete && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                    <motion.div
+                        initial={{ scale: 0.95, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+                    >
+                        <h3 className="text-xl font-black text-black dark:text-white mb-2">Delete {targetToDelete.type}?</h3>
+                        <p className="text-gray-600 dark:text-gray-400 font-medium mb-6">
+                            Are you sure you want to permanently remove this {targetToDelete.type}? This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setTargetToDelete(null)}
+                                className="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-zinc-800 text-black dark:text-white font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (targetToDelete.type === 'comment') {
+                                        handleDeleteComment(targetToDelete.id)
+                                    } else {
+                                        handleDeleteReply(targetToDelete.id)
+                                    }
+                                    setTargetToDelete(null)
+                                }}
+                                className="flex-1 px-4 py-2.5 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all shadow-lg shadow-red-600/20"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </motion.div>
                 </div>
             )}
         </div>
