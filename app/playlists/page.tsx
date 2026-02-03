@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { PlayIcon, ListVideo, SparklesIcon, UserCircleIcon, LayoutList, Search } from 'lucide-react'
+import { PlayIcon, ListVideo, BoltIcon, UserCircleIcon, LayoutList, Search } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import SearchInput from '@/components/SearchInput'
 
@@ -43,7 +43,7 @@ export default function PlaylistsPage() {
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-100 pb-6">
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-100 text-primary rounded-2xl">
-                                <SparklesIcon className="w-7 h-7" />
+                                <BoltIcon className="w-7 h-7" />
                             </div>
                             <div>
                                 <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white">Playlists</h1>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -14,6 +14,15 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
+    const [rememberMe, setRememberMe] = useState(false)
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem('rememberedEmail')
+        if (savedEmail) {
+            setEmail(savedEmail)
+            setRememberMe(true)
+        }
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -29,6 +38,11 @@ export default function LoginPage() {
             if (result?.error) {
                 toast.error('Invalid credentials')
             } else {
+                if (rememberMe) {
+                    localStorage.setItem('rememberedEmail', email)
+                } else {
+                    localStorage.removeItem('rememberedEmail')
+                }
                 toast.success('Welcome back!')
                 router.push('/home')
             }
@@ -105,6 +119,22 @@ export default function LoginPage() {
                                         <EyeIcon className="w-5 h-5" />
                                     )}
                                 </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <input
+                                    id="remember-me"
+                                    name="remember-me"
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
+                                />
+                                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 cursor-pointer font-medium">
+                                    Remember me
+                                </label>
                             </div>
                         </div>
 

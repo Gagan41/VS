@@ -14,8 +14,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
-    // Protect admin routes
-    if (pathname.startsWith('/admin') && token?.role !== 'ADMIN') {
+    // Redirect authenticated users away from auth pages and the landing page
+    const authRoutes = ['/auth/login', '/auth/register']
+    const isAuthRoute = authRoutes.some(route => pathname.startsWith(route))
+    const isLandingPage = pathname === '/'
+
+    if ((isAuthRoute || isLandingPage) && token) {
         return NextResponse.redirect(new URL('/home', request.url))
     }
 

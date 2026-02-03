@@ -1,10 +1,22 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { PlayCircleIcon, SparklesIcon, ClockIcon, ChartBarIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { PlayCircleIcon, BoltIcon, ClockIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 
 export default function LandingPage() {
+  const { status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/home')
+    }
+  }, [status, router])
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -79,7 +91,7 @@ export default function LandingPage() {
                 description: 'Access exclusive full-length premium content',
               },
               {
-                icon: SparklesIcon,
+                icon: BoltIcon,
                 title: 'Shorts & Reels',
                 description: 'Enjoy bite-sized content in a vertical feed',
               },

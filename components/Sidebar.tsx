@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import {
     HomeIcon,
     QueueListIcon,
-    SparklesIcon,
+    BoltIcon,
     GiftIcon,
     ClockIcon,
     VideoCameraIcon,
@@ -17,7 +17,7 @@ import {
 import {
     HomeIcon as HomeIconSolid,
     QueueListIcon as QueueListIconSolid,
-    SparklesIcon as SparklesIconSolid,
+    BoltIcon as BoltIconSolid,
     GiftIcon as GiftIconSolid,
     ClockIcon as ClockIconSolid,
     VideoCameraIcon as VideoCameraIconSolid
@@ -26,7 +26,7 @@ import { signOut, useSession } from 'next-auth/react'
 
 const navigation = [
     { name: 'Home', href: '/home', icon: HomeIcon, iconActive: HomeIconSolid },
-    { name: 'Premium', href: '/premium', icon: SparklesIcon, iconActive: SparklesIconSolid },
+    { name: 'Premium', href: '/premium', icon: BoltIcon, iconActive: BoltIconSolid },
     { name: 'Free Videos', href: '/free', icon: GiftIcon, iconActive: GiftIconSolid },
     { name: 'Watch Later', href: '/watch-later', icon: ClockIcon, iconActive: ClockIconSolid },
     { name: 'Playlists', href: '/playlists', icon: QueueListIcon, iconActive: QueueListIconSolid },
@@ -157,7 +157,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
                                     onClick={onClose}
                                     className="flex items-center gap-3 px-3 py-3 rounded-xl transition-all group bg-black hover:bg-gray-800 shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)]"
                                 >
-                                    <SparklesIcon className="w-5 h-5 text-white flex-shrink-0" />
+                                    <BoltIcon className="w-5 h-5 text-white flex-shrink-0" />
                                     <span className="font-bold text-white uppercase tracking-wider text-xs">Upgrade to Premium</span>
                                 </Link>
                             )}
