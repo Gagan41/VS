@@ -9,7 +9,7 @@ import SearchInput from '@/components/SearchInput'
 
 export default function PlaylistsPage() {
     const { data: session } = useSession()
-    const [playlists, setPlaylists] = useState([])
+    const [playlists, setPlaylists] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
 
@@ -23,7 +23,7 @@ export default function PlaylistsPage() {
             const url = `/api/playlists${searchQuery ? `?q=${encodeURIComponent(searchQuery)}` : ''}`
             const response = await fetch(url)
             const data = await response.json()
-            setPlaylists(data)
+            setPlaylists(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Error fetching playlists:', error)
         } finally {
@@ -31,11 +31,11 @@ export default function PlaylistsPage() {
         }
     }
 
-    const adminPlaylists = playlists.filter((p: any) => p.createdBy?.role === 'ADMIN')
-    const userPlaylists = playlists.filter((p: any) => p.createdBy?.role !== 'ADMIN')
+    const adminPlaylists = Array.isArray(playlists) ? playlists.filter((p: any) => p.createdBy?.role === 'ADMIN') : []
+    const userPlaylists = Array.isArray(playlists) ? playlists.filter((p: any) => p.createdBy?.role !== 'ADMIN') : []
 
     return (
-        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white dark:bg-transparent">
             <main className="max-w-7xl mx-auto pb-20 space-y-10">
 
                 {/* Header with Search */}
@@ -46,8 +46,8 @@ export default function PlaylistsPage() {
                                 <SparklesIcon className="w-7 h-7" />
                             </div>
                             <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-black">Playlists</h1>
-                                <p className="text-gray-600">Curated video collections</p>
+                                <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white">Playlists</h1>
+                                <p className="text-gray-600 dark:text-gray-400">Curated video collections</p>
                             </div>
                         </div>
                         <div className="w-full md:w-96">
@@ -75,7 +75,7 @@ export default function PlaylistsPage() {
                             <section className="space-y-6">
                                 <div className="flex items-center gap-3">
                                     <div className="w-1 h-6 bg-primary rounded-full"></div>
-                                    <h2 className="text-2xl font-bold text-black">Search Results</h2>
+                                    <h2 className="text-2xl font-bold text-black dark:text-white">Search Results</h2>
                                     <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">
                                         {playlists.length}
                                     </span>
@@ -109,7 +109,7 @@ export default function PlaylistsPage() {
                                     <section className="space-y-6">
                                         <div className="flex items-center gap-3">
                                             <div className="w-1 h-6 bg-primary rounded-full"></div>
-                                            <h2 className="text-2xl font-bold text-black">Featured Collections</h2>
+                                            <h2 className="text-2xl font-bold text-black dark:text-white">Featured Collections</h2>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                             {adminPlaylists.map((playlist: any) => (
@@ -124,7 +124,7 @@ export default function PlaylistsPage() {
                                     <section className="space-y-6">
                                         <div className="flex items-center gap-3">
                                             <div className="w-1 h-6 bg-primary rounded-full"></div>
-                                            <h2 className="text-2xl font-bold text-black">My Playlists</h2>
+                                            <h2 className="text-2xl font-bold text-black dark:text-white">My Playlists</h2>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                             {userPlaylists.map((playlist: any) => (
@@ -153,7 +153,7 @@ function PlaylistCard({ playlist }: { playlist: any }) {
     return (
         <Link
             href={`/home?playlistId=${playlist.id}`}
-            className="group relative bg-gray-50 rounded-2xl overflow-hidden border border-gray-200 hover:border-primary hover:shadow-md transition-all duration-300 hover:scale-[1.02] block">
+            className="group relative bg-gray-50 dark:bg-zinc-900/50 rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 hover:border-primary hover:shadow-md transition-all duration-300 hover:scale-[1.02] block">
             <div className="aspect-video bg-gray-200 relative overflow-hidden">
                 {playlist.thumbnailUrl ? (
                     <Image
@@ -178,8 +178,8 @@ function PlaylistCard({ playlist }: { playlist: any }) {
                 </div>
             </div>
             <div className="p-5">
-                <h3 className="text-black font-bold text-base line-clamp-1 mb-1 group-hover:text-primary transition-colors">{playlist.title}</h3>
-                <p className="text-gray-600 text-sm line-clamp-2 text-no-overflow">{playlist.description || 'No description'}</p>
+                <h3 className="text-black dark:text-white font-bold text-base line-clamp-1 mb-1 group-hover:text-primary transition-colors">{playlist.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 text-no-overflow">{playlist.description || 'No description'}</p>
             </div>
         </Link>
     )

@@ -12,7 +12,7 @@ function HomeContent() {
     const searchParams = useSearchParams()
     const playlistId = searchParams.get('playlistId')
 
-    const [videos, setVideos] = useState([])
+    const [videos, setVideos] = useState<any[]>([])
     const [playlistName, setPlaylistName] = useState('')
     const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
@@ -48,7 +48,7 @@ function HomeContent() {
 
             const response = await fetch(url)
             const data = await response.json()
-            setVideos(data)
+            setVideos(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Error fetching videos:', error)
         } finally {
@@ -57,20 +57,20 @@ function HomeContent() {
     }
 
     return (
-        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white dark:bg-transparent">
             <main className="max-w-7xl mx-auto pb-20">
-                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-10">
+                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 dark:border-white/10 pb-10">
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                            <span className="text-xs font-bold uppercase tracking-widest text-black">
+                            <span className="text-xs font-bold uppercase tracking-widest text-black dark:text-white/70">
                                 {playlistName ? 'Featured Collection' : 'Personalized Stream'}
                             </span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-black text-black leading-tight">
+                        <h1 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight">
                             {playlistName || (user?.name ? `Welcome back, ${user.name.split(' ')[0]}` : 'Discover High-Fidelity Content')}
                         </h1>
-                        <p className="text-gray-700 text-lg font-medium max-w-xl">
+                        <p className="text-gray-700 dark:text-gray-400 text-lg font-medium max-w-xl">
                             {playlistName
                                 ? `Now streaming: "${playlistName}". Handpicked selection for our library.`
                                 : "The absolute best in long-form entertainment and professional insights, curated specifically for you."}
@@ -90,19 +90,19 @@ function HomeContent() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {[...Array(8)].map((_, i) => (
                             <div key={i} className="space-y-4 animate-pulse">
-                                <div className="aspect-video bg-gray-200 rounded-2xl"></div>
+                                <div className="aspect-video bg-gray-200 dark:bg-zinc-800 rounded-2xl"></div>
                                 <div className="space-y-2">
-                                    <div className="h-4 bg-gray-200 rounded-full w-3/4"></div>
-                                    <div className="h-3 bg-gray-200 rounded-full w-1/2"></div>
+                                    <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded-full w-3/4"></div>
+                                    <div className="h-3 bg-gray-200 dark:bg-zinc-800 rounded-full w-1/2"></div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : videos.length === 0 ? (
-                    <div className="bg-gray-50 rounded-3xl border border-gray-200 p-8 shadow-md">
+                    <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-3xl border border-gray-200 dark:border-white/10 p-8 shadow-md transition-colors duration-300">
                         <div className="text-center py-32">
-                            <p className="text-gray-300 font-black text-3xl uppercase tracking-widest mb-4">No Signal Detected</p>
-                            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Awaiting new data transmissions.</p>
+                            <p className="text-gray-300 dark:text-zinc-700 font-black text-3xl uppercase tracking-widest mb-4">No Signal Detected</p>
+                            <p className="text-gray-500 dark:text-zinc-500 font-bold uppercase tracking-widest text-xs">Awaiting new data transmissions.</p>
                         </div>
                     </div>
                 ) : (
@@ -120,9 +120,9 @@ function HomeContent() {
 export default function HomePage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center bg-white">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
                 <div className="relative w-16 h-16">
-                    <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-gray-200 dark:border-zinc-800 rounded-full"></div>
                     <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
                 </div>
             </div>

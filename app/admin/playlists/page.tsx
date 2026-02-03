@@ -108,14 +108,14 @@ export default function PlaylistsPage() {
     return (
         <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
             <main className="max-w-7xl mx-auto pt-6 pb-8">
-                <div className="flex justify-between items-center mb-8 pb-6 border-b border-gray-100">
+                <div className="flex justify-between items-center mb-8 pb-6 border-b border-gray-100 dark:border-white/10">
                     <div>
-                        <h1 className="text-4xl font-bold text-black mb-2">Manage Playlists</h1>
-                        <p className="text-gray-600 font-medium">Create and organize video playlists</p>
+                        <h1 className="text-4xl font-bold text-black dark:text-white mb-2">Manage Playlists</h1>
+                        <p className="text-gray-600 dark:text-gray-400 font-medium">Create and organize video playlists</p>
                     </div>
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="px-6 py-3 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm flex items-center gap-2"
+                        className="px-6 py-3 bg-primary text-black font-black rounded-lg hover:bg-primary/90 transition-all shadow-lg uppercase tracking-wider text-sm flex items-center gap-2"
                     >
                         <PlusIcon className="w-5 h-5" />
                         Create Playlist
@@ -127,11 +127,11 @@ export default function PlaylistsPage() {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
                     </div>
                 ) : playlists.length === 0 ? (
-                    <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
-                        <p className="text-gray-500 text-lg mb-4 font-bold">No playlists created yet</p>
+                    <div className="text-center py-20 bg-gray-50 dark:bg-zinc-900/50 rounded-2xl border border-gray-100 dark:border-white/10">
+                        <p className="text-gray-500 dark:text-gray-400 text-lg mb-4 font-bold">No playlists created yet</p>
                         <button
                             onClick={() => setShowCreateModal(true)}
-                            className="inline-block px-8 py-3 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm"
+                            className="inline-block px-8 py-3 bg-primary text-black font-black rounded-lg hover:bg-primary/90 transition shadow-lg uppercase tracking-wider text-sm"
                         >
                             Create Your First Playlist
                         </button>
@@ -139,8 +139,8 @@ export default function PlaylistsPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {playlists.map((playlist) => (
-                            <div key={playlist.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden group shadow-sm hover:shadow-md transition-all">
-                                <div className="aspect-video bg-gray-100 relative overflow-hidden">
+                            <div key={playlist.id} className="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden group shadow-sm hover:shadow-md transition-all">
+                                <div className="aspect-video bg-gray-100 dark:bg-zinc-800 relative overflow-hidden">
                                     {playlist.thumbnailUrl ? (
                                         <img
                                             src={playlist.thumbnailUrl}
@@ -149,26 +149,26 @@ export default function PlaylistsPage() {
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
-                                            <svg className="w-16 h-16 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <svg className="w-16 h-16 text-gray-600 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                                             </svg>
                                         </div>
                                     )}
-                                    <div className="absolute top-2 right-2 px-3 py-1 bg-black/70 text-white text-sm font-semibold rounded-full">
+                                    <div className="absolute top-2 right-2 px-3 py-1 bg-primary text-black text-sm font-semibold rounded-full">
                                         {playlist._count?.videos || 0} videos
                                     </div>
                                 </div>
                                 <div className="p-4">
-                                    <h3 className="text-black font-bold text-lg mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+                                    <h3 className="text-black dark:text-white font-bold text-lg mb-1 line-clamp-1 group-hover:text-primary transition-colors">
                                         {playlist.title}
                                     </h3>
-                                    <p className="text-gray-600 text-sm line-clamp-2 mb-4 font-medium">
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-4 font-medium">
                                         {playlist.description}
                                     </p>
                                     <div className="flex gap-2">
                                         <Link
                                             href={`/admin/playlists/${playlist.id}`}
-                                            className="flex-1 py-2.5 px-4 bg-black text-white font-bold rounded-xl hover:bg-gray-800 transition shadow-lg text-center flex items-center justify-center gap-2"
+                                            className="flex-1 py-2.5 px-4 bg-primary text-black font-bold rounded-xl hover:bg-primary/90 transition shadow-lg text-center flex items-center justify-center gap-2"
                                         >
                                             <PencilIcon className="w-4 h-4" />
                                             Edit
@@ -189,8 +189,8 @@ export default function PlaylistsPage() {
                 {/* Create Playlist Modal */}
                 {showCreateModal && (
                     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                        <div className="bg-white border border-gray-200 rounded-2xl p-6 max-w-md w-full shadow-2xl">
-                            <h2 className="text-2xl font-bold text-black mb-6">Create New Playlist</h2>
+                        <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 max-w-md w-full shadow-2xl">
+                            <h2 className="text-2xl font-bold text-black dark:text-white mb-6">Create New Playlist</h2>
                             <form onSubmit={handleCreatePlaylist}>
                                 <div className="mb-4">
                                     <label className="block text-sm font-bold text-black mb-2">Title</label>
@@ -198,7 +198,7 @@ export default function PlaylistsPage() {
                                         type="text"
                                         value={newPlaylist.title}
                                         onChange={(e) => setNewPlaylist({ ...newPlaylist, title: e.target.value })}
-                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                         required
                                     />
                                 </div>
@@ -225,14 +225,14 @@ export default function PlaylistsPage() {
                                     <button
                                         type="submit"
                                         disabled={creating}
-                                        className="flex-1 py-3 px-4 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
+                                        className="flex-1 py-3 px-4 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
                                     >
                                         {creating ? 'Creating...' : 'Create'}
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setShowCreateModal(false)}
-                                        className="px-6 py-3 bg-white border-2 border-black text-black font-bold rounded-xl hover:bg-gray-50 transition-all font-bold"
+                                        className="px-6 py-3 bg-white dark:bg-zinc-800 border-2 border-black dark:border-zinc-700 text-black dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all font-bold"
                                     >
                                         Cancel
                                     </button>

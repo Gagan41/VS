@@ -319,7 +319,7 @@ export default function VideoPage() {
 
                     {/* Left Column: Video Player + Info + Comments */}
                     <div className="flex-1 min-w-0">
-                        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                        <div className="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm">
                             {/* Video Player */}
                             <VideoProtection videoId={video.id}>
                                 <div className="aspect-video bg-black relative group overflow-hidden">
@@ -594,16 +594,16 @@ export default function VideoPage() {
                             <div className="p-6">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex-1">
-                                        <h1 className="text-3xl font-black text-black mb-2">{video.title}</h1>
+                                        <h1 className="text-3xl font-black text-black dark:text-white mb-2">{video.title}</h1>
                                         <div className="flex items-center gap-4 mb-3">
                                             <ViewsDisplay videoId={video.id} />
                                             {video.accessType === 'PREMIUM' && (
-                                                <span className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-sm font-bold rounded-full">
+                                                <span className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-sm font-bold rounded-full transition-shadow duration-300 dark:shadow-[0_0_15px_rgba(234,179,8,0.3)]">
                                                     PREMIUM
                                                 </span>
                                             )}
                                             {video.accessType === 'FREE' && (
-                                                <span className="px-3 py-1 bg-green-500 text-black text-sm font-bold rounded-full">
+                                                <span className="px-3 py-1 bg-green-500 text-black text-sm font-bold rounded-full transition-shadow duration-300 dark:shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                                                     FREE
                                                 </span>
                                             )}
@@ -614,12 +614,12 @@ export default function VideoPage() {
                                                 onClick={toggleWatchLater}
                                                 disabled={togglingWatchLater}
                                                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold text-sm ${isWatchLater
-                                                    ? 'bg-black text-white shadow-lg'
-                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
+                                                    ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg shadow-black/20 dark:shadow-white/10'
+                                                    : 'bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700 border border-gray-200 dark:border-zinc-700'
                                                     }`}
                                             >
                                                 {isWatchLater ? (
-                                                    <BookmarkIconSolid className="w-5 h-5 text-white" />
+                                                    <BookmarkIconSolid className="w-5 h-5 text-current" />
                                                 ) : (
                                                     <BookmarkIconOutline className="w-5 h-5" />
                                                 )}
@@ -631,21 +631,21 @@ export default function VideoPage() {
                                     </div>
                                 </div>
 
-                                <p className="text-gray-700 text-lg font-medium leading-relaxed mb-6">{video.description}</p>
+                                <p className="text-gray-700 dark:text-gray-400 text-lg font-medium leading-relaxed mb-6">{video.description}</p>
 
                                 {/* Premium Content Warning */}
                                 {!canWatchFull && (
-                                    <div className="bg-blue-50 rounded-2xl p-6 border-2 border-primary/30 mb-6 shadow-sm">
-                                        <h3 className="text-xl font-black text-black mb-2 flex items-center gap-2">
+                                    <div className="bg-blue-50 dark:bg-blue-950/30 rounded-2xl p-6 border-2 border-primary/30 dark:border-primary/50 mb-6 shadow-sm">
+                                        <h3 className="text-xl font-black text-black dark:text-white mb-2 flex items-center gap-2">
                                             <span>🔒</span> Premium Content
                                         </h3>
-                                        <p className="text-gray-700 font-medium mb-4">
+                                        <p className="text-gray-700 dark:text-gray-300 font-medium mb-4">
                                             This is a premium video. You're currently watching the trailer (first {video.trailerDurationSeconds} seconds).
                                             Upgrade to Premium to watch the full video!
                                         </p>
                                         <Link
                                             href="/pricing"
-                                            className="inline-block px-8 py-3.5 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm"
+                                            className="inline-block px-8 py-3.5 bg-black dark:bg-white text-white dark:text-black font-black rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition-all shadow-lg uppercase tracking-wider text-sm"
                                         >
                                             Upgrade to Premium
                                         </Link>

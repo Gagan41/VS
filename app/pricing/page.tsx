@@ -36,19 +36,19 @@ export default function PricingPage() {
     }
 
     return (
-        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white dark:bg-transparent">
             <main className="max-w-6xl mx-auto pt-10 pb-16">
-                <div className="text-center mb-16 border-b border-gray-200 pb-12">
-                    <h1 className="text-6xl font-black text-black mb-4 uppercase tracking-tight">Choose Your Plan</h1>
-                    <p className="text-xl text-gray-700 font-medium">Unlock exclusive high-fidelity content and elite features</p>
+                <div className="text-center mb-16 border-b border-gray-200 dark:border-white/10 pb-12">
+                    <h1 className="text-6xl font-black text-black dark:text-white mb-4 uppercase tracking-tight">Choose Your Plan</h1>
+                    <p className="text-xl text-gray-700 dark:text-gray-400 font-medium">Unlock exclusive high-fidelity content and elite features</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Free Plan */}
-                    <div className="bg-white rounded-3xl p-10 border border-gray-200 shadow-sm">
-                        <h3 className="text-2xl font-black text-black mb-2 uppercase tracking-tight">Free</h3>
-                        <div className="text-6xl font-black text-black mb-8 flex items-baseline">
-                            $0<span className="text-lg text-gray-500 font-bold ml-1">/month</span>
+                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-10 border border-gray-200 dark:border-white/10 shadow-sm">
+                        <h3 className="text-2xl font-black text-black dark:text-white mb-2 uppercase tracking-tight">Free</h3>
+                        <div className="text-6xl font-black text-black dark:text-white mb-8 flex items-baseline">
+                            $0<span className="text-lg text-gray-500 dark:text-gray-400 font-bold ml-1">/month</span>
                         </div>
                         <ul className="space-y-5 mb-10">
                             {[
@@ -58,7 +58,7 @@ export default function PricingPage() {
                                 'Watch history tracking',
                                 'Basic analytics',
                             ].map((feature, i) => (
-                                <li key={i} className="flex items-start text-gray-700 font-bold text-sm">
+                                <li key={i} className="flex items-start text-gray-700 dark:text-gray-300 font-bold text-sm">
                                     <CheckIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
                                     {feature}
                                 </li>
@@ -66,20 +66,20 @@ export default function PricingPage() {
                         </ul>
                         <button
                             disabled
-                            className="w-full py-4 px-6 bg-gray-100 text-gray-500 font-black rounded-2xl cursor-not-allowed uppercase tracking-widest text-xs"
+                            className="w-full py-4 px-6 bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400 font-black rounded-2xl cursor-not-allowed uppercase tracking-widest text-xs"
                         >
                             Current Plan
                         </button>
                     </div>
 
                     {/* Premium Plan */}
-                    <div className="bg-white rounded-3xl p-10 border-2 border-primary relative shadow-xl transform scale-105">
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-10 border-2 border-primary relative shadow-xl transform scale-105">
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-black dark:bg-white text-white dark:text-black px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
                             RECOMMENDED
                         </div>
-                        <h3 className="text-2xl font-black text-black mb-2 uppercase tracking-tight">Premium</h3>
-                        <div className="text-6xl font-black text-black mb-8 flex items-baseline line-clamp-1">
-                            $9.99<span className="text-lg text-gray-500 font-bold ml-1">/month</span>
+                        <h3 className="text-2xl font-black text-black dark:text-white mb-2 uppercase tracking-tight">Premium</h3>
+                        <div className="text-6xl font-black text-black dark:text-white mb-8 flex items-baseline line-clamp-1">
+                            $9.99<span className="text-lg text-gray-500 dark:text-gray-400 font-bold ml-1">/month</span>
                         </div>
                         <ul className="space-y-5 mb-10">
                             {[
@@ -90,7 +90,7 @@ export default function PricingPage() {
                                 'Watch history tracking',
                                 'Cancel anytime',
                             ].map((feature, i) => (
-                                <li key={i} className="flex items-start text-gray-700 font-bold text-sm">
+                                <li key={i} className="flex items-start text-gray-700 dark:text-gray-300 font-bold text-sm">
                                     <CheckIcon className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
                                     {feature}
                                 </li>
@@ -99,7 +99,7 @@ export default function PricingPage() {
                         <button
                             onClick={handleSubscribe}
                             disabled={loading || user?.subscriptionStatus === 'ACTIVE'}
-                            className="w-full py-4 px-6 bg-black text-white font-black rounded-2xl hover:bg-gray-800 transition-all shadow-[0_12px_30px_-5px_rgba(0,0,0,0.3)] uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-4 px-6 bg-black dark:bg-white text-white dark:text-black font-black rounded-2xl hover:bg-gray-800 dark:hover:bg-gray-200 transition-all shadow-[0_12px_30px_-5px_rgba(0,0,0,0.3)] dark:shadow-[0_12px_30px_-5px_rgba(255,255,255,0.1)] uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Processing...' : user?.subscriptionStatus === 'ACTIVE' ? 'Current Plan' : 'Subscribe Now'}
                         </button>

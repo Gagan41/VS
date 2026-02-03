@@ -90,14 +90,14 @@ const ReplyItem = ({
                 />
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-black text-sm">
+                        <span className="font-bold text-black dark:text-white text-sm">
                             {reply?.user?.name || 'Anonymous'}
                         </span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                             {formatDate(reply.createdAt)}
                         </span>
                     </div>
-                    <p className="text-gray-700 text-sm font-medium">{reply.content}</p>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm font-medium">{reply.content}</p>
                     <div className="flex items-center gap-4 mt-1">
                         <button
                             onClick={() => setReplyingTo({ id: reply.id, type: 'reply' })}
@@ -141,7 +141,7 @@ const ReplyItem = ({
                             value={replyContent}
                             onChange={(e) => setReplyContent(e.target.value)}
                             placeholder="Write a reply..."
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-xs transition-all font-medium"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-xs transition-all font-medium"
                             rows={2}
                             maxLength={500}
                             autoFocus
@@ -150,7 +150,7 @@ const ReplyItem = ({
                             <button
                                 onClick={() => handleSubmitReply(commentId, reply.id)}
                                 disabled={submitting || !replyContent.trim()}
-                                className="px-3 py-1.5 bg-black text-white text-xs font-bold rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50"
+                                className="px-3 py-1.5 bg-primary text-black text-xs font-bold rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50"
                             >
                                 Reply
                             </button>
@@ -159,7 +159,7 @@ const ReplyItem = ({
                                     setReplyingTo(null)
                                     setReplyContent('')
                                 }}
-                                className="px-2 py-1 text-gray-500 text-xs font-bold hover:text-black transition"
+                                className="px-2 py-1 text-gray-500 dark:text-gray-400 text-xs font-bold hover:text-black dark:hover:text-white transition"
                             >
                                 Cancel
                             </button>
@@ -170,7 +170,7 @@ const ReplyItem = ({
 
             {/* Recursive Nested Replies */}
             {!isCollapsed && nestedReplies.length > 0 && (
-                <div className="ml-11 space-y-3 border-l-2 border-gray-200 pl-4">
+                <div className="ml-11 space-y-3 border-l-2 border-gray-200 dark:border-white/10 pl-4">
                     {nestedReplies.map((nested) => (
                         <ReplyItem
                             key={nested.id}
@@ -378,8 +378,8 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
     const user = session?.user as any
 
     return (
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <h2 className="text-2xl font-black text-black mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-900/50 rounded-2xl p-6 border border-gray-200 dark:border-white/10 shadow-sm">
+            <h2 className="text-2xl font-black text-black dark:text-white mb-6 flex items-center gap-2">
                 <span>Comments</span>
                 <span className="text-primary font-bold">({comments.length})</span>
             </h2>
@@ -398,7 +398,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
                                 placeholder="Add a comment..."
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-black placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all font-medium"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all font-medium"
                                 rows={3}
                                 maxLength={500}
                             />
@@ -409,7 +409,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                 <button
                                     type="submit"
                                     disabled={submitting || !newComment.trim()}
-                                    className="px-6 py-2.5 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-6 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-all shadow-lg uppercase tracking-wider text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {submitting ? 'Posting...' : 'Comment'}
                                 </button>
@@ -418,8 +418,8 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     </div>
                 </form>
             ) : (
-                <div className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-2xl text-center">
-                    <p className="text-gray-700 font-bold">Sign in to leave a comment</p>
+                <div className="mb-8 p-6 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-white/10 rounded-2xl text-center">
+                    <p className="text-gray-700 dark:text-gray-300 font-bold">Sign in to leave a comment</p>
                 </div>
             )}
 
@@ -429,7 +429,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
                 </div>
             ) : comments.length === 0 ? (
-                <div className="text-center py-12 text-gray-500 font-bold text-lg">
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400 font-bold text-lg">
                     No comments yet. Be the first to comment!
                 </div>
             ) : (
@@ -456,14 +456,14 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                         />
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className="font-bold text-black">
+                                                <span className="font-bold text-black dark:text-white">
                                                     {comment?.user?.name || 'Anonymous'}
                                                 </span>
-                                                <span className="text-sm text-gray-500">
+                                                <span className="text-sm text-gray-500 dark:text-gray-400">
                                                     {formatDate(comment.createdAt)}
                                                 </span>
                                             </div>
-                                            <p className="text-gray-700 font-medium mb-2">{comment.content}</p>
+                                            <p className="text-gray-700 dark:text-gray-300 font-medium mb-2">{comment.content}</p>
                                             <div className="flex items-center gap-4">
                                                 <button
                                                     onClick={() => setReplyingTo({ id: comment.id, type: 'comment' })}
@@ -516,7 +516,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                     value={replyContent}
                                                     onChange={(e) => setReplyContent(e.target.value)}
                                                     placeholder="Write a reply..."
-                                                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-sm transition-all font-medium"
+                                                    className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none text-sm transition-all font-medium"
                                                     rows={2}
                                                     maxLength={500}
                                                     autoFocus
@@ -525,7 +525,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                     <button
                                                         onClick={() => handleSubmitReply(comment.id)}
                                                         disabled={submitting || !replyContent.trim()}
-                                                        className="px-4 py-1.5 bg-black text-white text-sm font-bold rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50"
+                                                        className="px-4 py-1.5 bg-primary text-black text-sm font-bold rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50"
                                                     >
                                                         Reply
                                                     </button>
@@ -534,7 +534,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                             setReplyingTo(null)
                                                             setReplyContent('')
                                                         }}
-                                                        className="px-3 py-1 text-gray-500 text-sm font-bold hover:text-black transition"
+                                                        className="px-3 py-1 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-black dark:hover:text-white transition"
                                                     >
                                                         Cancel
                                                     </button>
@@ -575,7 +575,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                     <div className="mt-4 flex justify-center">
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="px-8 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-black font-black rounded-xl transition-all flex items-center gap-2 uppercase tracking-wider text-sm shadow-sm"
+                            className="px-8 py-3 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 border border-gray-200 dark:border-white/10 text-black dark:text-white font-black rounded-xl transition-all flex items-center gap-2 uppercase tracking-wider text-sm shadow-sm"
                         >
                             {isExpanded ? (
                                 <>

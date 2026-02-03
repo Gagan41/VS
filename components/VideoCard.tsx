@@ -24,7 +24,7 @@ export default function VideoCard({ video, playlistId }: VideoCardProps) {
                 transition={{ duration: 0.2 }}
                 className="group cursor-pointer"
             >
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100 shadow-md group-hover:shadow-lg transition-all duration-300">
+                <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 shadow-md group-hover:shadow-lg transition-all duration-300">
                     {video.thumbnailUrl ? (
                         <Image
                             src={video.thumbnailUrl}
@@ -34,8 +34,8 @@ export default function VideoCard({ video, playlistId }: VideoCardProps) {
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                            <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-zinc-800">
+                            <svg className="w-16 h-16 text-gray-400 dark:text-zinc-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
                             </svg>
                         </div>
@@ -43,7 +43,7 @@ export default function VideoCard({ video, playlistId }: VideoCardProps) {
 
                     {/* Premium Badge */}
                     {video.accessType === 'PREMIUM' && (
-                        <div className="absolute top-3 right-3 px-3 py-1.5 bg-black text-white text-[10px] font-black rounded-lg shadow-lg uppercase tracking-wider">
+                        <div className="absolute top-3 right-3 px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black text-[10px] font-black rounded-lg shadow-lg uppercase tracking-wider transition-colors duration-300">
                             PREMIUM
                         </div>
                     )}
@@ -52,12 +52,12 @@ export default function VideoCard({ video, playlistId }: VideoCardProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
-                <div className="mt-3 space-y-1.5">
-                    <h3 className="text-black font-semibold text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors text-no-overflow">
+                <div className="mt-3 space-y-1.5 px-1">
+                    <h3 className="text-gray-900 dark:text-white font-semibold text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors text-no-overflow">
                         {video.title}
                     </h3>
                     {video.description && (
-                        <p className="text-gray-700 text-sm leading-snug line-clamp-2 text-no-overflow">
+                        <p className="text-gray-700 dark:text-gray-400 text-sm leading-snug line-clamp-2 text-no-overflow">
                             {video.description}
                         </p>
                     )}

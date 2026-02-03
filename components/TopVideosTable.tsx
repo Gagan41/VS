@@ -48,8 +48,8 @@ export default function TopVideosTable() {
     }
 
     return (
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-black mb-6">Top Videos</h2>
+        <div className="bg-white dark:bg-zinc-900/50 border border-gray-100 dark:border-white/10 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-black dark:text-white mb-6">Top Videos</h2>
 
             {loading ? (
                 <div className="flex items-center justify-center py-8">
@@ -65,7 +65,7 @@ export default function TopVideosTable() {
                         <Link
                             key={video.id}
                             href={`/video/${video.id}`}
-                            className="flex items-center gap-4 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all group border border-transparent hover:border-gray-200"
+                            className="flex items-center gap-4 p-3 rounded-xl bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all group border border-transparent hover:border-gray-200 dark:hover:border-white/10"
                         >
                             <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary text-black font-black shadow-[0_4px_12px_-2px_rgba(37,99,235,0.6)]">
                                 {index + 1}
@@ -88,12 +88,12 @@ export default function TopVideosTable() {
                             </div>
 
                             <div className="flex-1 min-w-0">
-                                <h3 className="text-black font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                                <h3 className="text-black dark:text-white font-bold line-clamp-1 group-hover:text-primary transition-colors">
                                     {video.title}
                                 </h3>
                             </div>
 
-                            <div className="flex items-center gap-2 text-gray-600">
+                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                                 <EyeIcon className="w-5 h-5" />
                                 <span className="font-bold">{formatViews(video.views)}</span>
                             </div>

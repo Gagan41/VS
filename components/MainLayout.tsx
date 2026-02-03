@@ -15,7 +15,7 @@ export default function MainLayout({ children, session }: { children: React.Reac
 
     if (isGuestPage) {
         return (
-            <div className="min-h-screen bg-white">
+            <div className="min-h-screen bg-[#F7F9FC] dark:bg-transparent">
                 {children}
                 <Toaster position="top-right" />
             </div>
@@ -23,14 +23,14 @@ export default function MainLayout({ children, session }: { children: React.Reac
     }
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white dark:bg-[#0B0F1A] transition-colors duration-300">
             {/* Navbar with blue shadow */}
-            <div className="shadow-[0_2px_8px_rgba(37,99,235,0.15)]">
+            <div className="shadow-[0_2px_8px_rgba(37,99,235,0.15)] dark:shadow-[0_4px_12px_rgba(37,99,235,0.25)] relative z-50">
                 <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
             </div>
 
             {/* Sidebar with blue shadow */}
-            <div className="shadow-[2px_0_8px_rgba(37,99,235,0.15)]">
+            <div className="shadow-[2px_0_8px_rgba(37,99,235,0.15)] dark:shadow-[4px_0_12px_rgba(37,99,235,0.25)] relative z-40">
                 <Sidebar
                     isOpen={isSidebarOpen}
                     onClose={() => setIsSidebarOpen(false)}
@@ -38,8 +38,8 @@ export default function MainLayout({ children, session }: { children: React.Reac
             </div>
 
             {/* Main content area with white background */}
-            <div className={`transition-all duration-300 ${isSidebarOpen ? 'blur-sm lg:blur-none' : ''} lg:pl-64 min-h-screen bg-white pt-6`}>
-                <main className="bg-white">{children}</main>
+            <div className={`transition-all duration-300 ${isSidebarOpen ? 'blur-sm lg:blur-none' : ''} lg:pl-64 min-h-screen bg-transparent pt-6`}>
+                <main className="bg-transparent">{children}</main>
             </div>
             <Toaster position="top-right" />
         </div>

@@ -65,8 +65,8 @@ export default function WatchLaterPage() {
             <main className="max-w-7xl mx-auto pt-6 pb-8">
                 <div className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-4xl font-bold text-black mb-2">Watch Later</h1>
-                        <p className="text-gray-600">Videos you've saved to watch later</p>
+                        <h1 className="text-4xl font-bold text-black dark:text-white mb-2">Watch Later</h1>
+                        <p className="text-gray-600 dark:text-gray-400">Videos you've saved to watch later</p>
                     </div>
                 </div>
 
@@ -75,8 +75,8 @@ export default function WatchLaterPage() {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                     </div>
                 ) : items.length === 0 ? (
-                    <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-200">
-                        <p className="text-gray-500 text-lg mb-4 font-medium">Your Watch Later list is empty</p>
+                    <div className="text-center py-20 bg-gray-50 dark:bg-zinc-900/50 rounded-2xl border border-gray-200 dark:border-white/10">
+                        <p className="text-gray-500 dark:text-gray-400 text-lg mb-4 font-medium">Your Watch Later list is empty</p>
                         <Link
                             href="/home"
                             className="inline-block px-8 py-3 bg-black text-white font-bold rounded-lg hover:bg-gray-800 transition shadow-lg"
@@ -87,7 +87,7 @@ export default function WatchLaterPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {items.map((item) => (
-                            <div key={item.id} className="bg-blue-50 rounded-2xl overflow-hidden group border border-gray-100 hover:shadow-xl transition-all">
+                            <div key={item.id} className="bg-blue-50 dark:bg-zinc-900/50 rounded-2xl overflow-hidden group border border-gray-100 dark:border-white/10 hover:shadow-xl transition-all">
                                 <div className="aspect-video bg-gray-100 relative">
                                     {item.video.thumbnailUrl ? (
                                         <img
@@ -121,10 +121,10 @@ export default function WatchLaterPage() {
                                     )}
                                 </div>
                                 <div className="p-4">
-                                    <h3 className="text-black font-bold text-lg mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+                                    <h3 className="text-black dark:text-white font-bold text-lg mb-1 line-clamp-1 group-hover:text-primary transition-colors">
                                         {item.video.title}
                                     </h3>
-                                    <p className="text-gray-600 text-sm line-clamp-2 font-medium">
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 font-medium">
                                         {item.video.description}
                                     </p>
                                 </div>

@@ -161,20 +161,20 @@ export default function ProfilePage() {
     return (
         <div className="min-h-screen pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
             <main className="max-w-6xl mx-auto pb-20">
-                <div className="mb-12 border-b border-gray-200 pb-10">
-                    <h1 className="text-5xl font-black text-black mb-3">My Profile</h1>
-                    <p className="text-gray-700 text-lg font-medium">Manage your personal settings and consumption data.</p>
+                <div className="mb-12 border-b border-gray-200 dark:border-white/10 pb-10">
+                    <h1 className="text-5xl font-black text-black dark:text-white mb-3">My Profile</h1>
+                    <p className="text-gray-700 dark:text-gray-400 text-lg font-medium">Manage your personal settings and consumption data.</p>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex flex-wrap gap-2 mb-10 bg-gray-100 p-1.5 rounded-2xl w-fit border border-gray-200">
+                <div className="flex flex-wrap gap-2 mb-10 bg-gray-100 dark:bg-zinc-900 p-1.5 rounded-2xl w-fit border border-gray-200 dark:border-white/10">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center gap-2 px-8 py-3.5 rounded-xl font-black uppercase tracking-wider text-[10px] transition-all ${activeTab === tab.id
-                                ? 'bg-black text-white shadow-lg'
-                                : 'text-gray-600 hover:bg-gray-200 hover:text-black'
+                                ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg'
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
                                 }`}
                         >
                             <tab.icon className="w-4 h-4" />
@@ -187,9 +187,9 @@ export default function ProfilePage() {
                 {activeTab === 'account' && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                         <div className="lg:col-span-1">
-                            <div className="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm text-center">
+                            <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-sm text-center">
                                 <div className="relative inline-block group">
-                                    <div className="w-40 h-40 rounded-[2rem] overflow-hidden bg-gray-100 border-4 border-gray-50 mx-auto transition-transform duration-500 group-hover:scale-105 shadow-inner">
+                                    <div className="w-40 h-40 rounded-[2rem] overflow-hidden bg-gray-100 dark:bg-zinc-800 border-4 border-gray-50 dark:border-zinc-700 mx-auto transition-transform duration-500 group-hover:scale-105 shadow-inner">
                                         {user?.image ? (
                                             <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
                                         ) : (
@@ -216,8 +216,8 @@ export default function ProfilePage() {
                                     </label>
                                 </div>
                                 <div className="mt-6 space-y-2">
-                                    <h2 className="text-2xl font-black text-black">{user?.name}</h2>
-                                    <p className="text-gray-600 font-bold">{user?.email}</p>
+                                    <h2 className="text-2xl font-black text-black dark:text-white">{user?.name}</h2>
+                                    <p className="text-gray-600 dark:text-gray-400 font-bold">{user?.email}</p>
                                     <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest mt-2 border border-primary/20">
                                         {user?.role} Access
                                     </div>
@@ -235,9 +235,9 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="lg:col-span-2 space-y-6">
-                            <div className="bg-white p-10 rounded-[2.5rem] border border-gray-200 shadow-sm space-y-10">
-                                <h3 className="text-xl font-black text-black flex items-center gap-3 uppercase tracking-tight">
-                                    <span className="w-2 h-7 bg-black rounded-full"></span>
+                            <div className="bg-white dark:bg-zinc-900 p-10 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-sm space-y-10">
+                                <h3 className="text-xl font-black text-black dark:text-white flex items-center gap-3 uppercase tracking-tight">
+                                    <span className="w-2 h-7 bg-black dark:bg-white rounded-full"></span>
                                     Identity Details
                                 </h3>
 
@@ -250,7 +250,7 @@ export default function ProfilePage() {
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
                                                 disabled={!isEditing}
-                                                className={`flex-1 bg-gray-50 px-6 py-4 rounded-2xl text-black font-black transition-all focus:ring-2 focus:ring-primary outline-none ${isEditing ? 'border-primary' : 'border-gray-200 opacity-80'
+                                                className={`flex-1 bg-gray-50 dark:bg-zinc-950 px-6 py-4 rounded-2xl text-black dark:text-white font-black transition-all focus:ring-2 focus:ring-primary outline-none ${isEditing ? 'border-primary' : 'border-gray-200 dark:border-white/10 opacity-80'
                                                     }`}
                                             />
                                             {isEditing ? (
@@ -272,7 +272,7 @@ export default function ProfilePage() {
 
                                     <div className="space-y-2 opacity-80">
                                         <label className="text-xs font-black text-gray-500 uppercase tracking-widest px-1">Email Address</label>
-                                        <div className="bg-gray-100 px-6 py-4 rounded-2xl text-black font-bold border border-gray-200">
+                                        <div className="bg-gray-100 dark:bg-zinc-950 px-6 py-4 rounded-2xl text-black dark:text-white font-bold border border-gray-200 dark:border-white/5">
                                             {user?.email}
                                         </div>
                                     </div>
@@ -280,11 +280,11 @@ export default function ProfilePage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
+                                <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-sm">
                                     <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Member Since</p>
-                                    <p className="text-2xl font-black text-black tracking-tight">December 2025</p>
+                                    <p className="text-2xl font-black text-black dark:text-white tracking-tight">December 2025</p>
                                 </div>
-                                <div className="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
+                                <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-sm">
                                     <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Account Type</p>
                                     <p className="text-2xl font-black text-primary tracking-tight uppercase">{user?.subscriptionStatus?.toLowerCase() || 'Standard'}</p>
                                 </div>
@@ -295,10 +295,10 @@ export default function ProfilePage() {
 
                 {/* Watch History */}
                 {activeTab === 'history' && (
-                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-200 shadow-sm space-y-10">
+                    <div className="bg-white dark:bg-zinc-900 p-10 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-sm space-y-10">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-2xl font-black text-black uppercase tracking-tight">Chronological Records</h3>
-                            <span className="px-5 py-2 bg-gray-100 text-gray-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200">
+                            <h3 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Chronological Records</h3>
+                            <span className="px-5 py-2 bg-gray-100 dark:bg-black/20 text-gray-700 dark:text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200 dark:border-white/5">
                                 {watchHistory.length} Entries
                             </span>
                         </div>
@@ -333,13 +333,13 @@ export default function ProfilePage() {
                 {/* Analytics */}
                 {activeTab === 'analytics' && (
                     <div className="flex items-center justify-center py-10">
-                        <div className="bg-white p-12 rounded-[3.5rem] border border-gray-200 shadow-xl text-center max-w-lg w-full">
+                        <div className="bg-white dark:bg-zinc-900 p-12 rounded-[3.5rem] border border-gray-200 dark:border-white/10 shadow-xl text-center max-w-lg w-full">
                             <div className="w-20 h-20 bg-primary/10 text-primary rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-inner">
                                 <HistoryIcon className="w-10 h-10" />
                             </div>
-                            <h3 className="text-gray-500 font-black uppercase tracking-[0.2em] text-[10px] mb-4">Total Consumption Metric</h3>
-                            <p className="text-7xl font-black text-black mb-6 tracking-tighter">{formatWatchTime(totalWatchTime)}</p>
-                            <p className="text-gray-700 font-bold leading-relaxed">Aggregate duration of all content consumed across our high-fidelity streaming relay.</p>
+                            <h3 className="text-gray-500 dark:text-zinc-500 font-black uppercase tracking-[0.2em] text-[10px] mb-4">Total Consumption Metric</h3>
+                            <p className="text-7xl font-black text-black dark:text-white mb-6 tracking-tighter">{formatWatchTime(totalWatchTime)}</p>
+                            <p className="text-gray-700 dark:text-gray-400 font-bold leading-relaxed">Aggregate duration of all content consumed across our high-fidelity streaming relay.</p>
                         </div>
                     </div>
                 )}

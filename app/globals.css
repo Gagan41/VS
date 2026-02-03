@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Tailwind v4 Configuration */
+@config "../tailwind.config.ts";
+
+@theme {
+  --dark-mode: class;
+}
+
 @layer base {
   :root {
     /* Blue Color Palette - YouTube Style */
@@ -52,9 +59,23 @@
     --shadow-glow-secondary: 0 0 15px rgba(29, 78, 216, 0.2);
   }
 
+  /* Background colors */
   .dark {
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
+    --bg-light: #000000;
+    --bg-lighter: #0F172A;
+    --color-surface: #1E293B;
+    --app-bg: linear-gradient(to bottom right, #000000, #0F172A, #000000);
+  }
+
+  .light {
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
+    --bg-light: #FFFFFF;
+    --bg-lighter: #F7F9FC;
+    --color-surface: #F7F9FC;
+    --app-bg: #FFFFFF;
   }
 }
 
@@ -65,7 +86,8 @@
   }
 
   body {
-    background-color: hsl(var(--background));
+    background: var(--app-bg, hsl(var(--background)));
+    background-attachment: fixed;
     color: hsl(var(--foreground));
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -230,6 +252,23 @@
     background: rgba(0, 0, 0, 0.2);
   }
 
+  /* Enhanced glassmorphism effects - Dark theme */
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Scrollbar utilities - Dark theme */
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -238,6 +277,15 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1D4ED8 0%, #2563EB 100%);
+  border: 2px solid #000000;
 }
 
 /* Custom scrollbar - Blue theme */

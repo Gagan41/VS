@@ -157,7 +157,7 @@ export default function PlaylistEditorPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-white">
+            <div className="min-h-screen bg-transparent">
                 <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                 </div>
@@ -167,9 +167,9 @@ export default function PlaylistEditorPage() {
 
     if (!playlist) {
         return (
-            <div className="min-h-screen bg-white">
+            <div className="min-h-screen bg-transparent">
                 <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)]">
-                    <p className="text-black text-xl mb-4 font-bold">Playlist not found</p>
+                    <p className="text-black dark:text-white text-xl mb-4 font-bold">Playlist not found</p>
                     <Link href="/admin/playlists" className="text-primary hover:underline font-bold">
                         Go back to playlists
                     </Link>
@@ -198,46 +198,46 @@ export default function PlaylistEditorPage() {
                     Back to Playlists
                 </Link>
 
-                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 mb-8 shadow-sm">
+                <div className="bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-8 mb-8 shadow-sm">
                     <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                             {isEditing ? (
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-black mb-2 text-sm font-bold">Title</label>
+                                        <label className="block text-black dark:text-white mb-2 text-sm font-bold">Title</label>
                                         <input
                                             type="text"
                                             value={editedPlaylist.title}
                                             onChange={(e) => setEditedPlaylist({ ...editedPlaylist, title: e.target.value })}
-                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                            className="w-full px-4 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-black dark:text-white text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-black mb-2 text-sm font-bold">Description</label>
+                                        <label className="block text-black dark:text-white mb-2 text-sm font-bold">Description</label>
                                         <textarea
                                             value={editedPlaylist.description}
                                             onChange={(e) => setEditedPlaylist({ ...editedPlaylist, description: e.target.value })}
-                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                                            className="w-full px-4 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
                                             rows={2}
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-black mb-2 text-sm font-bold">Thumbnail URL</label>
+                                        <label className="block text-black dark:text-white mb-2 text-sm font-bold">Thumbnail URL</label>
                                         <input
                                             type="url"
                                             value={editedPlaylist.thumbnailUrl}
                                             onChange={(e) => setEditedPlaylist({ ...editedPlaylist, thumbnailUrl: e.target.value })}
-                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                            className="w-full px-4 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                             placeholder="https://example.com/image.jpg"
                                         />
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    <h1 className="text-4xl font-black text-black mb-2">{playlist.title}</h1>
-                                    <p className="text-gray-600 text-lg font-medium">{playlist.description}</p>
+                                    <h1 className="text-4xl font-black text-black dark:text-white mb-2">{playlist.title}</h1>
+                                    <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">{playlist.description}</p>
                                     {playlist.thumbnailUrl && (
-                                        <p className="text-gray-500 text-sm mt-3 font-medium flex items-center gap-2">
+                                        <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 font-medium flex items-center gap-2">
                                             <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
                                             Thumbnail: {playlist.thumbnailUrl}
                                         </p>
@@ -255,14 +255,14 @@ export default function PlaylistEditorPage() {
                                     <button
                                         onClick={handleSavePlaylist}
                                         disabled={saving}
-                                        className="px-6 py-3 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm disabled:opacity-50 flex items-center gap-2"
+                                        className="px-6 py-3 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-all shadow-lg uppercase tracking-wider text-sm disabled:opacity-50 flex items-center gap-2"
                                     >
                                         {saving ? 'Saving...' : 'Save Changes'}
                                     </button>
                                     <button
                                         onClick={handleCancelEdit}
                                         disabled={saving}
-                                        className="px-6 py-3 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all uppercase tracking-wider text-sm disabled:opacity-50"
+                                        className="px-6 py-3 bg-white dark:bg-zinc-800 border-2 border-black dark:border-zinc-700 text-black dark:text-white font-black rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all uppercase tracking-wider text-sm disabled:opacity-50"
                                     >
                                         Cancel
                                     </button>
@@ -271,14 +271,14 @@ export default function PlaylistEditorPage() {
                                 <>
                                     <button
                                         onClick={() => setIsEditing(true)}
-                                        className="px-6 py-3 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all shadow-sm uppercase tracking-wider text-sm flex items-center gap-2"
+                                        className="px-6 py-3 bg-white dark:bg-zinc-800 border-2 border-black dark:border-zinc-700 text-black dark:text-white font-black rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all shadow-sm uppercase tracking-wider text-sm flex items-center gap-2"
                                     >
                                         <PencilIcon className="w-5 h-5" />
                                         Edit Info
                                     </button>
                                     <button
                                         onClick={() => setShowAddModal(true)}
-                                        className="px-6 py-3 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg uppercase tracking-wider text-sm flex items-center gap-2"
+                                        className="px-6 py-3 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-all shadow-lg uppercase tracking-wider text-sm flex items-center gap-2"
                                     >
                                         <PlusIcon className="w-5 h-5" />
                                         Add Video
@@ -291,11 +291,11 @@ export default function PlaylistEditorPage() {
 
                 {
                     (playlist.videos || []).length === 0 ? (
-                        <div className="text-center py-20 bg-gray-50 border border-gray-200 rounded-2xl shadow-sm">
-                            <p className="text-gray-500 text-lg mb-4 font-bold">No videos in this playlist yet</p>
+                        <div className="text-center py-20 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm">
+                            <p className="text-gray-500 dark:text-gray-400 text-lg mb-4 font-bold">No videos in this playlist yet</p>
                             <button
                                 onClick={() => setShowAddModal(true)}
-                                className="inline-block px-8 py-3 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm"
+                                className="inline-block px-8 py-3 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition shadow-lg uppercase tracking-wider text-sm"
                             >
                                 Add Your First Video
                             </button>
@@ -305,13 +305,13 @@ export default function PlaylistEditorPage() {
                             {(playlist.videos || []).map((playlistVideo, index) => (
                                 <div
                                     key={playlistVideo.id}
-                                    className="bg-white border border-gray-200 rounded-2xl p-5 flex items-center gap-6 shadow-sm hover:shadow-md transition-all group"
+                                    className="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-5 flex items-center gap-6 shadow-sm hover:shadow-md transition-all group"
                                 >
-                                    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-black font-black shadow-[0_8px_20px_-4px_rgba(37,99,235,0.6)]">
+                                    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-black font-black shadow-[0_8px_20px_-4px_rgba(var(--primary-rgb),0.6)]">
                                         {index + 1}
                                     </div>
 
-                                    <div className="flex-shrink-0 w-40 h-24 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                                    <div className="flex-shrink-0 w-40 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700">
                                         {playlistVideo.video.thumbnailUrl ? (
                                             <img
                                                 src={playlistVideo.video.thumbnailUrl}
@@ -328,20 +328,20 @@ export default function PlaylistEditorPage() {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-black font-bold text-lg line-clamp-1 group-hover:text-primary transition-colors">
+                                        <h3 className="text-black dark:text-white font-bold text-lg line-clamp-1 group-hover:text-primary transition-colors">
                                             {playlistVideo.video.title}
                                         </h3>
-                                        <p className="text-gray-600 text-sm line-clamp-1 font-medium">
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-1 font-medium">
                                             {playlistVideo.video.description}
                                         </p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <span className={`px-2.5 py-0.5 text-[10px] font-black rounded uppercase tracking-wider ${playlistVideo.video.accessType === 'PREMIUM'
-                                                ? 'bg-black text-white'
-                                                : 'bg-green-100 text-green-700 border border-green-200'
+                                                ? 'bg-primary text-black'
+                                                : 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
                                                 }`}>
                                                 {playlistVideo.video.accessType}
                                             </span>
-                                            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest bg-gray-100 px-2.5 py-0.5 rounded">
+                                            <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest bg-gray-100 dark:bg-zinc-800 px-2.5 py-0.5 rounded">
                                                 {playlistVideo.video.videoType}
                                             </span>
                                         </div>
@@ -363,8 +363,8 @@ export default function PlaylistEditorPage() {
                 {
                     showAddModal && (
                         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                            <div className="bg-white border border-gray-200 rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-                                <h2 className="text-3xl font-black text-black mb-6">Add Video to Playlist</h2>
+                            <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+                                <h2 className="text-3xl font-black text-black dark:text-white mb-6">Add Video to Playlist</h2>
 
                                 <div className="mb-8">
                                     <SearchInput
@@ -377,12 +377,12 @@ export default function PlaylistEditorPage() {
                                 </div>
 
                                 {availableVideos.length === 0 ? (
-                                    <p className="text-gray-500 text-center py-12 font-bold text-lg">
+                                    <p className="text-gray-500 dark:text-gray-400 text-center py-12 font-bold text-lg">
                                         All videos have been added to this playlist
                                     </p>
                                 ) : filteredAvailableVideos.length === 0 ? (
                                     <div className="text-center py-12">
-                                        <p className="text-gray-500 font-bold text-lg mb-2">No videos found matching "{searchTerm}"</p>
+                                        <p className="text-gray-500 dark:text-gray-400 font-bold text-lg mb-2">No videos found matching "{searchTerm}"</p>
                                         <button
                                             onClick={() => setSearchTerm('')}
                                             className="text-primary font-bold hover:underline"
@@ -395,10 +395,10 @@ export default function PlaylistEditorPage() {
                                         {filteredAvailableVideos.map((video) => (
                                             <div
                                                 key={video.id}
-                                                className="bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:border-primary/40 hover:shadow-xl transition-all cursor-pointer group"
+                                                className="bg-gray-50 dark:bg-zinc-800 border border-gray-100 dark:border-white/5 rounded-2xl p-5 hover:border-primary/40 hover:shadow-xl transition-all cursor-pointer group"
                                                 onClick={() => handleAddVideo(video.id)}
                                             >
-                                                <div className="aspect-video bg-gray-200 rounded-xl mb-4 overflow-hidden border border-gray-100">
+                                                <div className="aspect-video bg-gray-200 dark:bg-zinc-700 rounded-xl mb-4 overflow-hidden border border-gray-100 dark:border-white/5">
                                                     {video.thumbnailUrl ? (
                                                         <img
                                                             src={video.thumbnailUrl}
@@ -413,10 +413,10 @@ export default function PlaylistEditorPage() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <h3 className="text-black font-bold line-clamp-1 mb-1 group-hover:text-primary transition-colors">
+                                                <h3 className="text-black dark:text-white font-bold line-clamp-1 mb-1 group-hover:text-primary transition-colors">
                                                     {video.title}
                                                 </h3>
-                                                <p className="text-gray-600 text-sm line-clamp-2 font-medium">
+                                                <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 font-medium">
                                                     {video.description}
                                                 </p>
                                             </div>
@@ -429,7 +429,7 @@ export default function PlaylistEditorPage() {
                                         setShowAddModal(false)
                                         setSearchTerm('')
                                     }}
-                                    className="w-full py-4 px-4 bg-white border-2 border-black text-black font-black rounded-xl hover:bg-gray-50 transition-all uppercase tracking-wider text-sm"
+                                    className="w-full py-4 px-4 bg-white dark:bg-zinc-800 border-2 border-black dark:border-zinc-700 text-black dark:text-white font-black rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all uppercase tracking-wider text-sm"
                                 >
                                     Close
                                 </button>

@@ -99,13 +99,13 @@ export default function NewShortPage() {
         <div className="p-4 sm:p-6 lg:p-8">
             <main className="max-w-3xl mx-auto py-8">
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-black mb-2">Upload New Short</h1>
-                    <p className="text-gray-600">Add a new short/reel to your platform</p>
+                    <h1 className="text-4xl font-bold text-black dark:text-white mb-2">Upload New Short</h1>
+                    <p className="text-gray-600 dark:text-gray-400">Add a new short/reel to your platform</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="bg-gray-50 border border-gray-200 rounded-2xl p-8 space-y-6 shadow-sm">
+                <form onSubmit={handleSubmit} className="bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-8 space-y-6 shadow-sm">
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Title *
                         </label>
                         <input
@@ -119,7 +119,7 @@ export default function NewShortPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Description
                         </label>
                         <textarea
@@ -132,28 +132,28 @@ export default function NewShortPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Video Source *
                         </label>
                         <div className="flex flex-wrap gap-4 mb-4">
                             <button
                                 type="button"
                                 onClick={() => setInputType('URL')}
-                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'URL' ? 'bg-black text-white' : 'bg-white text-black border-2 border-black hover:bg-gray-50'}`}
+                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'URL' ? 'bg-primary text-black' : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700'}`}
                             >
                                 External Link
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setInputType('REMOTE')}
-                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'REMOTE' ? 'bg-black text-white' : 'bg-white text-black border-2 border-black hover:bg-gray-50'}`}
+                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'REMOTE' ? 'bg-primary text-black' : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700'}`}
                             >
                                 Import from Link
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setInputType('FILE')}
-                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'FILE' ? 'bg-black text-white' : 'bg-white text-black border-2 border-black hover:bg-gray-50'}`}
+                                className={`px-4 py-2 rounded-lg font-bold transition-all shadow-sm ${inputType === 'FILE' ? 'bg-primary text-black' : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700'}`}
                             >
                                 Upload File
                             </button>
@@ -166,7 +166,7 @@ export default function NewShortPage() {
                                 required={inputType === 'URL'}
                                 value={formData.videoUrl}
                                 onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                 placeholder="https://youtube.com/shorts/... or direct URL"
                             />
                         ) : inputType === 'REMOTE' ? (
@@ -176,7 +176,7 @@ export default function NewShortPage() {
                                         type="url"
                                         value={remoteUrl}
                                         onChange={(e) => setRemoteUrl(e.target.value)}
-                                        className="flex-1 px-4 py-3 rounded-lg bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                        className="flex-1 px-4 py-3 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                         placeholder="Paste a direct video link (MP4, etc.)"
                                     />
                                     <button
@@ -196,7 +196,7 @@ export default function NewShortPage() {
                                 accept="video/*"
                                 required={inputType === 'FILE'}
                                 onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
-                                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-black file:text-white"
+                                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary file:text-black hover:file:bg-primary/90"
                             />
                         )}
                         {formData.videoUrl.startsWith('/uploads') && (
@@ -205,7 +205,7 @@ export default function NewShortPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Thumbnail URL
                         </label>
                         <input
@@ -218,16 +218,16 @@ export default function NewShortPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Access Type *
                         </label>
                         <select
                             value={formData.accessType}
                             onChange={(e) => setFormData({ ...formData, accessType: e.target.value as 'FREE' | 'PREMIUM' })}
-                            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                            className="w-full px-4 py-3 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                         >
-                            <option value="FREE" className="bg-white text-black">Free</option>
-                            <option value="PREMIUM" className="bg-white text-black">Premium</option>
+                            <option value="FREE" className="bg-white dark:bg-zinc-800 text-black dark:text-white">Free</option>
+                            <option value="PREMIUM" className="bg-white dark:bg-zinc-800 text-black dark:text-white">Premium</option>
                         </select>
                     </div>
 
@@ -235,14 +235,14 @@ export default function NewShortPage() {
                         <button
                             type="submit"
                             disabled={loading || isImporting}
-                            className="flex-1 py-3 px-4 bg-black text-white font-black rounded-lg hover:bg-gray-800 transition shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
+                            className="flex-1 py-3 px-4 bg-primary text-black font-black rounded-lg hover:bg-primary/90 transition shadow-lg uppercase tracking-wider text-sm disabled:opacity-50"
                         >
                             {loading ? 'Processing...' : 'Upload Short'}
                         </button>
                         <button
                             type="button"
                             onClick={() => router.back()}
-                            className="px-6 py-3 bg-white border-2 border-black text-black font-bold rounded-lg hover:bg-gray-50 transition-all font-bold"
+                            className="px-6 py-3 bg-white dark:bg-zinc-800 border-2 border-black dark:border-zinc-700 text-black dark:text-white font-bold rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all font-bold"
                         >
                             Cancel
                         </button>

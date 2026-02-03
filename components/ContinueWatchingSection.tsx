@@ -45,7 +45,7 @@ export default function ContinueWatchingSection({ currentVideoId }: ContinueWatc
 
     return (
         <section className="mb-8 p-1">
-            <h2 className="text-lg font-black text-white px-2 mb-4 flex items-center gap-2 uppercase tracking-tighter">
+            <h2 className="text-lg font-black text-gray-900 dark:text-white px-2 mb-4 flex items-center gap-2 uppercase tracking-tighter">
                 <ClockIcon className="w-5 h-5 text-purple-500" />
                 Continue Watching
             </h2>

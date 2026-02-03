@@ -43,11 +43,11 @@ export default function ViewAnalyticsChart({ className = '' }: ViewAnalyticsChar
     }
 
     return (
-        <div className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-sm ${className}`}>
+        <div className={`bg-white dark:bg-zinc-900/50 border border-gray-100 dark:border-white/10 rounded-2xl p-6 shadow-sm ${className}`}>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-2xl font-bold text-black mb-1">View Analytics</h2>
-                    <p className="text-gray-600 font-medium">Total Views: {totalViews.toLocaleString()}</p>
+                    <h2 className="text-2xl font-bold text-black dark:text-white mb-1">View Analytics</h2>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium">Total Views: {totalViews.toLocaleString()}</p>
                 </div>
                 <div className="flex gap-2">
                     {['7d', '30d', '90d', '1y'].map((p) => (
@@ -56,7 +56,7 @@ export default function ViewAnalyticsChart({ className = '' }: ViewAnalyticsChar
                             onClick={() => setPeriod(p)}
                             className={`px-3 py-1 rounded-lg text-sm font-bold transition ${period === p
                                 ? 'bg-primary text-black shadow-[0_8px_20px_-4px_rgba(37,99,235,0.6)]'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
                                 }`}
                         >
                             {p}
@@ -70,7 +70,7 @@ export default function ViewAnalyticsChart({ className = '' }: ViewAnalyticsChar
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
                 </div>
             ) : data.length === 0 ? (
-                <div className="flex items-center justify-center h-64 text-gray-500 font-medium">
+                <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400 font-medium">
                     No view data available for this period
                 </div>
             ) : (

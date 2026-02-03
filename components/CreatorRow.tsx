@@ -41,9 +41,9 @@ export default function CreatorRow({
     }
 
     return (
-        <div className="flex items-center gap-2 text-xs text-gray-600">
+        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
             {showAvatar && (
-                <div className="relative w-6 h-6 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+                <div className="relative w-6 h-6 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-800 flex-shrink-0">
                     {channelAvatar ? (
                         <Image
                             src={channelAvatar}
@@ -61,7 +61,7 @@ export default function CreatorRow({
                 </div>
             )}
             <div className="flex flex-col min-w-0 flex-1">
-                <p className="font-medium truncate text-gray-700 hover:text-black transition-colors">
+                <p className="font-medium truncate text-gray-900 dark:text-gray-300 hover:text-primary transition-colors">
                     {channelName}
                 </p>
                 <div className="flex items-center gap-1">

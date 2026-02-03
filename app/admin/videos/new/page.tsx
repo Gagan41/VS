@@ -87,17 +87,17 @@ export default function NewVideoPage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 bg-white">
+        <div className="p-4 sm:p-6 lg:p-8 bg-transparent">
             <main className="max-w-3xl mx-auto py-6">
                 <div className="mb-6">
-                    <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">Upload New Video</h1>
-                    <p className="text-gray-600">Add a new long-form video to your platform</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Upload New Video</h1>
+                    <p className="text-gray-600 dark:text-gray-400">Add a new long-form video to your platform</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="bg-gray-50 rounded-2xl p-6 md:p-8 space-y-5 border border-gray-200 shadow-sm">
+                <form onSubmit={handleSubmit} className="bg-gray-50 dark:bg-zinc-900/50 rounded-2xl p-6 md:p-8 space-y-5 border border-gray-200 dark:border-white/10 shadow-sm">
                     {/* Title Field */}
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Video Title *
                         </label>
                         <input
@@ -105,28 +105,28 @@ export default function NewVideoPage() {
                             required
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                             placeholder="Enter a descriptive video title"
                         />
                     </div>
 
                     {/* Description Field */}
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Description
                         </label>
                         <textarea
                             rows={4}
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
                             placeholder="What is this video about?"
                         />
                     </div>
 
                     {/* Video Source Section */}
                     <div>
-                        <label className="block text-sm font-bold text-black mb-3">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-3">
                             Video Source *
                         </label>
 
@@ -136,8 +136,8 @@ export default function NewVideoPage() {
                                 type="button"
                                 onClick={() => setInputType('URL')}
                                 className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all shadow-sm ${inputType === 'URL'
-                                    ? 'bg-black text-white'
-                                    : 'bg-white text-black border-2 border-black hover:bg-gray-50'
+                                    ? 'bg-primary text-black'
+                                    : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700'
                                     }`}
                             >
                                 External Link
@@ -146,8 +146,8 @@ export default function NewVideoPage() {
                                 type="button"
                                 onClick={() => setInputType('FILE')}
                                 className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all shadow-sm ${inputType === 'FILE'
-                                    ? 'bg-black text-white'
-                                    : 'bg-white text-black border-2 border-black hover:bg-gray-50'
+                                    ? 'bg-primary text-black'
+                                    : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700'
                                     }`}
                             >
                                 Local Upload
@@ -163,7 +163,7 @@ export default function NewVideoPage() {
                                     required={inputType === 'URL'}
                                     value={formData.videoUrl}
                                     onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                     placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
                                 />
                                 <p className="text-xs text-gray-400 flex items-start gap-2">
@@ -182,7 +182,7 @@ export default function NewVideoPage() {
                                         accept="video/*"
                                         required={inputType === 'FILE'}
                                         onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
-                                        className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800 cursor-pointer"
+                                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
                                     />
                                 </div>
                                 {videoFile && (
@@ -202,7 +202,7 @@ export default function NewVideoPage() {
 
                     {/* Thumbnail Section */}
                     <div>
-                        <label className="block text-sm font-bold text-black mb-3">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-3">
                             Thumbnail
                         </label>
                         <div className="space-y-3">
@@ -210,7 +210,7 @@ export default function NewVideoPage() {
                                 type="url"
                                 value={formData.thumbnailUrl}
                                 onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                                className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                                 placeholder="https://example.com/thumbnail.jpg (optional)"
                             />
                             <div className="relative">
@@ -219,7 +219,7 @@ export default function NewVideoPage() {
                                     type="file"
                                     accept="image/*"
                                     onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-                                    className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800 cursor-pointer"
+                                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
                                 />
                                 {thumbnailFile && (
                                     <p className="text-xs text-primary-400 font-semibold mt-2 flex items-center gap-2">
@@ -236,22 +236,22 @@ export default function NewVideoPage() {
                     {/* Access Type Field...
 */}
                     <div>
-                        <label className="block text-sm font-bold text-black mb-2">
+                        <label className="block text-sm font-bold text-black dark:text-white mb-2">
                             Access Type *
                         </label>
                         <select
                             value={formData.accessType}
                             onChange={(e) => setFormData({ ...formData, accessType: e.target.value as 'FREE' | 'PREMIUM' })}
-                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer"
+                            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer"
                         >
-                            <option value="FREE" className="bg-white text-black">Free (Available to all users)</option>
-                            <option value="PREMIUM" className="bg-white text-black">Premium (Subscription required)</option>
+                            <option value="FREE" className="bg-white dark:bg-zinc-800 text-black dark:text-white">Free (Available to all users)</option>
+                            <option value="PREMIUM" className="bg-white dark:bg-zinc-800 text-black dark:text-white">Premium (Subscription required)</option>
                         </select>
                     </div>
 
                     {/* Trailer Duration (Premium only) */}
                     {formData.accessType === 'PREMIUM' && (
-                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                        <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 rounded-xl p-4">
                             <label className="block text-sm font-bold text-primary mb-2">
                                 Trailer Duration (seconds)
                             </label>
@@ -264,9 +264,9 @@ export default function NewVideoPage() {
                                     const val = parseInt(e.target.value)
                                     setFormData({ ...formData, trailerDurationSeconds: isNaN(val) ? 0 : val })
                                 }}
-                                className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                                className="w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                             />
-                            <p className="text-xs text-gray-600 mt-2 font-medium">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 font-medium">
                                 Free users will see the first {formData.trailerDurationSeconds} seconds as a preview
                             </p>
                         </div>
@@ -277,7 +277,7 @@ export default function NewVideoPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 py-3.5 px-6 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm"
+                            className="flex-1 py-3.5 px-6 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm"
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center gap-2">
@@ -294,7 +294,7 @@ export default function NewVideoPage() {
                         <button
                             type="button"
                             onClick={() => router.back()}
-                            className="px-6 py-3.5 bg-white border-2 border-black text-black font-bold rounded-xl hover:bg-gray-50 transition-all font-bold"
+                            className="px-6 py-3.5 bg-white dark:bg-zinc-800 border-2 border-black dark:border-zinc-700 text-black dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all font-bold"
                         >
                             Cancel
                         </button>

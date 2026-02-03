@@ -68,12 +68,12 @@ export default function RecommendationCard({
         return (
             <div className="flex gap-2 p-2 animate-pulse">
                 {/* Desktop and Mobile skeleton */}
-                <div className="w-40 lg:w-44 aspect-video bg-gray-100 rounded-xl flex-shrink-0" />
+                <div className="w-40 lg:w-44 aspect-video bg-gray-100 dark:bg-zinc-800 rounded-xl flex-shrink-0" />
                 <div className="flex-1 space-y-2 py-1 min-w-0">
-                    <div className="h-4 bg-gray-100 rounded w-full" />
-                    <div className="h-4 bg-gray-100 rounded w-4/5" />
-                    <div className="h-3 bg-gray-100 rounded w-1/2 mt-2" />
-                    <div className="h-3 bg-gray-100 rounded w-2/3" />
+                    <div className="h-4 bg-gray-100 dark:bg-zinc-800 rounded w-full" />
+                    <div className="h-4 bg-gray-100 dark:bg-zinc-800 rounded w-4/5" />
+                    <div className="h-3 bg-gray-100 dark:bg-zinc-800 rounded w-1/2 mt-2" />
+                    <div className="h-3 bg-gray-100 dark:bg-zinc-800 rounded w-2/3" />
                 </div>
             </div>
         )
@@ -84,8 +84,8 @@ export default function RecommendationCard({
     return (
         <Link
             href={`/video/${video.id}`}
-            className="group flex gap-2 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 relative
-                       active:scale-[0.98] lg:hover:scale-[1.01] lg:hover:shadow-md border border-transparent hover:border-gray-200 shadow-sm"
+            className="group flex gap-2 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-all duration-200 relative
+                       active:scale-[0.98] lg:hover:scale-[1.01] lg:hover:shadow-md border border-transparent hover:border-gray-200 dark:hover:border-white/10 shadow-sm"
         >
             {/* Thumbnail */}
             <div className="relative w-40 lg:w-44 aspect-video rounded-xl overflow-hidden bg-gray-900 flex-shrink-0">
@@ -154,8 +154,8 @@ export default function RecommendationCard({
                 {/* Access Type Badge (mobile only, subtle) */}
                 <div className="flex items-center gap-1.5 mt-1.5 lg:hidden">
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${video.accessType === 'PREMIUM'
-                        ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
-                        : 'bg-green-500/10 text-green-500 border border-green-500/20'
+                        ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 dark:border-yellow-500/40'
+                        : 'bg-green-500/10 text-green-500 border border-green-500/20 dark:border-green-500/40'
                         }`}>
                         {video.accessType}
                     </span>
@@ -170,10 +170,10 @@ export default function RecommendationCard({
                     setShowMenu(!showMenu)
                 }}
                 className="absolute top-2 right-2 p-1.5 rounded-full opacity-0 group-hover:opacity-100 
-                           hover:bg-gray-200 active:bg-gray-300 transition-all z-10"
+                           hover:bg-gray-200 dark:hover:bg-white/10 active:bg-gray-300 dark:active:bg-white/20 transition-all z-10"
                 aria-label="More options"
             >
-                <EllipsisVerticalIcon className="w-4 h-4 text-black" />
+                <EllipsisVerticalIcon className="w-4 h-4 text-black dark:text-white" />
             </button>
 
             {/* Simple Menu Dropdown */}
@@ -189,7 +189,7 @@ export default function RecommendationCard({
                     <button
                         onClick={addToWatchLater}
                         disabled={isSaving}
-                        className="w-full px-4 py-2 text-left text-sm text-black hover:bg-gray-100 transition-colors"
+                        className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                     >
                         {isSaving ? 'Adding...' : 'Add to Watch Later'}
                     </button>

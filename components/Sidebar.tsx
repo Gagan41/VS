@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
     HomeIcon,
     QueueListIcon,
@@ -35,6 +35,8 @@ const navigation = [
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
     const { data: session } = useSession()
     const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const isPlaylistContext = searchParams.get('playlistId')
     const user = session?.user as any
     const isAdmin = user?.role === 'ADMIN'
 
@@ -49,13 +51,13 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
             )}
 
             <aside
-                className={`fixed left-0 top-0 lg:top-16 w-64 h-full lg:h-[calc(100vh-4rem)] bg-white border-r border-gray-200 overflow-y-auto z-40 lg:z-20 transition-transform duration-300 transform shadow-lg ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+                className={`fixed left-0 top-0 lg:top-16 w-64 h-full lg:h-[calc(100vh-4rem)] bg-white dark:bg-[#0F172A] border-r border-gray-200 dark:border-white/10 overflow-y-auto z-40 lg:z-20 transition-all duration-300 transform shadow-lg ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
             >
                 <div className="flex flex-col h-full p-4">
                     {/* Mobile Header */}
                     <div className="flex lg:hidden items-center justify-between mb-8 px-2">
-                        <span className="text-xl font-black text-black tracking-tight uppercase">Kushal Stream</span>
-                        <button onClick={onClose} className="text-gray-600 hover:text-black transition-smooth">
+                        <span className="text-xl font-black text-gray-900 dark:text-white tracking-tight uppercase">Kushal Stream</span>
+                        <button onClick={onClose} className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-smooth">
                             <XMarkIcon className="w-6 h-6" />
                         </button>
                     </div>
@@ -65,21 +67,25 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
                             <h2 className="text-xs font-semibold text-gray-600 uppercase tracking-wider px-3 mb-3">Sections</h2>
                             <nav className="space-y-1">
                                 {navigation.map((item) => {
-                                    const isActive = pathname === item.href
+                                    const isActive = item.href === '/home'
+                                        ? (pathname === '/home' || pathname === '/') && !isPlaylistContext
+                                        : item.href === '/playlists'
+                                            ? pathname.startsWith('/playlists') || isPlaylistContext
+                                            : pathname.startsWith(item.href)
                                     return (
                                         <Link
                                             key={item.name}
                                             href={item.href}
                                             onClick={onClose}
                                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-smooth group relative border-2 ${isActive
-                                                ? 'border-primary bg-primary/10 text-black shadow-[0_4px_12px_-2px_rgba(37,99,235,0.4)] font-bold'
-                                                : 'border-transparent text-gray-700 hover:bg-gray-100 hover:text-black'
+                                                ? 'border-primary text-black dark:text-white shadow-[0_4px_12px_-2px_rgba(37,99,235,0.4)] font-bold'
+                                                : 'border-transparent text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary'
                                                 }`}
                                         >
-                                            <item.icon className={`w-5 h-5 flex-shrink-0 transition-smooth ${isActive ? 'text-black' : 'group-hover:text-primary'}`} />
-                                            <span className="font-medium">{item.name}</span>
+                                            <item.icon className={`w-5 h-5 flex-shrink-0 transition-smooth ${isActive ? 'text-black dark:text-white' : 'group-hover:text-primary'}`} />
+                                            <span className="font-medium text-inherit">{item.name}</span>
                                             {isActive && (
-                                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-black rounded-r-full" />
+                                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-black dark:bg-white rounded-r-full" />
                                             )}
                                         </Link>
                                     )
@@ -95,14 +101,14 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
                                         href="/admin"
                                         onClick={onClose}
                                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-smooth group relative border-2 ${pathname.startsWith('/admin')
-                                            ? 'border-primary bg-primary/10 text-black shadow-[0_4px_12px_-2px_rgba(37,99,235,0.4)] font-bold'
-                                            : 'border-transparent text-gray-700 hover:bg-gray-100 hover:text-black'
+                                            ? 'border-primary text-black dark:text-white shadow-[0_4px_12px_-2px_rgba(37,99,235,0.4)] font-bold'
+                                            : 'border-transparent text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary'
                                             }`}
                                     >
-                                        <VideoCameraIcon className={`w-5 h-5 transition-smooth ${pathname.startsWith('/admin') ? 'text-black' : 'group-hover:text-primary'}`} />
+                                        <VideoCameraIcon className={`w-5 h-5 transition-smooth ${pathname.startsWith('/admin') ? 'text-black dark:text-white' : 'group-hover:text-primary'}`} />
                                         <span className="font-medium">Admin Dashboard</span>
                                         {pathname.startsWith('/admin') && (
-                                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-black rounded-r-full" />
+                                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-black dark:bg-white rounded-r-full" />
                                         )}
                                     </Link>
                                 </nav>
@@ -129,8 +135,8 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
                                 )}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-black truncate">{user?.name || 'User'}</p>
-                                <p className="text-xs text-gray-600 truncate">{user?.email}</p>
+                                <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user?.name || 'User'}</p>
+                                <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{user?.email}</p>
                             </div>
                         </div>
 
@@ -138,7 +144,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
                             <Link
                                 href="/profile"
                                 onClick={onClose}
-                                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-smooth group border-2 ${pathname === '/profile' ? 'border-primary bg-primary/10 text-primary shadow-sm' : 'border-transparent text-gray-700 hover:bg-gray-100 hover:text-black'}`}
+                                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-smooth group border-2 ${pathname === '/profile' ? 'border-primary bg-primary/5 text-primary shadow-sm' : 'border-transparent text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary'}`}
                             >
                                 <UserIcon className={`w-5 h-5 transition-smooth ${pathname === '/profile' ? 'text-primary' : 'group-hover:text-primary'}`} />
                                 <span className="font-medium">Profile Settings</span>
@@ -158,7 +164,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
 
                             <button
                                 onClick={() => signOut({ callbackUrl: '/' })}
-                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-smooth group text-gray-700 hover:bg-primary/10 hover:text-primary"
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-smooth group text-gray-700 dark:text-gray-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-white/5"
                             >
                                 <ArrowRightOnRectangleIcon className="w-5 h-5" />
                                 <span className="font-medium">Sign Out</span>

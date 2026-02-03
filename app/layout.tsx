@@ -22,8 +22,8 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(authOptions)
   return (
-    <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} transition-colors duration-300`}>
         <Providers>
           <MainLayout session={session}>
             {children}

@@ -58,13 +58,13 @@ export default function VideoRecommendations({ currentVideoId }: VideoRecommenda
             <ContinueWatchingSection currentVideoId={currentVideoId} />
 
             <div className="hidden lg:block">
-                <h2 className="text-base font-black text-black px-2 uppercase tracking-tight">
+                <h2 className="text-base font-black text-gray-900 dark:text-white px-2 uppercase tracking-tight">
                     Recommended
                 </h2>
             </div>
 
             <div className="lg:hidden">
-                <h2 className="text-lg font-black text-black px-2 border-b border-gray-100 pb-3 uppercase tracking-tight">
+                <h2 className="text-lg font-black text-gray-900 dark:text-white px-2 border-b border-gray-200 dark:border-white/10 pb-3 uppercase tracking-tight">
                     Up next
                 </h2>
             </div>
@@ -93,7 +93,7 @@ export default function VideoRecommendations({ currentVideoId }: VideoRecommenda
                     ))
                 ) : (
                     <div className="px-4 py-8 text-center">
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-600 dark:text-gray-500 text-sm">
                             No recommendations available
                         </p>
                     </div>

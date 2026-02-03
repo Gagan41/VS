@@ -5,7 +5,7 @@ import VideoCard from '@/components/VideoCard'
 import SearchInput from '@/components/SearchInput'
 
 export default function FreePage() {
-    const [videos, setVideos] = useState([])
+    const [videos, setVideos] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
 
@@ -19,7 +19,7 @@ export default function FreePage() {
             const url = `/api/videos?accessType=FREE${searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : ''}`
             const response = await fetch(url)
             const data = await response.json()
-            setVideos(data)
+            setVideos(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Error fetching free videos:', error)
         } finally {
@@ -28,12 +28,12 @@ export default function FreePage() {
     }
 
     return (
-        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white">
+        <div className="pt-6 px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 bg-white dark:bg-transparent">
             <main className="max-w-7xl mx-auto pb-20">
                 <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-10">
                     <div className="space-y-4">
-                        <h1 className="text-4xl md:text-5xl font-black text-black leading-tight">Free Videos</h1>
-                        <p className="text-gray-700 text-lg font-medium">Enjoy our collection of free content, open for everyone.</p>
+                        <h1 className="text-4xl md:text-5xl font-black text-black dark:text-white leading-tight">Free Videos</h1>
+                        <p className="text-gray-700 dark:text-gray-400 text-lg font-medium">Enjoy our collection of free content, open for everyone.</p>
                     </div>
                     <div className="w-full md:w-auto">
                         <SearchInput
